@@ -44232,10 +44232,11 @@ function mergeLoginOptions(loginOptions, otherLoginOptions) {
     customValues
   };
 }
-const UserRole = Variant({
-  "admin": Null,
-  "user": Null,
-  "guest": Null
+const SubscriptionId = Nat;
+const SubscriptionStatus = Variant({
+  "active": Null,
+  "inactive": Null,
+  "suspended": Null
 });
 const ClientId = Nat;
 const Time = Int;
@@ -44243,6 +44244,45 @@ const PlanType$1 = Variant({
   "enterprise": Null,
   "professional": Null,
   "basic": Null
+});
+const Subscription = Record({
+  "id": SubscriptionId,
+  "status": SubscriptionStatus,
+  "clientId": ClientId,
+  "createdAt": Time,
+  "plan": PlanType$1,
+  "updatedAt": Time,
+  "startDate": Time
+});
+const TransactionId = Nat;
+const TransactionType = Variant({
+  "expense": Null,
+  "income": Null
+});
+const TransactionCategory = Variant({
+  "revenue": Null,
+  "liability": Null,
+  "expense": Null,
+  "asset": Null,
+  "equity": Null
+});
+const Transaction = Record({
+  "id": TransactionId,
+  "clientId": ClientId,
+  "transactionType": TransactionType,
+  "value": Nat,
+  "date": Time,
+  "hash": Text$1,
+  "createdAt": Time,
+  "description": Text$1,
+  "updatedAt": Time,
+  "category": TransactionCategory,
+  "confirmed": Bool
+});
+const UserRole = Variant({
+  "admin": Null,
+  "user": Null,
+  "guest": Null
 });
 const WalletType$1 = Variant({
   "ckbtc": Null,
@@ -44279,11 +44319,15 @@ const ClientBitcoinAddressResult = Record({
 });
 Service({
   "_initializeAccessControlWithSecret": Func([Text$1], [], []),
+  "addSubscription": Func([Subscription], [SubscriptionId], []),
+  "addTransaction": Func([Transaction], [TransactionId], []),
   "assignCallerUserRole": Func([Principal2, UserRole], [], []),
   "deleteClient": Func([ClientId], [], []),
   "editClient": Func([ClientId, Client], [], []),
   "generateCkBtcAddress": Func([ClientId], [Text$1], []),
   "getAllClients": Func([], [Vec(Client)], ["query"]),
+  "getAllSubscriptions": Func([], [Vec(Subscription)], ["query"]),
+  "getAllTransactions": Func([], [Vec(Transaction)], ["query"]),
   "getCallerUserProfile": Func([], [Opt(UserProfile)], ["query"]),
   "getCallerUserRole": Func([], [UserRole], ["query"]),
   "getCkBtcBalance": Func([ClientId], [Nat], []),
@@ -44291,6 +44335,16 @@ Service({
   "getClientBitcoinAddress": Func(
     [ClientId],
     [Opt(ClientBitcoinAddressResult)],
+    ["query"]
+  ),
+  "getSubscriptionByClientId": Func(
+    [ClientId],
+    [Opt(Subscription)],
+    ["query"]
+  ),
+  "getTransactionsByClientId": Func(
+    [ClientId],
+    [Vec(Transaction)],
     ["query"]
   ),
   "getUserProfile": Func(
@@ -44308,10 +44362,11 @@ Service({
   )
 });
 const idlFactory = ({ IDL: IDL2 }) => {
-  const UserRole2 = IDL2.Variant({
-    "admin": IDL2.Null,
-    "user": IDL2.Null,
-    "guest": IDL2.Null
+  const SubscriptionId2 = IDL2.Nat;
+  const SubscriptionStatus2 = IDL2.Variant({
+    "active": IDL2.Null,
+    "inactive": IDL2.Null,
+    "suspended": IDL2.Null
   });
   const ClientId2 = IDL2.Nat;
   const Time2 = IDL2.Int;
@@ -44319,6 +44374,45 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "enterprise": IDL2.Null,
     "professional": IDL2.Null,
     "basic": IDL2.Null
+  });
+  const Subscription2 = IDL2.Record({
+    "id": SubscriptionId2,
+    "status": SubscriptionStatus2,
+    "clientId": ClientId2,
+    "createdAt": Time2,
+    "plan": PlanType2,
+    "updatedAt": Time2,
+    "startDate": Time2
+  });
+  const TransactionId2 = IDL2.Nat;
+  const TransactionType2 = IDL2.Variant({
+    "expense": IDL2.Null,
+    "income": IDL2.Null
+  });
+  const TransactionCategory2 = IDL2.Variant({
+    "revenue": IDL2.Null,
+    "liability": IDL2.Null,
+    "expense": IDL2.Null,
+    "asset": IDL2.Null,
+    "equity": IDL2.Null
+  });
+  const Transaction2 = IDL2.Record({
+    "id": TransactionId2,
+    "clientId": ClientId2,
+    "transactionType": TransactionType2,
+    "value": IDL2.Nat,
+    "date": Time2,
+    "hash": IDL2.Text,
+    "createdAt": Time2,
+    "description": IDL2.Text,
+    "updatedAt": Time2,
+    "category": TransactionCategory2,
+    "confirmed": IDL2.Bool
+  });
+  const UserRole2 = IDL2.Variant({
+    "admin": IDL2.Null,
+    "user": IDL2.Null,
+    "guest": IDL2.Null
   });
   const WalletType2 = IDL2.Variant({ "ckbtc": IDL2.Null, "manual": IDL2.Null });
   const Client2 = IDL2.Record({
@@ -44352,11 +44446,15 @@ const idlFactory = ({ IDL: IDL2 }) => {
   });
   return IDL2.Service({
     "_initializeAccessControlWithSecret": IDL2.Func([IDL2.Text], [], []),
+    "addSubscription": IDL2.Func([Subscription2], [SubscriptionId2], []),
+    "addTransaction": IDL2.Func([Transaction2], [TransactionId2], []),
     "assignCallerUserRole": IDL2.Func([IDL2.Principal, UserRole2], [], []),
     "deleteClient": IDL2.Func([ClientId2], [], []),
     "editClient": IDL2.Func([ClientId2, Client2], [], []),
     "generateCkBtcAddress": IDL2.Func([ClientId2], [IDL2.Text], []),
     "getAllClients": IDL2.Func([], [IDL2.Vec(Client2)], ["query"]),
+    "getAllSubscriptions": IDL2.Func([], [IDL2.Vec(Subscription2)], ["query"]),
+    "getAllTransactions": IDL2.Func([], [IDL2.Vec(Transaction2)], ["query"]),
     "getCallerUserProfile": IDL2.Func([], [IDL2.Opt(UserProfile2)], ["query"]),
     "getCallerUserRole": IDL2.Func([], [UserRole2], ["query"]),
     "getCkBtcBalance": IDL2.Func([ClientId2], [IDL2.Nat], []),
@@ -44364,6 +44462,16 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "getClientBitcoinAddress": IDL2.Func(
       [ClientId2],
       [IDL2.Opt(ClientBitcoinAddressResult2)],
+      ["query"]
+    ),
+    "getSubscriptionByClientId": IDL2.Func(
+      [ClientId2],
+      [IDL2.Opt(Subscription2)],
+      ["query"]
+    ),
+    "getTransactionsByClientId": IDL2.Func(
+      [ClientId2],
+      [IDL2.Vec(Transaction2)],
       ["query"]
     ),
     "getUserProfile": IDL2.Func(
@@ -44462,17 +44570,45 @@ class Backend {
       return result;
     }
   }
-  async assignCallerUserRole(arg0, arg1) {
+  async addSubscription(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+        const result = await this.actor.addSubscription(to_candid_Subscription_n1(this._uploadFile, this._downloadFile, arg0));
         return result;
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+      const result = await this.actor.addSubscription(to_candid_Subscription_n1(this._uploadFile, this._downloadFile, arg0));
+      return result;
+    }
+  }
+  async addTransaction(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.addTransaction(to_candid_Transaction_n7(this._uploadFile, this._downloadFile, arg0));
+        return result;
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.addTransaction(to_candid_Transaction_n7(this._uploadFile, this._downloadFile, arg0));
+      return result;
+    }
+  }
+  async assignCallerUserRole(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n13(this._uploadFile, this._downloadFile, arg1));
+        return result;
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n13(this._uploadFile, this._downloadFile, arg1));
       return result;
     }
   }
@@ -44493,14 +44629,14 @@ class Backend {
   async editClient(arg0, arg1) {
     if (this.processError) {
       try {
-        const result = await this.actor.editClient(arg0, to_candid_Client_n3(this._uploadFile, this._downloadFile, arg1));
+        const result = await this.actor.editClient(arg0, to_candid_Client_n15(this._uploadFile, this._downloadFile, arg1));
         return result;
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.editClient(arg0, to_candid_Client_n3(this._uploadFile, this._downloadFile, arg1));
+      const result = await this.actor.editClient(arg0, to_candid_Client_n15(this._uploadFile, this._downloadFile, arg1));
       return result;
     }
   }
@@ -44522,42 +44658,70 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getAllClients();
-        return from_candid_vec_n9(this._uploadFile, this._downloadFile, result);
+        return from_candid_vec_n19(this._uploadFile, this._downloadFile, result);
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getAllClients();
-      return from_candid_vec_n9(this._uploadFile, this._downloadFile, result);
+      return from_candid_vec_n19(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getAllSubscriptions() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getAllSubscriptions();
+        return from_candid_vec_n28(this._uploadFile, this._downloadFile, result);
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getAllSubscriptions();
+      return from_candid_vec_n28(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getAllTransactions() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getAllTransactions();
+        return from_candid_vec_n33(this._uploadFile, this._downloadFile, result);
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getAllTransactions();
+      return from_candid_vec_n33(this._uploadFile, this._downloadFile, result);
     }
   }
   async getCallerUserProfile() {
     if (this.processError) {
       try {
         const result = await this.actor.getCallerUserProfile();
-        return from_candid_opt_n18(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n40(this._uploadFile, this._downloadFile, result);
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getCallerUserProfile();
-      return from_candid_opt_n18(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n40(this._uploadFile, this._downloadFile, result);
     }
   }
   async getCallerUserRole() {
     if (this.processError) {
       try {
         const result = await this.actor.getCallerUserRole();
-        return from_candid_UserRole_n24(this._uploadFile, this._downloadFile, result);
+        return from_candid_UserRole_n46(this._uploadFile, this._downloadFile, result);
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getCallerUserRole();
-      return from_candid_UserRole_n24(this._uploadFile, this._downloadFile, result);
+      return from_candid_UserRole_n46(this._uploadFile, this._downloadFile, result);
     }
   }
   async getCkBtcBalance(arg0) {
@@ -44578,42 +44742,70 @@ class Backend {
     if (this.processError) {
       try {
         const result = await this.actor.getClient(arg0);
-        return from_candid_opt_n26(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n48(this._uploadFile, this._downloadFile, result);
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getClient(arg0);
-      return from_candid_opt_n26(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n48(this._uploadFile, this._downloadFile, result);
     }
   }
   async getClientBitcoinAddress(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getClientBitcoinAddress(arg0);
-        return from_candid_opt_n27(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n49(this._uploadFile, this._downloadFile, result);
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getClientBitcoinAddress(arg0);
-      return from_candid_opt_n27(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n49(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getSubscriptionByClientId(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getSubscriptionByClientId(arg0);
+        return from_candid_opt_n52(this._uploadFile, this._downloadFile, result);
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getSubscriptionByClientId(arg0);
+      return from_candid_opt_n52(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getTransactionsByClientId(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getTransactionsByClientId(arg0);
+        return from_candid_vec_n33(this._uploadFile, this._downloadFile, result);
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getTransactionsByClientId(arg0);
+      return from_candid_vec_n33(this._uploadFile, this._downloadFile, result);
     }
   }
   async getUserProfile(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getUserProfile(arg0);
-        return from_candid_opt_n18(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n40(this._uploadFile, this._downloadFile, result);
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getUserProfile(arg0);
-      return from_candid_opt_n18(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n40(this._uploadFile, this._downloadFile, result);
     }
   }
   async isCallerAdmin() {
@@ -44633,157 +44825,223 @@ class Backend {
   async registerClient(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.registerClient(to_candid_Client_n3(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.registerClient(to_candid_Client_n15(this._uploadFile, this._downloadFile, arg0));
         return result;
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.registerClient(to_candid_Client_n3(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.registerClient(to_candid_Client_n15(this._uploadFile, this._downloadFile, arg0));
       return result;
     }
   }
   async saveCallerUserProfile(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n30(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n53(this._uploadFile, this._downloadFile, arg0));
         return result;
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n30(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n53(this._uploadFile, this._downloadFile, arg0));
       return result;
     }
   }
   async setClientBitcoinAddress(arg0, arg1, arg2) {
     if (this.processError) {
       try {
-        const result = await this.actor.setClientBitcoinAddress(arg0, arg1, to_candid_WalletType_n7(this._uploadFile, this._downloadFile, arg2));
+        const result = await this.actor.setClientBitcoinAddress(arg0, arg1, to_candid_WalletType_n17(this._uploadFile, this._downloadFile, arg2));
         return result;
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.setClientBitcoinAddress(arg0, arg1, to_candid_WalletType_n7(this._uploadFile, this._downloadFile, arg2));
+      const result = await this.actor.setClientBitcoinAddress(arg0, arg1, to_candid_WalletType_n17(this._uploadFile, this._downloadFile, arg2));
       return result;
     }
   }
 }
-function from_candid_BusinessRole_n22(_uploadFile, _downloadFile, value) {
+function from_candid_BusinessRole_n44(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n45(_uploadFile, _downloadFile, value);
+}
+function from_candid_ClientBitcoinAddressResult_n50(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n51(_uploadFile, _downloadFile, value);
+}
+function from_candid_Client_n20(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n21(_uploadFile, _downloadFile, value);
+}
+function from_candid_PlanType_n22(_uploadFile, _downloadFile, value) {
   return from_candid_variant_n23(_uploadFile, _downloadFile, value);
 }
-function from_candid_ClientBitcoinAddressResult_n28(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n29(_uploadFile, _downloadFile, value);
+function from_candid_SubscriptionStatus_n31(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n32(_uploadFile, _downloadFile, value);
 }
-function from_candid_Client_n10(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n11(_uploadFile, _downloadFile, value);
+function from_candid_Subscription_n29(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n30(_uploadFile, _downloadFile, value);
 }
-function from_candid_PlanType_n12(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n13(_uploadFile, _downloadFile, value);
+function from_candid_TransactionCategory_n38(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n39(_uploadFile, _downloadFile, value);
 }
-function from_candid_UserProfile_n19(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n20(_uploadFile, _downloadFile, value);
+function from_candid_TransactionType_n36(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n37(_uploadFile, _downloadFile, value);
 }
-function from_candid_UserRole_n24(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n25(_uploadFile, _downloadFile, value);
+function from_candid_Transaction_n34(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n35(_uploadFile, _downloadFile, value);
 }
-function from_candid_WalletType_n15(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n16(_uploadFile, _downloadFile, value);
+function from_candid_UserProfile_n41(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n42(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n14(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_WalletType_n15(_uploadFile, _downloadFile, value[0]);
+function from_candid_UserRole_n46(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n47(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n17(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
+function from_candid_WalletType_n25(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n26(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n18(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_UserProfile_n19(_uploadFile, _downloadFile, value[0]);
-}
-function from_candid_opt_n21(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n26(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_Client_n10(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n24(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_WalletType_n25(_uploadFile, _downloadFile, value[0]);
 }
 function from_candid_opt_n27(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_ClientBitcoinAddressResult_n28(_uploadFile, _downloadFile, value[0]);
+  return value.length === 0 ? null : value[0];
 }
-function from_candid_record_n11(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n40(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_UserProfile_n41(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n43(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n48(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_Client_n20(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n49(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_ClientBitcoinAddressResult_n50(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n52(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_Subscription_n29(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_record_n21(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     active: value.active,
     cnpj: value.cnpj,
     name: value.name,
     createdAt: value.createdAt,
-    plan: from_candid_PlanType_n12(_uploadFile, _downloadFile, value.plan),
-    walletType: record_opt_to_undefined(from_candid_opt_n14(_uploadFile, _downloadFile, value.walletType)),
+    plan: from_candid_PlanType_n22(_uploadFile, _downloadFile, value.plan),
+    walletType: record_opt_to_undefined(from_candid_opt_n24(_uploadFile, _downloadFile, value.walletType)),
     email: value.email,
     updatedAt: value.updatedAt,
     address: value.address,
-    bitcoinAddress: record_opt_to_undefined(from_candid_opt_n17(_uploadFile, _downloadFile, value.bitcoinAddress)),
+    bitcoinAddress: record_opt_to_undefined(from_candid_opt_n27(_uploadFile, _downloadFile, value.bitcoinAddress)),
     phone: value.phone
   };
 }
-function from_candid_record_n20(_uploadFile, _downloadFile, value) {
+function from_candid_record_n30(_uploadFile, _downloadFile, value) {
   return {
-    clientId: record_opt_to_undefined(from_candid_opt_n21(_uploadFile, _downloadFile, value.clientId)),
+    id: value.id,
+    status: from_candid_SubscriptionStatus_n31(_uploadFile, _downloadFile, value.status),
+    clientId: value.clientId,
+    createdAt: value.createdAt,
+    plan: from_candid_PlanType_n22(_uploadFile, _downloadFile, value.plan),
+    updatedAt: value.updatedAt,
+    startDate: value.startDate
+  };
+}
+function from_candid_record_n35(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    clientId: value.clientId,
+    transactionType: from_candid_TransactionType_n36(_uploadFile, _downloadFile, value.transactionType),
+    value: value.value,
+    date: value.date,
+    hash: value.hash,
+    createdAt: value.createdAt,
+    description: value.description,
+    updatedAt: value.updatedAt,
+    category: from_candid_TransactionCategory_n38(_uploadFile, _downloadFile, value.category),
+    confirmed: value.confirmed
+  };
+}
+function from_candid_record_n42(_uploadFile, _downloadFile, value) {
+  return {
+    clientId: record_opt_to_undefined(from_candid_opt_n43(_uploadFile, _downloadFile, value.clientId)),
     name: value.name,
-    businessRole: from_candid_BusinessRole_n22(_uploadFile, _downloadFile, value.businessRole),
+    businessRole: from_candid_BusinessRole_n44(_uploadFile, _downloadFile, value.businessRole),
     email: value.email
   };
 }
-function from_candid_record_n29(_uploadFile, _downloadFile, value) {
+function from_candid_record_n51(_uploadFile, _downloadFile, value) {
   return {
-    walletType: from_candid_WalletType_n15(_uploadFile, _downloadFile, value.walletType),
+    walletType: from_candid_WalletType_n25(_uploadFile, _downloadFile, value.walletType),
     address: value.address
   };
 }
-function from_candid_variant_n13(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n23(_uploadFile, _downloadFile, value) {
   return "enterprise" in value ? "enterprise" : "professional" in value ? "professional" : "basic" in value ? "basic" : value;
 }
-function from_candid_variant_n16(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n26(_uploadFile, _downloadFile, value) {
   return "ckbtc" in value ? "ckbtc" : "manual" in value ? "manual" : value;
 }
-function from_candid_variant_n23(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n32(_uploadFile, _downloadFile, value) {
+  return "active" in value ? "active" : "inactive" in value ? "inactive" : "suspended" in value ? "suspended" : value;
+}
+function from_candid_variant_n37(_uploadFile, _downloadFile, value) {
+  return "expense" in value ? "expense" : "income" in value ? "income" : value;
+}
+function from_candid_variant_n39(_uploadFile, _downloadFile, value) {
+  return "revenue" in value ? "revenue" : "liability" in value ? "liability" : "expense" in value ? "expense" : "asset" in value ? "asset" : "equity" in value ? "equity" : value;
+}
+function from_candid_variant_n45(_uploadFile, _downloadFile, value) {
   return "accountant" in value ? "accountant" : "client" in value ? "client" : "admin" in value ? "admin" : value;
 }
-function from_candid_variant_n25(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n47(_uploadFile, _downloadFile, value) {
   return "admin" in value ? "admin" : "user" in value ? "user" : "guest" in value ? "guest" : value;
 }
-function from_candid_vec_n9(_uploadFile, _downloadFile, value) {
-  return value.map((x3) => from_candid_Client_n10(_uploadFile, _downloadFile, x3));
+function from_candid_vec_n19(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_Client_n20(_uploadFile, _downloadFile, x3));
 }
-function to_candid_BusinessRole_n32(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n33(_uploadFile, _downloadFile, value);
+function from_candid_vec_n28(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_Subscription_n29(_uploadFile, _downloadFile, x3));
 }
-function to_candid_Client_n3(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n4(_uploadFile, _downloadFile, value);
+function from_candid_vec_n33(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_Transaction_n34(_uploadFile, _downloadFile, x3));
+}
+function to_candid_BusinessRole_n55(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n56(_uploadFile, _downloadFile, value);
+}
+function to_candid_Client_n15(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n16(_uploadFile, _downloadFile, value);
 }
 function to_candid_PlanType_n5(_uploadFile, _downloadFile, value) {
   return to_candid_variant_n6(_uploadFile, _downloadFile, value);
 }
-function to_candid_UserProfile_n30(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n31(_uploadFile, _downloadFile, value);
+function to_candid_SubscriptionStatus_n3(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n4(_uploadFile, _downloadFile, value);
 }
-function to_candid_UserRole_n1(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n2(_uploadFile, _downloadFile, value);
+function to_candid_Subscription_n1(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n2(_uploadFile, _downloadFile, value);
 }
-function to_candid_WalletType_n7(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n8(_uploadFile, _downloadFile, value);
+function to_candid_TransactionCategory_n11(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n12(_uploadFile, _downloadFile, value);
 }
-function to_candid_record_n31(_uploadFile, _downloadFile, value) {
-  return {
-    clientId: value.clientId ? candid_some(value.clientId) : candid_none(),
-    name: value.name,
-    businessRole: to_candid_BusinessRole_n32(_uploadFile, _downloadFile, value.businessRole),
-    email: value.email
-  };
+function to_candid_TransactionType_n9(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n10(_uploadFile, _downloadFile, value);
 }
-function to_candid_record_n4(_uploadFile, _downloadFile, value) {
+function to_candid_Transaction_n7(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n8(_uploadFile, _downloadFile, value);
+}
+function to_candid_UserProfile_n53(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n54(_uploadFile, _downloadFile, value);
+}
+function to_candid_UserRole_n13(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n14(_uploadFile, _downloadFile, value);
+}
+function to_candid_WalletType_n17(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n18(_uploadFile, _downloadFile, value);
+}
+function to_candid_record_n16(_uploadFile, _downloadFile, value) {
   return {
     id: value.id,
     active: value.active,
@@ -44791,7 +45049,7 @@ function to_candid_record_n4(_uploadFile, _downloadFile, value) {
     name: value.name,
     createdAt: value.createdAt,
     plan: to_candid_PlanType_n5(_uploadFile, _downloadFile, value.plan),
-    walletType: value.walletType ? candid_some(to_candid_WalletType_n7(_uploadFile, _downloadFile, value.walletType)) : candid_none(),
+    walletType: value.walletType ? candid_some(to_candid_WalletType_n17(_uploadFile, _downloadFile, value.walletType)) : candid_none(),
     email: value.email,
     updatedAt: value.updatedAt,
     address: value.address,
@@ -44799,7 +45057,61 @@ function to_candid_record_n4(_uploadFile, _downloadFile, value) {
     phone: value.phone
   };
 }
-function to_candid_variant_n2(_uploadFile, _downloadFile, value) {
+function to_candid_record_n2(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    status: to_candid_SubscriptionStatus_n3(_uploadFile, _downloadFile, value.status),
+    clientId: value.clientId,
+    createdAt: value.createdAt,
+    plan: to_candid_PlanType_n5(_uploadFile, _downloadFile, value.plan),
+    updatedAt: value.updatedAt,
+    startDate: value.startDate
+  };
+}
+function to_candid_record_n54(_uploadFile, _downloadFile, value) {
+  return {
+    clientId: value.clientId ? candid_some(value.clientId) : candid_none(),
+    name: value.name,
+    businessRole: to_candid_BusinessRole_n55(_uploadFile, _downloadFile, value.businessRole),
+    email: value.email
+  };
+}
+function to_candid_record_n8(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    clientId: value.clientId,
+    transactionType: to_candid_TransactionType_n9(_uploadFile, _downloadFile, value.transactionType),
+    value: value.value,
+    date: value.date,
+    hash: value.hash,
+    createdAt: value.createdAt,
+    description: value.description,
+    updatedAt: value.updatedAt,
+    category: to_candid_TransactionCategory_n11(_uploadFile, _downloadFile, value.category),
+    confirmed: value.confirmed
+  };
+}
+function to_candid_variant_n10(_uploadFile, _downloadFile, value) {
+  return value == "expense" ? {
+    expense: null
+  } : value == "income" ? {
+    income: null
+  } : value;
+}
+function to_candid_variant_n12(_uploadFile, _downloadFile, value) {
+  return value == "revenue" ? {
+    revenue: null
+  } : value == "liability" ? {
+    liability: null
+  } : value == "expense" ? {
+    expense: null
+  } : value == "asset" ? {
+    asset: null
+  } : value == "equity" ? {
+    equity: null
+  } : value;
+}
+function to_candid_variant_n14(_uploadFile, _downloadFile, value) {
   return value == "admin" ? {
     admin: null
   } : value == "user" ? {
@@ -44808,7 +45120,23 @@ function to_candid_variant_n2(_uploadFile, _downloadFile, value) {
     guest: null
   } : value;
 }
-function to_candid_variant_n33(_uploadFile, _downloadFile, value) {
+function to_candid_variant_n18(_uploadFile, _downloadFile, value) {
+  return value == "ckbtc" ? {
+    ckbtc: null
+  } : value == "manual" ? {
+    manual: null
+  } : value;
+}
+function to_candid_variant_n4(_uploadFile, _downloadFile, value) {
+  return value == "active" ? {
+    active: null
+  } : value == "inactive" ? {
+    inactive: null
+  } : value == "suspended" ? {
+    suspended: null
+  } : value;
+}
+function to_candid_variant_n56(_uploadFile, _downloadFile, value) {
   return value == "accountant" ? {
     accountant: null
   } : value == "client" ? {
@@ -44824,13 +45152,6 @@ function to_candid_variant_n6(_uploadFile, _downloadFile, value) {
     professional: null
   } : value == "basic" ? {
     basic: null
-  } : value;
-}
-function to_candid_variant_n8(_uploadFile, _downloadFile, value) {
-  return value == "ckbtc" ? {
-    ckbtc: null
-  } : value == "manual" ? {
-    manual: null
   } : value;
 }
 function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {

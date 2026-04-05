@@ -380,4 +380,112 @@ actor {
       };
     };
   };
+
+  // ⚠🔼 6 NEW FUNCTIONS ADDED BELOW 🔼⚠
+
+  // 1. Get all transactions (with filter for non-admins)
+  public query ({ caller }) func getAllTransactions() : async [Transaction] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can view transactions");
+    };
+
+    if (AccessControl.isAdmin(accessControlState, caller)) {
+      // Admins see all transactions
+      return transactions.values().toArray();
+    };
+
+    // Non-admins: filter transactions by their clientId
+    switch (userProfiles.get(caller)) {
+      case (null) { [] };
+      case (?profile) {
+        switch (profile.clientId) {
+          case (null) { [] };
+          case (?ownedClientId) {
+            transactions.values().filter(
+              func(transaction) {
+                transaction.clientId == ownedClientId;
+              }
+            ).toArray();
+          };
+        };
+      };
+    };
+  };
+
+  // 2. Get transactions by specific clientId
+  public query ({ caller }) func getTransactionsByClientId(clientId : ClientId) : async [Transaction] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can view transactions");
+    };
+
+    if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
+      Runtime.trap("Unauthorized: Can only view your own transactions");
+    };
+
+    transactions.values().filter(
+      func(transaction) {
+        transaction.clientId == clientId;
+      }
+    ).toArray();
+  };
+
+  // 3. Add new transaction (admin only)
+  public shared ({ caller }) func addTransaction(newTx : Transaction) : async TransactionId {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can add transactions");
+    };
+
+    let txWithId = {
+      newTx with
+      id = nextTransactionId;
+      createdAt = Time.now();
+    };
+    transactions.add(nextTransactionId, txWithId);
+    nextTransactionId += 1;
+    txWithId.id;
+  };
+
+  // 4. Get all subscriptions (admin only)
+  public query ({ caller }) func getAllSubscriptions() : async [Subscription] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can view all subscriptions");
+    };
+    subscriptions.values().toArray();
+  };
+
+  // 5. Get subscription by clientId
+  public query ({ caller }) func getSubscriptionByClientId(clientId : ClientId) : async ?Subscription {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can view subscriptions");
+    };
+
+    if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
+      Runtime.trap("Unauthorized: Can only view your own subscription");
+    };
+
+    let matches = subscriptions.values().filter(
+      func(sub) {
+        sub.clientId == clientId;
+      }
+    ).toArray();
+
+    if (matches.size() == 0) { return null };
+    ?matches[0];
+  };
+
+  // 6. Add new subscription (admin only)
+  public shared ({ caller }) func addSubscription(newSub : Subscription) : async SubscriptionId {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can add subscriptions");
+    };
+
+    let subWithId = {
+      newSub with
+      id = nextSubscriptionId;
+      createdAt = Time.now();
+    };
+    subscriptions.add(nextSubscriptionId, subWithId);
+    nextSubscriptionId += 1;
+    subWithId.id;
+  };
 };

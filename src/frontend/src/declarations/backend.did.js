@@ -8,10 +8,11 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const UserRole = IDL.Variant({
-  'admin' : IDL.Null,
-  'user' : IDL.Null,
-  'guest' : IDL.Null,
+export const SubscriptionId = IDL.Nat;
+export const SubscriptionStatus = IDL.Variant({
+  'active' : IDL.Null,
+  'inactive' : IDL.Null,
+  'suspended' : IDL.Null,
 });
 export const ClientId = IDL.Nat;
 export const Time = IDL.Int;
@@ -19,6 +20,45 @@ export const PlanType = IDL.Variant({
   'enterprise' : IDL.Null,
   'professional' : IDL.Null,
   'basic' : IDL.Null,
+});
+export const Subscription = IDL.Record({
+  'id' : SubscriptionId,
+  'status' : SubscriptionStatus,
+  'clientId' : ClientId,
+  'createdAt' : Time,
+  'plan' : PlanType,
+  'updatedAt' : Time,
+  'startDate' : Time,
+});
+export const TransactionId = IDL.Nat;
+export const TransactionType = IDL.Variant({
+  'expense' : IDL.Null,
+  'income' : IDL.Null,
+});
+export const TransactionCategory = IDL.Variant({
+  'revenue' : IDL.Null,
+  'liability' : IDL.Null,
+  'expense' : IDL.Null,
+  'asset' : IDL.Null,
+  'equity' : IDL.Null,
+});
+export const Transaction = IDL.Record({
+  'id' : TransactionId,
+  'clientId' : ClientId,
+  'transactionType' : TransactionType,
+  'value' : IDL.Nat,
+  'date' : Time,
+  'hash' : IDL.Text,
+  'createdAt' : Time,
+  'description' : IDL.Text,
+  'updatedAt' : Time,
+  'category' : TransactionCategory,
+  'confirmed' : IDL.Bool,
+});
+export const UserRole = IDL.Variant({
+  'admin' : IDL.Null,
+  'user' : IDL.Null,
+  'guest' : IDL.Null,
 });
 export const WalletType = IDL.Variant({
   'ckbtc' : IDL.Null,
@@ -56,11 +96,15 @@ export const ClientBitcoinAddressResult = IDL.Record({
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'addSubscription' : IDL.Func([Subscription], [SubscriptionId], []),
+  'addTransaction' : IDL.Func([Transaction], [TransactionId], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'deleteClient' : IDL.Func([ClientId], [], []),
   'editClient' : IDL.Func([ClientId, Client], [], []),
   'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
   'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
+  'getAllSubscriptions' : IDL.Func([], [IDL.Vec(Subscription)], ['query']),
+  'getAllTransactions' : IDL.Func([], [IDL.Vec(Transaction)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getCkBtcBalance' : IDL.Func([ClientId], [IDL.Nat], []),
@@ -68,6 +112,16 @@ export const idlService = IDL.Service({
   'getClientBitcoinAddress' : IDL.Func(
       [ClientId],
       [IDL.Opt(ClientBitcoinAddressResult)],
+      ['query'],
+    ),
+  'getSubscriptionByClientId' : IDL.Func(
+      [ClientId],
+      [IDL.Opt(Subscription)],
+      ['query'],
+    ),
+  'getTransactionsByClientId' : IDL.Func(
+      [ClientId],
+      [IDL.Vec(Transaction)],
       ['query'],
     ),
   'getUserProfile' : IDL.Func(
@@ -88,10 +142,11 @@ export const idlService = IDL.Service({
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
-  const UserRole = IDL.Variant({
-    'admin' : IDL.Null,
-    'user' : IDL.Null,
-    'guest' : IDL.Null,
+  const SubscriptionId = IDL.Nat;
+  const SubscriptionStatus = IDL.Variant({
+    'active' : IDL.Null,
+    'inactive' : IDL.Null,
+    'suspended' : IDL.Null,
   });
   const ClientId = IDL.Nat;
   const Time = IDL.Int;
@@ -99,6 +154,45 @@ export const idlFactory = ({ IDL }) => {
     'enterprise' : IDL.Null,
     'professional' : IDL.Null,
     'basic' : IDL.Null,
+  });
+  const Subscription = IDL.Record({
+    'id' : SubscriptionId,
+    'status' : SubscriptionStatus,
+    'clientId' : ClientId,
+    'createdAt' : Time,
+    'plan' : PlanType,
+    'updatedAt' : Time,
+    'startDate' : Time,
+  });
+  const TransactionId = IDL.Nat;
+  const TransactionType = IDL.Variant({
+    'expense' : IDL.Null,
+    'income' : IDL.Null,
+  });
+  const TransactionCategory = IDL.Variant({
+    'revenue' : IDL.Null,
+    'liability' : IDL.Null,
+    'expense' : IDL.Null,
+    'asset' : IDL.Null,
+    'equity' : IDL.Null,
+  });
+  const Transaction = IDL.Record({
+    'id' : TransactionId,
+    'clientId' : ClientId,
+    'transactionType' : TransactionType,
+    'value' : IDL.Nat,
+    'date' : Time,
+    'hash' : IDL.Text,
+    'createdAt' : Time,
+    'description' : IDL.Text,
+    'updatedAt' : Time,
+    'category' : TransactionCategory,
+    'confirmed' : IDL.Bool,
+  });
+  const UserRole = IDL.Variant({
+    'admin' : IDL.Null,
+    'user' : IDL.Null,
+    'guest' : IDL.Null,
   });
   const WalletType = IDL.Variant({ 'ckbtc' : IDL.Null, 'manual' : IDL.Null });
   const Client = IDL.Record({
@@ -133,11 +227,15 @@ export const idlFactory = ({ IDL }) => {
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'addSubscription' : IDL.Func([Subscription], [SubscriptionId], []),
+    'addTransaction' : IDL.Func([Transaction], [TransactionId], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'deleteClient' : IDL.Func([ClientId], [], []),
     'editClient' : IDL.Func([ClientId, Client], [], []),
     'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
     'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
+    'getAllSubscriptions' : IDL.Func([], [IDL.Vec(Subscription)], ['query']),
+    'getAllTransactions' : IDL.Func([], [IDL.Vec(Transaction)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getCkBtcBalance' : IDL.Func([ClientId], [IDL.Nat], []),
@@ -145,6 +243,16 @@ export const idlFactory = ({ IDL }) => {
     'getClientBitcoinAddress' : IDL.Func(
         [ClientId],
         [IDL.Opt(ClientBitcoinAddressResult)],
+        ['query'],
+      ),
+    'getSubscriptionByClientId' : IDL.Func(
+        [ClientId],
+        [IDL.Opt(Subscription)],
+        ['query'],
+      ),
+    'getTransactionsByClientId' : IDL.Func(
+        [ClientId],
+        [IDL.Vec(Transaction)],
         ['query'],
       ),
     'getUserProfile' : IDL.Func(

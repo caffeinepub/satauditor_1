@@ -35,7 +35,41 @@ export type ClientId = bigint;
 export type PlanType = { 'enterprise' : null } |
   { 'professional' : null } |
   { 'basic' : null };
+export interface Subscription {
+  'id' : SubscriptionId,
+  'status' : SubscriptionStatus,
+  'clientId' : ClientId,
+  'createdAt' : Time,
+  'plan' : PlanType,
+  'updatedAt' : Time,
+  'startDate' : Time,
+}
+export type SubscriptionId = bigint;
+export type SubscriptionStatus = { 'active' : null } |
+  { 'inactive' : null } |
+  { 'suspended' : null };
 export type Time = bigint;
+export interface Transaction {
+  'id' : TransactionId,
+  'clientId' : ClientId,
+  'transactionType' : TransactionType,
+  'value' : bigint,
+  'date' : Time,
+  'hash' : string,
+  'createdAt' : Time,
+  'description' : string,
+  'updatedAt' : Time,
+  'category' : TransactionCategory,
+  'confirmed' : boolean,
+}
+export type TransactionCategory = { 'revenue' : null } |
+  { 'liability' : null } |
+  { 'expense' : null } |
+  { 'asset' : null } |
+  { 'equity' : null };
+export type TransactionId = bigint;
+export type TransactionType = { 'expense' : null } |
+  { 'income' : null };
 export interface UserProfile {
   'clientId' : [] | [ClientId],
   'name' : string,
@@ -49,11 +83,15 @@ export type WalletType = { 'ckbtc' : null } |
   { 'manual' : null };
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'addSubscription' : ActorMethod<[Subscription], SubscriptionId>,
+  'addTransaction' : ActorMethod<[Transaction], TransactionId>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'deleteClient' : ActorMethod<[ClientId], undefined>,
   'editClient' : ActorMethod<[ClientId, Client], undefined>,
   'generateCkBtcAddress' : ActorMethod<[ClientId], string>,
   'getAllClients' : ActorMethod<[], Array<Client>>,
+  'getAllSubscriptions' : ActorMethod<[], Array<Subscription>>,
+  'getAllTransactions' : ActorMethod<[], Array<Transaction>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getCkBtcBalance' : ActorMethod<[ClientId], bigint>,
@@ -62,6 +100,8 @@ export interface _SERVICE {
     [ClientId],
     [] | [ClientBitcoinAddressResult]
   >,
+  'getSubscriptionByClientId' : ActorMethod<[ClientId], [] | [Subscription]>,
+  'getTransactionsByClientId' : ActorMethod<[ClientId], Array<Transaction>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'registerClient' : ActorMethod<[Client], ClientId>,

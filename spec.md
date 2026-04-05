@@ -1,50 +1,30 @@
 # SatAuditor
 
 ## Current State
-Novo projeto sem arquivos de aplicação existentes.
+- Cadastro de clientes funcional (ClientesPage.tsx) com campos: empresa, CNPJ, email, telefone, endereço, plano, status.
+- Backend (main.mo) tem tipo `Client` sem nenhum campo de carteira Bitcoin.
+- Nenhuma integração Bitcoin vinculada a clientes ainda.
 
 ## Requested Changes (Diff)
 
 ### Add
-- Sistema completo de autenticação com login via Internet Identity
-- Gerenciamento de clientes (empresas) com CRUD completo
-- Motor contábil: registro e classificação de transações Bitcoin/ckBTC
-- Plano de contas automático com categorias contábeis
-- Relatórios financeiros automáticos: Balanço Patrimonial, DRE, Fluxo de Caixa
-- Auditoria automática com rastreabilidade de cada transação on-chain
-- Dashboard com gráficos e métricas em tempo real
-- Histórico completo de transações com filtros
-- Gestão de assinaturas/planos de serviço (sem preços fixos por enquanto)
-- Conciliação financeira automática
-- Notificações de auditoria e alertas
-- Interface 100% em português
+- **Backend:** Campos `bitcoinAddress: ?Text` e `walletType: ?{#manual; #ckbtc}` no tipo `Client`.
+- **Backend:** Função `generateCkBtcAddress(clientId)` que deriva endereço P2PKH exclusivo via API de gerenciamento do ICP (ecdsa_public_key + derivation path por clientId).
+- **Backend:** Função `setClientBitcoinAddress(clientId, address)` para vinculação manual.
+- **Backend:** Função `getClientBitcoinAddress(clientId)` para consulta do endereço.
+- **Frontend:** Seção "Carteira Bitcoin" no modal de cadastro/edição: RadioGroup entre endereço manual e gerar via ICP (ckBTC), campo de input manual, botão Gerar com resultado exibido, botão copiar.
+- **Frontend:** Ícone Bitcoin colorido na tabela quando cliente tem carteira vinculada.
 
 ### Modify
-- N/A (novo projeto)
+- **Backend:** Tipo `Client` recebe `bitcoinAddress` e `walletType` como campos opcionais.
+- **Frontend:** Interface `Cliente` e form state incluem `bitcoinAddress` e `walletType`.
 
 ### Remove
-- N/A (novo projeto)
+- Nada.
 
 ## Implementation Plan
-
-### Backend (Motoko)
-- Actor principal com autenticação por Principal ICP
-- Módulo de clientes: cadastro, edição, listagem de empresas
-- Módulo de transações: registro, classificação, categorização Bitcoin/ckBTC
-- Módulo contábil: plano de contas, lançamentos, regras contábeis
-- Módulo de relatórios: geração de Balanço, DRE, Fluxo de Caixa
-- Módulo de auditoria: log imutável de eventos, rastreabilidade
-- Gestão de planos/assinaturas por usuário
-- Funções de consulta para gráficos e métricas do dashboard
-
-### Frontend (React + TypeScript)
-- Tela de login com Internet Identity
-- Dashboard principal com métricas, gráficos e resumo financeiro
-- Módulo de Clientes: listagem, cadastro, detalhes de cada empresa
-- Módulo de Transações: registro manual, listagem com filtros, categorização
-- Módulo Contábil: visualização do plano de contas, lançamentos
-- Módulo de Relatórios: Balanço Patrimonial, DRE, Fluxo de Caixa com gráficos
-- Módulo de Auditoria: log de eventos, rastreabilidade, alertas
-- Módulo de Assinaturas: gestão de planos do cliente
-- Navegação lateral completa
-- Todos os textos e labels em português
+1. Atualizar tipo `Client` no backend com campos opcionais de carteira.
+2. Implementar `generateCkBtcAddress` via ecdsa_public_key do ICP (derivação por clientId).
+3. Implementar `setClientBitcoinAddress` e `getClientBitcoinAddress`.
+4. Atualizar `backend.d.ts` com novos tipos e funções.
+5. Atualizar `ClientesPage.tsx`: seção de carteira no modal, ícone na tabela, botão copiar.

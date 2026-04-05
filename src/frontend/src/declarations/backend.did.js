@@ -14,6 +14,30 @@ export const UserRole = IDL.Variant({
   'guest' : IDL.Null,
 });
 export const ClientId = IDL.Nat;
+export const Time = IDL.Int;
+export const PlanType = IDL.Variant({
+  'enterprise' : IDL.Null,
+  'professional' : IDL.Null,
+  'basic' : IDL.Null,
+});
+export const WalletType = IDL.Variant({
+  'ckbtc' : IDL.Null,
+  'manual' : IDL.Null,
+});
+export const Client = IDL.Record({
+  'id' : ClientId,
+  'active' : IDL.Bool,
+  'cnpj' : IDL.Text,
+  'name' : IDL.Text,
+  'createdAt' : Time,
+  'plan' : PlanType,
+  'walletType' : IDL.Opt(WalletType),
+  'email' : IDL.Text,
+  'updatedAt' : Time,
+  'address' : IDL.Text,
+  'bitcoinAddress' : IDL.Opt(IDL.Text),
+  'phone' : IDL.Text,
+});
 export const BusinessRole = IDL.Variant({
   'accountant' : IDL.Null,
   'client' : IDL.Null,
@@ -25,19 +49,38 @@ export const UserProfile = IDL.Record({
   'businessRole' : BusinessRole,
   'email' : IDL.Text,
 });
+export const ClientBitcoinAddressResult = IDL.Record({
+  'walletType' : WalletType,
+  'address' : IDL.Text,
+});
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'editClient' : IDL.Func([ClientId, Client], [], []),
+  'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
+  'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getClient' : IDL.Func([ClientId], [IDL.Opt(Client)], ['query']),
+  'getClientBitcoinAddress' : IDL.Func(
+      [ClientId],
+      [IDL.Opt(ClientBitcoinAddressResult)],
+      ['query'],
+    ),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'registerClient' : IDL.Func([Client], [ClientId], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'setClientBitcoinAddress' : IDL.Func(
+      [ClientId, IDL.Text, WalletType],
+      [],
+      [],
+    ),
 });
 
 export const idlInitArgs = [];
@@ -49,6 +92,27 @@ export const idlFactory = ({ IDL }) => {
     'guest' : IDL.Null,
   });
   const ClientId = IDL.Nat;
+  const Time = IDL.Int;
+  const PlanType = IDL.Variant({
+    'enterprise' : IDL.Null,
+    'professional' : IDL.Null,
+    'basic' : IDL.Null,
+  });
+  const WalletType = IDL.Variant({ 'ckbtc' : IDL.Null, 'manual' : IDL.Null });
+  const Client = IDL.Record({
+    'id' : ClientId,
+    'active' : IDL.Bool,
+    'cnpj' : IDL.Text,
+    'name' : IDL.Text,
+    'createdAt' : Time,
+    'plan' : PlanType,
+    'walletType' : IDL.Opt(WalletType),
+    'email' : IDL.Text,
+    'updatedAt' : Time,
+    'address' : IDL.Text,
+    'bitcoinAddress' : IDL.Opt(IDL.Text),
+    'phone' : IDL.Text,
+  });
   const BusinessRole = IDL.Variant({
     'accountant' : IDL.Null,
     'client' : IDL.Null,
@@ -60,19 +124,38 @@ export const idlFactory = ({ IDL }) => {
     'businessRole' : BusinessRole,
     'email' : IDL.Text,
   });
+  const ClientBitcoinAddressResult = IDL.Record({
+    'walletType' : WalletType,
+    'address' : IDL.Text,
+  });
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'editClient' : IDL.Func([ClientId, Client], [], []),
+    'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
+    'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getClient' : IDL.Func([ClientId], [IDL.Opt(Client)], ['query']),
+    'getClientBitcoinAddress' : IDL.Func(
+        [ClientId],
+        [IDL.Opt(ClientBitcoinAddressResult)],
+        ['query'],
+      ),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'registerClient' : IDL.Func([Client], [ClientId], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'setClientBitcoinAddress' : IDL.Func(
+        [ClientId, IDL.Text, WalletType],
+        [],
+        [],
+      ),
   });
 };
 

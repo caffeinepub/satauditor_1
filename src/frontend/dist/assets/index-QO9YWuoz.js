@@ -17401,19 +17401,19 @@ const Toaster = ({ ...props }) => {
 };
 function createContext2(rootComponentName, defaultContext) {
   const Context = reactExports.createContext(defaultContext);
-  const Provider = (props) => {
+  const Provider2 = (props) => {
     const { children, ...context } = props;
     const value = reactExports.useMemo(() => context, Object.values(context));
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Context.Provider, { value, children });
   };
-  Provider.displayName = rootComponentName + "Provider";
+  Provider2.displayName = rootComponentName + "Provider";
   function useContext2(consumerName) {
     const context = reactExports.useContext(Context);
     if (context) return context;
     if (defaultContext !== void 0) return defaultContext;
     throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
   }
-  return [Provider, useContext2];
+  return [Provider2, useContext2];
 }
 function createContextScope(scopeName, createContextScopeDeps = []) {
   let defaultContexts = [];
@@ -17421,14 +17421,14 @@ function createContextScope(scopeName, createContextScopeDeps = []) {
     const BaseContext = reactExports.createContext(defaultContext);
     const index2 = defaultContexts.length;
     defaultContexts = [...defaultContexts, defaultContext];
-    const Provider = (props) => {
+    const Provider2 = (props) => {
       var _a3;
       const { scope, children, ...context } = props;
       const Context = ((_a3 = scope == null ? void 0 : scope[scopeName]) == null ? void 0 : _a3[index2]) || BaseContext;
       const value = reactExports.useMemo(() => context, Object.values(context));
       return /* @__PURE__ */ jsxRuntimeExports.jsx(Context.Provider, { value, children });
     };
-    Provider.displayName = rootComponentName + "Provider";
+    Provider2.displayName = rootComponentName + "Provider";
     function useContext2(consumerName, scope) {
       var _a3;
       const Context = ((_a3 = scope == null ? void 0 : scope[scopeName]) == null ? void 0 : _a3[index2]) || BaseContext;
@@ -17437,7 +17437,7 @@ function createContextScope(scopeName, createContextScopeDeps = []) {
       if (defaultContext !== void 0) return defaultContext;
       throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
     }
-    return [Provider, useContext2];
+    return [Provider2, useContext2];
   }
   const createScope = () => {
     const scopeContexts = defaultContexts.map((defaultContext) => {
@@ -17563,6 +17563,15 @@ function createSlotClone(ownerName) {
   return SlotClone;
 }
 var SLOTTABLE_IDENTIFIER = Symbol("radix.slottable");
+// @__NO_SIDE_EFFECTS__
+function createSlottable(ownerName) {
+  const Slottable2 = ({ children }) => {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children });
+  };
+  Slottable2.displayName = `${ownerName}.Slottable`;
+  Slottable2.__radixId = SLOTTABLE_IDENTIFIER;
+  return Slottable2;
+}
 function isSlottable(child) {
   return reactExports.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
 }
@@ -17812,14 +17821,14 @@ function useImageLoadingStatus(src, { referrerPolicy, crossOrigin }) {
   }, [image, crossOrigin, referrerPolicy]);
   return loadingStatus;
 }
-var Root$6 = Avatar$1;
+var Root$7 = Avatar$1;
 var Fallback = AvatarFallback$1;
 function Avatar({
   className,
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root$6,
+    Root$7,
     {
       "data-slot": "avatar",
       className: cn(
@@ -18003,10 +18012,10 @@ function isFunction$4(value) {
   return typeof value === "function";
 }
 function createCollection(name) {
-  const PROVIDER_NAME = name + "CollectionProvider";
-  const [createCollectionContext, createCollectionScope2] = createContextScope(PROVIDER_NAME);
+  const PROVIDER_NAME2 = name + "CollectionProvider";
+  const [createCollectionContext, createCollectionScope2] = createContextScope(PROVIDER_NAME2);
   const [CollectionProviderImpl, useCollectionContext] = createCollectionContext(
-    PROVIDER_NAME,
+    PROVIDER_NAME2,
     { collectionRef: { current: null }, itemMap: /* @__PURE__ */ new Map() }
   );
   const CollectionProvider = (props) => {
@@ -18015,7 +18024,7 @@ function createCollection(name) {
     const itemMap = React$3.useRef(/* @__PURE__ */ new Map()).current;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(CollectionProviderImpl, { scope, itemMap, collectionRef: ref, children });
   };
-  CollectionProvider.displayName = PROVIDER_NAME;
+  CollectionProvider.displayName = PROVIDER_NAME2;
   const COLLECTION_SLOT_NAME = name + "CollectionSlot";
   const CollectionSlotImpl = /* @__PURE__ */ createSlot(COLLECTION_SLOT_NAME);
   const CollectionSlot = React$3.forwardRef(
@@ -20410,7 +20419,7 @@ var Arrow$1 = reactExports.forwardRef((props, forwardedRef) => {
   );
 });
 Arrow$1.displayName = NAME$3;
-var Root$5 = Arrow$1;
+var Root$6 = Arrow$1;
 function useSize(element) {
   const [size2, setSize] = reactExports.useState(void 0);
   useLayoutEffect2(() => {
@@ -20473,8 +20482,8 @@ var PopperAnchor = reactExports.forwardRef(
   }
 );
 PopperAnchor.displayName = ANCHOR_NAME$1;
-var CONTENT_NAME$5 = "PopperContent";
-var [PopperContentProvider, useContentContext] = createPopperContext(CONTENT_NAME$5);
+var CONTENT_NAME$6 = "PopperContent";
+var [PopperContentProvider, useContentContext] = createPopperContext(CONTENT_NAME$6);
 var PopperContent = reactExports.forwardRef(
   (props, forwardedRef) => {
     var _a3, _b3, _c2, _d2, _e2, _f2;
@@ -20494,7 +20503,7 @@ var PopperContent = reactExports.forwardRef(
       onPlaced,
       ...contentProps
     } = props;
-    const context = usePopperContext(CONTENT_NAME$5, __scopePopper);
+    const context = usePopperContext(CONTENT_NAME$6, __scopePopper);
     const [content, setContent] = reactExports.useState(null);
     const composedRefs = useComposedRefs$1(forwardedRef, (node) => setContent(node));
     const [arrow$12, setArrow] = reactExports.useState(null);
@@ -20617,8 +20626,8 @@ var PopperContent = reactExports.forwardRef(
     );
   }
 );
-PopperContent.displayName = CONTENT_NAME$5;
-var ARROW_NAME$3 = "PopperArrow";
+PopperContent.displayName = CONTENT_NAME$6;
+var ARROW_NAME$4 = "PopperArrow";
 var OPPOSITE_SIDE = {
   top: "bottom",
   right: "left",
@@ -20627,7 +20636,7 @@ var OPPOSITE_SIDE = {
 };
 var PopperArrow = reactExports.forwardRef(function PopperArrow2(props, forwardedRef) {
   const { __scopePopper, ...arrowProps } = props;
-  const contentContext = useContentContext(ARROW_NAME$3, __scopePopper);
+  const contentContext = useContentContext(ARROW_NAME$4, __scopePopper);
   const baseSide = OPPOSITE_SIDE[contentContext.placedSide];
   return (
     // we have to use an extra wrapper because `ResizeObserver` (used by `useSize`)
@@ -20657,7 +20666,7 @@ var PopperArrow = reactExports.forwardRef(function PopperArrow2(props, forwarded
           visibility: contentContext.shouldHideArrow ? "hidden" : void 0
         },
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Root$5,
+          Root$6,
           {
             ...arrowProps,
             ref: forwardedRef,
@@ -20672,7 +20681,7 @@ var PopperArrow = reactExports.forwardRef(function PopperArrow2(props, forwarded
     )
   );
 });
-PopperArrow.displayName = ARROW_NAME$3;
+PopperArrow.displayName = ARROW_NAME$4;
 function isNotNull$2(value) {
   return value !== null;
 }
@@ -20712,12 +20721,12 @@ function getSideAndAlignFromPlacement(placement) {
   const [side, align = "center"] = placement.split("-");
   return [side, align];
 }
-var Root2$3 = Popper;
+var Root2$4 = Popper;
 var Anchor = PopperAnchor;
 var Content$2 = PopperContent;
 var Arrow = PopperArrow;
-var PORTAL_NAME$4 = "Portal";
-var Portal$3 = reactExports.forwardRef((props, forwardedRef) => {
+var PORTAL_NAME$5 = "Portal";
+var Portal$4 = reactExports.forwardRef((props, forwardedRef) => {
   var _a3;
   const { container: containerProp, ...portalProps } = props;
   const [mounted, setMounted] = reactExports.useState(false);
@@ -20725,7 +20734,7 @@ var Portal$3 = reactExports.forwardRef((props, forwardedRef) => {
   const container = containerProp || mounted && ((_a3 = globalThis == null ? void 0 : globalThis.document) == null ? void 0 : _a3.body);
   return container ? ReactDOM$2.createPortal(/* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...portalProps, ref: forwardedRef }), container) : null;
 });
-Portal$3.displayName = PORTAL_NAME$4;
+Portal$4.displayName = PORTAL_NAME$5;
 function useStateMachine$1(initialState, machine) {
   return reactExports.useReducer((state, event) => {
     const nextState = machine[state][event];
@@ -20954,7 +20963,7 @@ var RovingFocusGroupImpl = reactExports.forwardRef((props, forwardedRef) => {
     }
   );
 });
-var ITEM_NAME$3 = "RovingFocusGroupItem";
+var ITEM_NAME$4 = "RovingFocusGroupItem";
 var RovingFocusGroupItem = reactExports.forwardRef(
   (props, forwardedRef) => {
     const {
@@ -20967,7 +20976,7 @@ var RovingFocusGroupItem = reactExports.forwardRef(
     } = props;
     const autoId = useId();
     const id2 = tabStopId || autoId;
-    const context = useRovingFocusContext(ITEM_NAME$3, __scopeRovingFocusGroup);
+    const context = useRovingFocusContext(ITEM_NAME$4, __scopeRovingFocusGroup);
     const isCurrentTabStop = context.currentTabStopId === id2;
     const getItems = useCollection$2(__scopeRovingFocusGroup);
     const { onFocusableItemAdd, onFocusableItemRemove, currentTabStopId } = context;
@@ -21024,7 +21033,7 @@ var RovingFocusGroupItem = reactExports.forwardRef(
     );
   }
 );
-RovingFocusGroupItem.displayName = ITEM_NAME$3;
+RovingFocusGroupItem.displayName = ITEM_NAME$4;
 var MAP_KEY_TO_FOCUS_INTENT = {
   ArrowLeft: "prev",
   ArrowUp: "prev",
@@ -21056,7 +21065,7 @@ function focusFirst$1(candidates, preventScroll = false) {
 function wrapArray$2(array2, startIndex) {
   return array2.map((_2, index2) => array2[(startIndex + index2) % array2.length]);
 }
-var Root$4 = RovingFocusGroup;
+var Root$5 = RovingFocusGroup;
 var Item$1 = RovingFocusGroupItem;
 var getDefaultParent = function(originalTarget) {
   if (typeof document === "undefined") {
@@ -21850,13 +21859,13 @@ var [createMenuContext, createMenuScope] = createContextScope(MENU_NAME, [
   createPopperScope,
   createRovingFocusGroupScope
 ]);
-var usePopperScope$1 = createPopperScope();
-var useRovingFocusGroupScope$1 = createRovingFocusGroupScope();
+var usePopperScope$2 = createPopperScope();
+var useRovingFocusGroupScope$2 = createRovingFocusGroupScope();
 var [MenuProvider, useMenuContext] = createMenuContext(MENU_NAME);
 var [MenuRootProvider, useMenuRootContext] = createMenuContext(MENU_NAME);
 var Menu$1 = (props) => {
   const { __scopeMenu, open = false, children, dir, onOpenChange, modal = true } = props;
-  const popperScope = usePopperScope$1(__scopeMenu);
+  const popperScope = usePopperScope$2(__scopeMenu);
   const [content, setContent] = reactExports.useState(null);
   const isUsingKeyboardRef = reactExports.useRef(false);
   const handleOpenChange = useCallbackRef$1(onOpenChange);
@@ -21875,7 +21884,7 @@ var Menu$1 = (props) => {
       document.removeEventListener("pointermove", handlePointer, { capture: true });
     };
   }, []);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$3, { ...popperScope, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$4, { ...popperScope, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
     MenuProvider,
     {
       scope: __scopeMenu,
@@ -21902,35 +21911,35 @@ var ANCHOR_NAME = "MenuAnchor";
 var MenuAnchor = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...anchorProps } = props;
-    const popperScope = usePopperScope$1(__scopeMenu);
+    const popperScope = usePopperScope$2(__scopeMenu);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Anchor, { ...popperScope, ...anchorProps, ref: forwardedRef });
   }
 );
 MenuAnchor.displayName = ANCHOR_NAME;
-var PORTAL_NAME$3 = "MenuPortal";
-var [PortalProvider$1, usePortalContext$1] = createMenuContext(PORTAL_NAME$3, {
+var PORTAL_NAME$4 = "MenuPortal";
+var [PortalProvider$2, usePortalContext$2] = createMenuContext(PORTAL_NAME$4, {
   forceMount: void 0
 });
 var MenuPortal = (props) => {
   const { __scopeMenu, forceMount, children, container } = props;
-  const context = useMenuContext(PORTAL_NAME$3, __scopeMenu);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider$1, { scope: __scopeMenu, forceMount, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$3, { asChild: true, container, children }) }) });
+  const context = useMenuContext(PORTAL_NAME$4, __scopeMenu);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider$2, { scope: __scopeMenu, forceMount, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$4, { asChild: true, container, children }) }) });
 };
-MenuPortal.displayName = PORTAL_NAME$3;
-var CONTENT_NAME$4 = "MenuContent";
-var [MenuContentProvider, useMenuContentContext] = createMenuContext(CONTENT_NAME$4);
+MenuPortal.displayName = PORTAL_NAME$4;
+var CONTENT_NAME$5 = "MenuContent";
+var [MenuContentProvider, useMenuContentContext] = createMenuContext(CONTENT_NAME$5);
 var MenuContent = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const portalContext = usePortalContext$1(CONTENT_NAME$4, props.__scopeMenu);
+    const portalContext = usePortalContext$2(CONTENT_NAME$5, props.__scopeMenu);
     const { forceMount = portalContext.forceMount, ...contentProps } = props;
-    const context = useMenuContext(CONTENT_NAME$4, props.__scopeMenu);
-    const rootContext = useMenuRootContext(CONTENT_NAME$4, props.__scopeMenu);
+    const context = useMenuContext(CONTENT_NAME$5, props.__scopeMenu);
+    const rootContext = useMenuRootContext(CONTENT_NAME$5, props.__scopeMenu);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$1.Provider, { scope: props.__scopeMenu, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$1.Slot, { scope: props.__scopeMenu, children: rootContext.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(MenuRootContentModal, { ...contentProps, ref: forwardedRef }) : /* @__PURE__ */ jsxRuntimeExports.jsx(MenuRootContentNonModal, { ...contentProps, ref: forwardedRef }) }) }) });
   }
 );
 var MenuRootContentModal = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const context = useMenuContext(CONTENT_NAME$4, props.__scopeMenu);
+    const context = useMenuContext(CONTENT_NAME$5, props.__scopeMenu);
     const ref = reactExports.useRef(null);
     const composedRefs = useComposedRefs$1(forwardedRef, ref);
     reactExports.useEffect(() => {
@@ -21956,7 +21965,7 @@ var MenuRootContentModal = reactExports.forwardRef(
   }
 );
 var MenuRootContentNonModal = reactExports.forwardRef((props, forwardedRef) => {
-  const context = useMenuContext(CONTENT_NAME$4, props.__scopeMenu);
+  const context = useMenuContext(CONTENT_NAME$5, props.__scopeMenu);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     MenuContentImpl,
     {
@@ -21988,10 +21997,10 @@ var MenuContentImpl = reactExports.forwardRef(
       disableOutsideScroll,
       ...contentProps
     } = props;
-    const context = useMenuContext(CONTENT_NAME$4, __scopeMenu);
-    const rootContext = useMenuRootContext(CONTENT_NAME$4, __scopeMenu);
-    const popperScope = usePopperScope$1(__scopeMenu);
-    const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeMenu);
+    const context = useMenuContext(CONTENT_NAME$5, __scopeMenu);
+    const rootContext = useMenuRootContext(CONTENT_NAME$5, __scopeMenu);
+    const popperScope = usePopperScope$2(__scopeMenu);
+    const rovingFocusGroupScope = useRovingFocusGroupScope$2(__scopeMenu);
     const getItems = useCollection$1(__scopeMenu);
     const [currentItemId, setCurrentItemId] = reactExports.useState(null);
     const contentRef = reactExports.useRef(null);
@@ -22083,7 +22092,7 @@ var MenuContentImpl = reactExports.forwardRef(
                 onInteractOutside,
                 onDismiss,
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Root$4,
+                  Root$5,
                   {
                     asChild: true,
                     ...rovingFocusGroupScope,
@@ -22156,7 +22165,7 @@ var MenuContentImpl = reactExports.forwardRef(
     );
   }
 );
-MenuContent.displayName = CONTENT_NAME$4;
+MenuContent.displayName = CONTENT_NAME$5;
 var GROUP_NAME$2 = "MenuGroup";
 var MenuGroup = reactExports.forwardRef(
   (props, forwardedRef) => {
@@ -22173,14 +22182,14 @@ var MenuLabel = reactExports.forwardRef(
   }
 );
 MenuLabel.displayName = LABEL_NAME$2;
-var ITEM_NAME$2 = "MenuItem";
+var ITEM_NAME$3 = "MenuItem";
 var ITEM_SELECT = "menu.itemSelect";
 var MenuItem = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { disabled = false, onSelect, ...itemProps } = props;
     const ref = reactExports.useRef(null);
-    const rootContext = useMenuRootContext(ITEM_NAME$2, props.__scopeMenu);
-    const contentContext = useMenuContentContext(ITEM_NAME$2, props.__scopeMenu);
+    const rootContext = useMenuRootContext(ITEM_NAME$3, props.__scopeMenu);
+    const contentContext = useMenuContentContext(ITEM_NAME$3, props.__scopeMenu);
     const composedRefs = useComposedRefs$1(forwardedRef, ref);
     const isPointerDownRef = reactExports.useRef(false);
     const handleSelect = () => {
@@ -22224,12 +22233,12 @@ var MenuItem = reactExports.forwardRef(
     );
   }
 );
-MenuItem.displayName = ITEM_NAME$2;
+MenuItem.displayName = ITEM_NAME$3;
 var MenuItemImpl = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, disabled = false, textValue, ...itemProps } = props;
-    const contentContext = useMenuContentContext(ITEM_NAME$2, __scopeMenu);
-    const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeMenu);
+    const contentContext = useMenuContentContext(ITEM_NAME$3, __scopeMenu);
+    const rovingFocusGroupScope = useRovingFocusGroupScope$2(__scopeMenu);
     const ref = reactExports.useRef(null);
     const composedRefs = useComposedRefs$1(forwardedRef, ref);
     const [isFocused, setIsFocused] = reactExports.useState(false);
@@ -22303,9 +22312,9 @@ var MenuCheckboxItem = reactExports.forwardRef(
   }
 );
 MenuCheckboxItem.displayName = CHECKBOX_ITEM_NAME$1;
-var RADIO_GROUP_NAME$1 = "MenuRadioGroup";
-var [RadioGroupProvider, useRadioGroupContext] = createMenuContext(
-  RADIO_GROUP_NAME$1,
+var RADIO_GROUP_NAME$2 = "MenuRadioGroup";
+var [RadioGroupProvider$1, useRadioGroupContext$1] = createMenuContext(
+  RADIO_GROUP_NAME$2,
   { value: void 0, onValueChange: () => {
   } }
 );
@@ -22313,15 +22322,15 @@ var MenuRadioGroup = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { value, onValueChange, ...groupProps } = props;
     const handleValueChange = useCallbackRef$1(onValueChange);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(RadioGroupProvider, { scope: props.__scopeMenu, value, onValueChange: handleValueChange, children: /* @__PURE__ */ jsxRuntimeExports.jsx(MenuGroup, { ...groupProps, ref: forwardedRef }) });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(RadioGroupProvider$1, { scope: props.__scopeMenu, value, onValueChange: handleValueChange, children: /* @__PURE__ */ jsxRuntimeExports.jsx(MenuGroup, { ...groupProps, ref: forwardedRef }) });
   }
 );
-MenuRadioGroup.displayName = RADIO_GROUP_NAME$1;
+MenuRadioGroup.displayName = RADIO_GROUP_NAME$2;
 var RADIO_ITEM_NAME$1 = "MenuRadioItem";
 var MenuRadioItem = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { value, ...radioItemProps } = props;
-    const context = useRadioGroupContext(RADIO_ITEM_NAME$1, props.__scopeMenu);
+    const context = useRadioGroupContext$1(RADIO_ITEM_NAME$1, props.__scopeMenu);
     const checked = value === context.value;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(ItemIndicatorProvider, { scope: props.__scopeMenu, checked, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       MenuItem,
@@ -22386,15 +22395,15 @@ var MenuSeparator = reactExports.forwardRef(
   }
 );
 MenuSeparator.displayName = SEPARATOR_NAME$2;
-var ARROW_NAME$2 = "MenuArrow";
+var ARROW_NAME$3 = "MenuArrow";
 var MenuArrow = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...arrowProps } = props;
-    const popperScope = usePopperScope$1(__scopeMenu);
+    const popperScope = usePopperScope$2(__scopeMenu);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Arrow, { ...popperScope, ...arrowProps, ref: forwardedRef });
   }
 );
-MenuArrow.displayName = ARROW_NAME$2;
+MenuArrow.displayName = ARROW_NAME$3;
 var SUB_NAME = "MenuSub";
 var [MenuSubProvider, useMenuSubContext] = createMenuContext(SUB_NAME);
 var SUB_TRIGGER_NAME$1 = "MenuSubTrigger";
@@ -22504,10 +22513,10 @@ MenuSubTrigger.displayName = SUB_TRIGGER_NAME$1;
 var SUB_CONTENT_NAME$1 = "MenuSubContent";
 var MenuSubContent = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const portalContext = usePortalContext$1(CONTENT_NAME$4, props.__scopeMenu);
+    const portalContext = usePortalContext$2(CONTENT_NAME$5, props.__scopeMenu);
     const { forceMount = portalContext.forceMount, ...subContentProps } = props;
-    const context = useMenuContext(CONTENT_NAME$4, props.__scopeMenu);
-    const rootContext = useMenuRootContext(CONTENT_NAME$4, props.__scopeMenu);
+    const context = useMenuContext(CONTENT_NAME$5, props.__scopeMenu);
+    const rootContext = useMenuRootContext(CONTENT_NAME$5, props.__scopeMenu);
     const subContext = useMenuSubContext(SUB_CONTENT_NAME$1, props.__scopeMenu);
     const ref = reactExports.useRef(null);
     const composedRefs = useComposedRefs$1(forwardedRef, ref);
@@ -22583,7 +22592,7 @@ function getNextMatch(values, search, currentMatch) {
   );
   return nextMatch !== currentMatch ? nextMatch : void 0;
 }
-function isPointInPolygon(point2, polygon) {
+function isPointInPolygon$1(point2, polygon) {
   const { x: x3, y: y2 } = point2;
   let inside = false;
   for (let i = 0, j2 = polygon.length - 1; i < polygon.length; j2 = i++) {
@@ -22601,24 +22610,24 @@ function isPointInPolygon(point2, polygon) {
 function isPointerInGraceArea(event, area) {
   if (!area) return false;
   const cursorPos = { x: event.clientX, y: event.clientY };
-  return isPointInPolygon(cursorPos, area);
+  return isPointInPolygon$1(cursorPos, area);
 }
 function whenMouse(handler) {
   return (event) => event.pointerType === "mouse" ? handler(event) : void 0;
 }
-var Root3 = Menu$1;
+var Root3$1 = Menu$1;
 var Anchor2 = MenuAnchor;
-var Portal$2 = MenuPortal;
-var Content2$2 = MenuContent;
+var Portal$3 = MenuPortal;
+var Content2$3 = MenuContent;
 var Group = MenuGroup;
 var Label$3 = MenuLabel;
-var Item2$1 = MenuItem;
+var Item2$2 = MenuItem;
 var CheckboxItem = MenuCheckboxItem;
-var RadioGroup = MenuRadioGroup;
+var RadioGroup$2 = MenuRadioGroup;
 var RadioItem = MenuRadioItem;
 var ItemIndicator$1 = MenuItemIndicator;
 var Separator$2 = MenuSeparator;
-var Arrow2 = MenuArrow;
+var Arrow2$1 = MenuArrow;
 var SubTrigger = MenuSubTrigger;
 var SubContent = MenuSubContent;
 var DROPDOWN_MENU_NAME = "DropdownMenu";
@@ -22657,16 +22666,16 @@ var DropdownMenu$1 = (props) => {
       onOpenChange: setOpen,
       onOpenToggle: reactExports.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
       modal,
-      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Root3, { ...menuScope, open, onOpenChange: setOpen, dir, modal, children })
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Root3$1, { ...menuScope, open, onOpenChange: setOpen, dir, modal, children })
     }
   );
 };
 DropdownMenu$1.displayName = DROPDOWN_MENU_NAME;
-var TRIGGER_NAME$3 = "DropdownMenuTrigger";
+var TRIGGER_NAME$4 = "DropdownMenuTrigger";
 var DropdownMenuTrigger$1 = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDropdownMenu, disabled = false, ...triggerProps } = props;
-    const context = useDropdownMenuContext(TRIGGER_NAME$3, __scopeDropdownMenu);
+    const context = useDropdownMenuContext(TRIGGER_NAME$4, __scopeDropdownMenu);
     const menuScope = useMenuScope(__scopeDropdownMenu);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Anchor2, { asChild: true, ...menuScope, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       Primitive.button,
@@ -22697,23 +22706,23 @@ var DropdownMenuTrigger$1 = reactExports.forwardRef(
     ) });
   }
 );
-DropdownMenuTrigger$1.displayName = TRIGGER_NAME$3;
-var PORTAL_NAME$2 = "DropdownMenuPortal";
+DropdownMenuTrigger$1.displayName = TRIGGER_NAME$4;
+var PORTAL_NAME$3 = "DropdownMenuPortal";
 var DropdownMenuPortal = (props) => {
   const { __scopeDropdownMenu, ...portalProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$2, { ...menuScope, ...portalProps });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$3, { ...menuScope, ...portalProps });
 };
-DropdownMenuPortal.displayName = PORTAL_NAME$2;
-var CONTENT_NAME$3 = "DropdownMenuContent";
+DropdownMenuPortal.displayName = PORTAL_NAME$3;
+var CONTENT_NAME$4 = "DropdownMenuContent";
 var DropdownMenuContent$1 = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDropdownMenu, ...contentProps } = props;
-    const context = useDropdownMenuContext(CONTENT_NAME$3, __scopeDropdownMenu);
+    const context = useDropdownMenuContext(CONTENT_NAME$4, __scopeDropdownMenu);
     const menuScope = useMenuScope(__scopeDropdownMenu);
     const hasInteractedOutsideRef = reactExports.useRef(false);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Content2$2,
+      Content2$3,
       {
         id: context.contentId,
         "aria-labelledby": context.triggerId,
@@ -22747,7 +22756,7 @@ var DropdownMenuContent$1 = reactExports.forwardRef(
     );
   }
 );
-DropdownMenuContent$1.displayName = CONTENT_NAME$3;
+DropdownMenuContent$1.displayName = CONTENT_NAME$4;
 var GROUP_NAME$1 = "DropdownMenuGroup";
 var DropdownMenuGroup = reactExports.forwardRef(
   (props, forwardedRef) => {
@@ -22766,15 +22775,15 @@ var DropdownMenuLabel = reactExports.forwardRef(
   }
 );
 DropdownMenuLabel.displayName = LABEL_NAME$1;
-var ITEM_NAME$1 = "DropdownMenuItem";
+var ITEM_NAME$2 = "DropdownMenuItem";
 var DropdownMenuItem$1 = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDropdownMenu, ...itemProps } = props;
     const menuScope = useMenuScope(__scopeDropdownMenu);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Item2$1, { ...menuScope, ...itemProps, ref: forwardedRef });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Item2$2, { ...menuScope, ...itemProps, ref: forwardedRef });
   }
 );
-DropdownMenuItem$1.displayName = ITEM_NAME$1;
+DropdownMenuItem$1.displayName = ITEM_NAME$2;
 var CHECKBOX_ITEM_NAME = "DropdownMenuCheckboxItem";
 var DropdownMenuCheckboxItem = reactExports.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...checkboxItemProps } = props;
@@ -22782,13 +22791,13 @@ var DropdownMenuCheckboxItem = reactExports.forwardRef((props, forwardedRef) => 
   return /* @__PURE__ */ jsxRuntimeExports.jsx(CheckboxItem, { ...menuScope, ...checkboxItemProps, ref: forwardedRef });
 });
 DropdownMenuCheckboxItem.displayName = CHECKBOX_ITEM_NAME;
-var RADIO_GROUP_NAME = "DropdownMenuRadioGroup";
+var RADIO_GROUP_NAME$1 = "DropdownMenuRadioGroup";
 var DropdownMenuRadioGroup = reactExports.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...radioGroupProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(RadioGroup, { ...menuScope, ...radioGroupProps, ref: forwardedRef });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(RadioGroup$2, { ...menuScope, ...radioGroupProps, ref: forwardedRef });
 });
-DropdownMenuRadioGroup.displayName = RADIO_GROUP_NAME;
+DropdownMenuRadioGroup.displayName = RADIO_GROUP_NAME$1;
 var RADIO_ITEM_NAME = "DropdownMenuRadioItem";
 var DropdownMenuRadioItem = reactExports.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...radioItemProps } = props;
@@ -22796,13 +22805,13 @@ var DropdownMenuRadioItem = reactExports.forwardRef((props, forwardedRef) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(RadioItem, { ...menuScope, ...radioItemProps, ref: forwardedRef });
 });
 DropdownMenuRadioItem.displayName = RADIO_ITEM_NAME;
-var INDICATOR_NAME = "DropdownMenuItemIndicator";
+var INDICATOR_NAME$1 = "DropdownMenuItemIndicator";
 var DropdownMenuItemIndicator = reactExports.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...itemIndicatorProps } = props;
   const menuScope = useMenuScope(__scopeDropdownMenu);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(ItemIndicator$1, { ...menuScope, ...itemIndicatorProps, ref: forwardedRef });
 });
-DropdownMenuItemIndicator.displayName = INDICATOR_NAME;
+DropdownMenuItemIndicator.displayName = INDICATOR_NAME$1;
 var SEPARATOR_NAME$1 = "DropdownMenuSeparator";
 var DropdownMenuSeparator = reactExports.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...separatorProps } = props;
@@ -22810,15 +22819,15 @@ var DropdownMenuSeparator = reactExports.forwardRef((props, forwardedRef) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Separator$2, { ...menuScope, ...separatorProps, ref: forwardedRef });
 });
 DropdownMenuSeparator.displayName = SEPARATOR_NAME$1;
-var ARROW_NAME$1 = "DropdownMenuArrow";
+var ARROW_NAME$2 = "DropdownMenuArrow";
 var DropdownMenuArrow = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDropdownMenu, ...arrowProps } = props;
     const menuScope = useMenuScope(__scopeDropdownMenu);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Arrow2, { ...menuScope, ...arrowProps, ref: forwardedRef });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Arrow2$1, { ...menuScope, ...arrowProps, ref: forwardedRef });
   }
 );
-DropdownMenuArrow.displayName = ARROW_NAME$1;
+DropdownMenuArrow.displayName = ARROW_NAME$2;
 var SUB_TRIGGER_NAME = "DropdownMenuSubTrigger";
 var DropdownMenuSubTrigger = reactExports.forwardRef((props, forwardedRef) => {
   const { __scopeDropdownMenu, ...subTriggerProps } = props;
@@ -22851,11 +22860,11 @@ var DropdownMenuSubContent = reactExports.forwardRef((props, forwardedRef) => {
   );
 });
 DropdownMenuSubContent.displayName = SUB_CONTENT_NAME;
-var Root2$2 = DropdownMenu$1;
-var Trigger$3 = DropdownMenuTrigger$1;
+var Root2$3 = DropdownMenu$1;
+var Trigger$4 = DropdownMenuTrigger$1;
 var Portal2 = DropdownMenuPortal;
-var Content2$1 = DropdownMenuContent$1;
-var Item2 = DropdownMenuItem$1;
+var Content2$2 = DropdownMenuContent$1;
+var Item2$1 = DropdownMenuItem$1;
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -22961,20 +22970,20 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$v = [
+const __iconNode$y = [
   ["path", { d: "M8 3 4 7l4 4", key: "9rb6wj" }],
   ["path", { d: "M4 7h16", key: "6tx8e3" }],
   ["path", { d: "m16 21 4-4-4-4", key: "siv7j2" }],
   ["path", { d: "M20 17H4", key: "h6l3hr" }]
 ];
-const ArrowLeftRight = createLucideIcon("arrow-left-right", __iconNode$v);
+const ArrowLeftRight = createLucideIcon("arrow-left-right", __iconNode$y);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$u = [
+const __iconNode$x = [
   ["path", { d: "M10.268 21a2 2 0 0 0 3.464 0", key: "vwvbt9" }],
   [
     "path",
@@ -22984,14 +22993,14 @@ const __iconNode$u = [
     }
   ]
 ];
-const Bell = createLucideIcon("bell", __iconNode$u);
+const Bell = createLucideIcon("bell", __iconNode$x);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$t = [
+const __iconNode$w = [
   [
     "path",
     {
@@ -23000,14 +23009,14 @@ const __iconNode$t = [
     }
   ]
 ];
-const Bitcoin = createLucideIcon("bitcoin", __iconNode$t);
+const Bitcoin = createLucideIcon("bitcoin", __iconNode$w);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$s = [
+const __iconNode$v = [
   ["path", { d: "M12 7v14", key: "1akyts" }],
   [
     "path",
@@ -23017,52 +23026,83 @@ const __iconNode$s = [
     }
   ]
 ];
-const BookOpen = createLucideIcon("book-open", __iconNode$s);
+const BookOpen = createLucideIcon("book-open", __iconNode$v);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$r = [
+const __iconNode$u = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$r);
+const ChartColumn = createLucideIcon("chart-column", __iconNode$u);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$q = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$q);
+const __iconNode$t = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$t);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$p = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$p);
+const __iconNode$s = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$s);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$o = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$o);
+const __iconNode$r = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$r);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$n = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$n);
+const __iconNode$q = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$q);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$p = [
+  ["path", { d: "M18 20a6 6 0 0 0-12 0", key: "1qehca" }],
+  ["circle", { cx: "12", cy: "10", r: "4", key: "1h16sb" }],
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+];
+const CircleUserRound = createLucideIcon("circle-user-round", __iconNode$p);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$o = [["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]];
+const Circle = createLucideIcon("circle", __iconNode$o);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$n = [
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+];
+const Copy = createLucideIcon("copy", __iconNode$n);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23070,11 +23110,10 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$n);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$m = [
-  ["path", { d: "M18 20a6 6 0 0 0-12 0", key: "1qehca" }],
-  ["circle", { cx: "12", cy: "10", r: "4", key: "1h16sb" }],
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
+  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
 ];
-const CircleUserRound = createLucideIcon("circle-user-round", __iconNode$m);
+const CreditCard = createLucideIcon("credit-card", __iconNode$m);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23082,17 +23121,6 @@ const CircleUserRound = createLucideIcon("circle-user-round", __iconNode$m);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$l = [
-  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
-  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
-];
-const CreditCard = createLucideIcon("credit-card", __iconNode$l);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$k = [
   [
     "path",
     {
@@ -23102,7 +23130,19 @@ const __iconNode$k = [
   ],
   ["path", { d: "M5 21h14", key: "11awu3" }]
 ];
-const Crown = createLucideIcon("crown", __iconNode$k);
+const Crown = createLucideIcon("crown", __iconNode$l);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$k = [
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+];
+const Download = createLucideIcon("download", __iconNode$k);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23110,11 +23150,13 @@ const Crown = createLucideIcon("crown", __iconNode$k);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$j = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M8 18v-2", key: "qcmpov" }],
+  ["path", { d: "M12 18v-4", key: "q1q25u" }],
+  ["path", { d: "M16 18v-6", key: "15y0np" }]
 ];
-const Download = createLucideIcon("download", __iconNode$j);
+const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$j);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23122,34 +23164,32 @@ const Download = createLucideIcon("download", __iconNode$j);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$i = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M8 18v-2", key: "qcmpov" }],
-  ["path", { d: "M12 18v-4", key: "q1q25u" }],
-  ["path", { d: "M16 18v-6", key: "15y0np" }]
-];
-const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$i);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$h = [
   ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
   ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
   ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
   ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
 ];
-const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$h);
+const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$i);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$g = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$g);
+const __iconNode$h = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$h);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$g = [
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+];
+const LogOut = createLucideIcon("log-out", __iconNode$g);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23157,11 +23197,11 @@ const LoaderCircle = createLucideIcon("loader-circle", __iconNode$g);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$f = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$f);
+const Menu = createLucideIcon("menu", __iconNode$f);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23169,18 +23209,6 @@ const LogOut = createLucideIcon("log-out", __iconNode$f);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$e = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
-];
-const Menu = createLucideIcon("menu", __iconNode$e);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$d = [
   [
     "path",
     {
@@ -23193,14 +23221,14 @@ const __iconNode$d = [
   ["circle", { cx: "6.5", cy: "12.5", r: ".5", fill: "currentColor", key: "qy21gx" }],
   ["circle", { cx: "8.5", cy: "7.5", r: ".5", fill: "currentColor", key: "fotxhn" }]
 ];
-const Palette = createLucideIcon("palette", __iconNode$d);
+const Palette = createLucideIcon("palette", __iconNode$e);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$c = [
+const __iconNode$d = [
   [
     "path",
     {
@@ -23210,7 +23238,18 @@ const __iconNode$c = [
   ],
   ["path", { d: "m15 5 4 4", key: "1mk7zo" }]
 ];
-const Pencil = createLucideIcon("pencil", __iconNode$c);
+const Pencil = createLucideIcon("pencil", __iconNode$d);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$c = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "M12 5v14", key: "s699le" }]
+];
+const Plus = createLucideIcon("plus", __iconNode$c);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23218,17 +23257,6 @@ const Pencil = createLucideIcon("pencil", __iconNode$c);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$b = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "M12 5v14", key: "s699le" }]
-];
-const Plus = createLucideIcon("plus", __iconNode$b);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$a = [
   [
     "path",
     {
@@ -23239,7 +23267,18 @@ const __iconNode$a = [
   ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
   ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
 ];
-const Save = createLucideIcon("save", __iconNode$a);
+const Save = createLucideIcon("save", __iconNode$b);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$a = [
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+];
+const Search = createLucideIcon("search", __iconNode$a);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23247,10 +23286,16 @@ const Save = createLucideIcon("save", __iconNode$a);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$9 = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+  [
+    "path",
+    {
+      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
+      key: "1qme2f"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ];
-const Search = createLucideIcon("search", __iconNode$9);
+const Settings = createLucideIcon("settings", __iconNode$9);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23261,13 +23306,12 @@ const __iconNode$8 = [
   [
     "path",
     {
-      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
-      key: "1qme2f"
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
     }
-  ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+  ]
 ];
-const Settings = createLucideIcon("settings", __iconNode$8);
+const Shield = createLucideIcon("shield", __iconNode$8);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23275,15 +23319,13 @@ const Settings = createLucideIcon("settings", __iconNode$8);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$7 = [
-  [
-    "path",
-    {
-      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-      key: "oel41y"
-    }
-  ]
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
+  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
+  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
 ];
-const Shield = createLucideIcon("shield", __iconNode$7);
+const Trash2 = createLucideIcon("trash-2", __iconNode$7);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23291,13 +23333,10 @@ const Shield = createLucideIcon("shield", __iconNode$7);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$6 = [
-  ["path", { d: "M3 6h18", key: "d0wm0j" }],
-  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
-  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
-  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
-  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
+  ["path", { d: "M16 17h6v-6", key: "t6n2it" }],
+  ["path", { d: "m22 17-8.5-8.5-5 5L2 7", key: "x473p" }]
 ];
-const Trash2 = createLucideIcon("trash-2", __iconNode$6);
+const TrendingDown = createLucideIcon("trending-down", __iconNode$6);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23305,10 +23344,10 @@ const Trash2 = createLucideIcon("trash-2", __iconNode$6);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$5 = [
-  ["path", { d: "M16 17h6v-6", key: "t6n2it" }],
-  ["path", { d: "m22 17-8.5-8.5-5 5L2 7", key: "x473p" }]
+  ["path", { d: "M16 7h6v6", key: "box55l" }],
+  ["path", { d: "m22 7-8.5 8.5-5-5L2 17", key: "1t1m79" }]
 ];
-const TrendingDown = createLucideIcon("trending-down", __iconNode$5);
+const TrendingUp = createLucideIcon("trending-up", __iconNode$5);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23316,10 +23355,10 @@ const TrendingDown = createLucideIcon("trending-down", __iconNode$5);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$4 = [
-  ["path", { d: "M16 7h6v6", key: "box55l" }],
-  ["path", { d: "m22 7-8.5 8.5-5-5L2 17", key: "1t1m79" }]
+  ["path", { d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", key: "975kel" }],
+  ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
 ];
-const TrendingUp = createLucideIcon("trending-up", __iconNode$4);
+const User = createLucideIcon("user", __iconNode$4);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23327,10 +23366,12 @@ const TrendingUp = createLucideIcon("trending-up", __iconNode$4);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$3 = [
-  ["path", { d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", key: "975kel" }],
-  ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
+  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
 ];
-const User = createLucideIcon("user", __iconNode$3);
+const Users = createLucideIcon("users", __iconNode$3);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23338,12 +23379,16 @@ const User = createLucideIcon("user", __iconNode$3);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$2 = [
-  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-  ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
-  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
-  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+  [
+    "path",
+    {
+      d: "M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1",
+      key: "18etb6"
+    }
+  ],
+  ["path", { d: "M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4", key: "xoc0q4" }]
 ];
-const Users = createLucideIcon("users", __iconNode$2);
+const Wallet = createLucideIcon("wallet", __iconNode$2);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23374,13 +23419,13 @@ const Zap = createLucideIcon("zap", __iconNode);
 function DropdownMenu({
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$2, { "data-slot": "dropdown-menu", ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$3, { "data-slot": "dropdown-menu", ...props });
 }
 function DropdownMenuTrigger({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Trigger$3,
+    Trigger$4,
     {
       "data-slot": "dropdown-menu-trigger",
       ...props
@@ -23393,7 +23438,7 @@ function DropdownMenuContent({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal2, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Content2$1,
+    Content2$2,
     {
       "data-slot": "dropdown-menu-content",
       sideOffset,
@@ -23412,7 +23457,7 @@ function DropdownMenuItem({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Item2,
+    Item2$1,
     {
       "data-slot": "dropdown-menu-item",
       "data-inset": inset,
@@ -24131,7 +24176,7 @@ function useResizeObserver(element, onResize) {
     }
   }, [element, handleResize]);
 }
-var Root$3 = ScrollArea$1;
+var Root$4 = ScrollArea$1;
 var Viewport$1 = ScrollAreaViewport;
 var Corner = ScrollAreaCorner;
 function ScrollArea({
@@ -24140,7 +24185,7 @@ function ScrollArea({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Root$3,
+    Root$4,
     {
       "data-slot": "scroll-area",
       className: cn("relative", className),
@@ -44005,6 +44050,30 @@ const UserRole = Variant({
   "guest": Null
 });
 const ClientId = Nat;
+const Time = Int;
+const PlanType = Variant({
+  "enterprise": Null,
+  "professional": Null,
+  "basic": Null
+});
+const WalletType$1 = Variant({
+  "ckbtc": Null,
+  "manual": Null
+});
+const Client = Record({
+  "id": ClientId,
+  "active": Bool,
+  "cnpj": Text$1,
+  "name": Text$1,
+  "createdAt": Time,
+  "plan": PlanType,
+  "walletType": Opt(WalletType$1),
+  "email": Text$1,
+  "updatedAt": Time,
+  "address": Text$1,
+  "bitcoinAddress": Opt(Text$1),
+  "phone": Text$1
+});
 const BusinessRole$1 = Variant({
   "accountant": Null,
   "client": Null,
@@ -44016,18 +44085,37 @@ const UserProfile = Record({
   "businessRole": BusinessRole$1,
   "email": Text$1
 });
+const ClientBitcoinAddressResult = Record({
+  "walletType": WalletType$1,
+  "address": Text$1
+});
 Service({
   "_initializeAccessControlWithSecret": Func([Text$1], [], []),
   "assignCallerUserRole": Func([Principal2, UserRole], [], []),
+  "editClient": Func([ClientId, Client], [], []),
+  "generateCkBtcAddress": Func([ClientId], [Text$1], []),
+  "getAllClients": Func([], [Vec(Client)], ["query"]),
   "getCallerUserProfile": Func([], [Opt(UserProfile)], ["query"]),
   "getCallerUserRole": Func([], [UserRole], ["query"]),
+  "getClient": Func([ClientId], [Opt(Client)], ["query"]),
+  "getClientBitcoinAddress": Func(
+    [ClientId],
+    [Opt(ClientBitcoinAddressResult)],
+    ["query"]
+  ),
   "getUserProfile": Func(
     [Principal2],
     [Opt(UserProfile)],
     ["query"]
   ),
   "isCallerAdmin": Func([], [Bool], ["query"]),
-  "saveCallerUserProfile": Func([UserProfile], [], [])
+  "registerClient": Func([Client], [ClientId], []),
+  "saveCallerUserProfile": Func([UserProfile], [], []),
+  "setClientBitcoinAddress": Func(
+    [ClientId, Text$1, WalletType$1],
+    [],
+    []
+  )
 });
 const idlFactory = ({ IDL: IDL2 }) => {
   const UserRole2 = IDL2.Variant({
@@ -44036,6 +44124,27 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "guest": IDL2.Null
   });
   const ClientId2 = IDL2.Nat;
+  const Time2 = IDL2.Int;
+  const PlanType2 = IDL2.Variant({
+    "enterprise": IDL2.Null,
+    "professional": IDL2.Null,
+    "basic": IDL2.Null
+  });
+  const WalletType2 = IDL2.Variant({ "ckbtc": IDL2.Null, "manual": IDL2.Null });
+  const Client2 = IDL2.Record({
+    "id": ClientId2,
+    "active": IDL2.Bool,
+    "cnpj": IDL2.Text,
+    "name": IDL2.Text,
+    "createdAt": Time2,
+    "plan": PlanType2,
+    "walletType": IDL2.Opt(WalletType2),
+    "email": IDL2.Text,
+    "updatedAt": Time2,
+    "address": IDL2.Text,
+    "bitcoinAddress": IDL2.Opt(IDL2.Text),
+    "phone": IDL2.Text
+  });
   const BusinessRole2 = IDL2.Variant({
     "accountant": IDL2.Null,
     "client": IDL2.Null,
@@ -44047,18 +44156,37 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "businessRole": BusinessRole2,
     "email": IDL2.Text
   });
+  const ClientBitcoinAddressResult2 = IDL2.Record({
+    "walletType": WalletType2,
+    "address": IDL2.Text
+  });
   return IDL2.Service({
     "_initializeAccessControlWithSecret": IDL2.Func([IDL2.Text], [], []),
     "assignCallerUserRole": IDL2.Func([IDL2.Principal, UserRole2], [], []),
+    "editClient": IDL2.Func([ClientId2, Client2], [], []),
+    "generateCkBtcAddress": IDL2.Func([ClientId2], [IDL2.Text], []),
+    "getAllClients": IDL2.Func([], [IDL2.Vec(Client2)], ["query"]),
     "getCallerUserProfile": IDL2.Func([], [IDL2.Opt(UserProfile2)], ["query"]),
     "getCallerUserRole": IDL2.Func([], [UserRole2], ["query"]),
+    "getClient": IDL2.Func([ClientId2], [IDL2.Opt(Client2)], ["query"]),
+    "getClientBitcoinAddress": IDL2.Func(
+      [ClientId2],
+      [IDL2.Opt(ClientBitcoinAddressResult2)],
+      ["query"]
+    ),
     "getUserProfile": IDL2.Func(
       [IDL2.Principal],
       [IDL2.Opt(UserProfile2)],
       ["query"]
     ),
     "isCallerAdmin": IDL2.Func([], [IDL2.Bool], ["query"]),
-    "saveCallerUserProfile": IDL2.Func([UserProfile2], [], [])
+    "registerClient": IDL2.Func([Client2], [ClientId2], []),
+    "saveCallerUserProfile": IDL2.Func([UserProfile2], [], []),
+    "setClientBitcoinAddress": IDL2.Func(
+      [ClientId2, IDL2.Text, WalletType2],
+      [],
+      []
+    )
   });
 };
 function candid_some(value) {
@@ -44110,6 +44238,11 @@ class ExternalBlob {
     return this;
   }
 }
+var WalletType = /* @__PURE__ */ ((WalletType2) => {
+  WalletType2["ckbtc"] = "ckbtc";
+  WalletType2["manual"] = "manual";
+  return WalletType2;
+})(WalletType || {});
 class Backend {
   constructor(actor, _uploadFile, _downloadFile, processError2) {
     this.actor = actor;
@@ -44145,46 +44278,116 @@ class Backend {
       return result;
     }
   }
+  async editClient(arg0, arg1) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.editClient(arg0, to_candid_Client_n3(this._uploadFile, this._downloadFile, arg1));
+        return result;
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.editClient(arg0, to_candid_Client_n3(this._uploadFile, this._downloadFile, arg1));
+      return result;
+    }
+  }
+  async generateCkBtcAddress(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.generateCkBtcAddress(arg0);
+        return result;
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.generateCkBtcAddress(arg0);
+      return result;
+    }
+  }
+  async getAllClients() {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getAllClients();
+        return from_candid_vec_n9(this._uploadFile, this._downloadFile, result);
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getAllClients();
+      return from_candid_vec_n9(this._uploadFile, this._downloadFile, result);
+    }
+  }
   async getCallerUserProfile() {
     if (this.processError) {
       try {
         const result = await this.actor.getCallerUserProfile();
-        return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n18(this._uploadFile, this._downloadFile, result);
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getCallerUserProfile();
-      return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n18(this._uploadFile, this._downloadFile, result);
     }
   }
   async getCallerUserRole() {
     if (this.processError) {
       try {
         const result = await this.actor.getCallerUserRole();
-        return from_candid_UserRole_n9(this._uploadFile, this._downloadFile, result);
+        return from_candid_UserRole_n24(this._uploadFile, this._downloadFile, result);
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getCallerUserRole();
-      return from_candid_UserRole_n9(this._uploadFile, this._downloadFile, result);
+      return from_candid_UserRole_n24(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getClient(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getClient(arg0);
+        return from_candid_opt_n26(this._uploadFile, this._downloadFile, result);
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getClient(arg0);
+      return from_candid_opt_n26(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getClientBitcoinAddress(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getClientBitcoinAddress(arg0);
+        return from_candid_opt_n27(this._uploadFile, this._downloadFile, result);
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getClientBitcoinAddress(arg0);
+      return from_candid_opt_n27(this._uploadFile, this._downloadFile, result);
     }
   }
   async getUserProfile(arg0) {
     if (this.processError) {
       try {
         const result = await this.actor.getUserProfile(arg0);
-        return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+        return from_candid_opt_n18(this._uploadFile, this._downloadFile, result);
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
       const result = await this.actor.getUserProfile(arg0);
-      return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+      return from_candid_opt_n18(this._uploadFile, this._downloadFile, result);
     }
   }
   async isCallerAdmin() {
@@ -44201,75 +44404,174 @@ class Backend {
       return result;
     }
   }
-  async saveCallerUserProfile(arg0) {
+  async registerClient(arg0) {
     if (this.processError) {
       try {
-        const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n11(this._uploadFile, this._downloadFile, arg0));
+        const result = await this.actor.registerClient(to_candid_Client_n3(this._uploadFile, this._downloadFile, arg0));
         return result;
       } catch (e3) {
         this.processError(e3);
         throw new Error("unreachable");
       }
     } else {
-      const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n11(this._uploadFile, this._downloadFile, arg0));
+      const result = await this.actor.registerClient(to_candid_Client_n3(this._uploadFile, this._downloadFile, arg0));
+      return result;
+    }
+  }
+  async saveCallerUserProfile(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n30(this._uploadFile, this._downloadFile, arg0));
+        return result;
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n30(this._uploadFile, this._downloadFile, arg0));
+      return result;
+    }
+  }
+  async setClientBitcoinAddress(arg0, arg1, arg2) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.setClientBitcoinAddress(arg0, arg1, to_candid_WalletType_n7(this._uploadFile, this._downloadFile, arg2));
+        return result;
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.setClientBitcoinAddress(arg0, arg1, to_candid_WalletType_n7(this._uploadFile, this._downloadFile, arg2));
       return result;
     }
   }
 }
-function from_candid_BusinessRole_n7(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n8(_uploadFile, _downloadFile, value);
+function from_candid_BusinessRole_n22(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n23(_uploadFile, _downloadFile, value);
 }
-function from_candid_UserProfile_n4(_uploadFile, _downloadFile, value) {
-  return from_candid_record_n5(_uploadFile, _downloadFile, value);
+function from_candid_ClientBitcoinAddressResult_n28(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n29(_uploadFile, _downloadFile, value);
 }
-function from_candid_UserRole_n9(_uploadFile, _downloadFile, value) {
-  return from_candid_variant_n10(_uploadFile, _downloadFile, value);
+function from_candid_Client_n10(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n11(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n3(_uploadFile, _downloadFile, value) {
-  return value.length === 0 ? null : from_candid_UserProfile_n4(_uploadFile, _downloadFile, value[0]);
+function from_candid_PlanType_n12(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n13(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n6(_uploadFile, _downloadFile, value) {
+function from_candid_UserProfile_n19(_uploadFile, _downloadFile, value) {
+  return from_candid_record_n20(_uploadFile, _downloadFile, value);
+}
+function from_candid_UserRole_n24(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n25(_uploadFile, _downloadFile, value);
+}
+function from_candid_WalletType_n15(_uploadFile, _downloadFile, value) {
+  return from_candid_variant_n16(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n14(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_WalletType_n15(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n17(_uploadFile, _downloadFile, value) {
   return value.length === 0 ? null : value[0];
 }
-function from_candid_record_n5(_uploadFile, _downloadFile, value) {
+function from_candid_opt_n18(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_UserProfile_n19(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n21(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n26(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_Client_n10(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n27(_uploadFile, _downloadFile, value) {
+  return value.length === 0 ? null : from_candid_ClientBitcoinAddressResult_n28(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_record_n11(_uploadFile, _downloadFile, value) {
   return {
-    clientId: record_opt_to_undefined(from_candid_opt_n6(_uploadFile, _downloadFile, value.clientId)),
+    id: value.id,
+    active: value.active,
+    cnpj: value.cnpj,
     name: value.name,
-    businessRole: from_candid_BusinessRole_n7(_uploadFile, _downloadFile, value.businessRole),
+    createdAt: value.createdAt,
+    plan: from_candid_PlanType_n12(_uploadFile, _downloadFile, value.plan),
+    walletType: record_opt_to_undefined(from_candid_opt_n14(_uploadFile, _downloadFile, value.walletType)),
+    email: value.email,
+    updatedAt: value.updatedAt,
+    address: value.address,
+    bitcoinAddress: record_opt_to_undefined(from_candid_opt_n17(_uploadFile, _downloadFile, value.bitcoinAddress)),
+    phone: value.phone
+  };
+}
+function from_candid_record_n20(_uploadFile, _downloadFile, value) {
+  return {
+    clientId: record_opt_to_undefined(from_candid_opt_n21(_uploadFile, _downloadFile, value.clientId)),
+    name: value.name,
+    businessRole: from_candid_BusinessRole_n22(_uploadFile, _downloadFile, value.businessRole),
     email: value.email
   };
 }
-function from_candid_variant_n10(_uploadFile, _downloadFile, value) {
-  return "admin" in value ? "admin" : "user" in value ? "user" : "guest" in value ? "guest" : value;
+function from_candid_record_n29(_uploadFile, _downloadFile, value) {
+  return {
+    walletType: from_candid_WalletType_n15(_uploadFile, _downloadFile, value.walletType),
+    address: value.address
+  };
 }
-function from_candid_variant_n8(_uploadFile, _downloadFile, value) {
+function from_candid_variant_n13(_uploadFile, _downloadFile, value) {
+  return "enterprise" in value ? "enterprise" : "professional" in value ? "professional" : "basic" in value ? "basic" : value;
+}
+function from_candid_variant_n16(_uploadFile, _downloadFile, value) {
+  return "ckbtc" in value ? "ckbtc" : "manual" in value ? "manual" : value;
+}
+function from_candid_variant_n23(_uploadFile, _downloadFile, value) {
   return "accountant" in value ? "accountant" : "client" in value ? "client" : "admin" in value ? "admin" : value;
 }
-function to_candid_BusinessRole_n13(_uploadFile, _downloadFile, value) {
-  return to_candid_variant_n14(_uploadFile, _downloadFile, value);
+function from_candid_variant_n25(_uploadFile, _downloadFile, value) {
+  return "admin" in value ? "admin" : "user" in value ? "user" : "guest" in value ? "guest" : value;
 }
-function to_candid_UserProfile_n11(_uploadFile, _downloadFile, value) {
-  return to_candid_record_n12(_uploadFile, _downloadFile, value);
+function from_candid_vec_n9(_uploadFile, _downloadFile, value) {
+  return value.map((x3) => from_candid_Client_n10(_uploadFile, _downloadFile, x3));
+}
+function to_candid_BusinessRole_n32(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n33(_uploadFile, _downloadFile, value);
+}
+function to_candid_Client_n3(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n4(_uploadFile, _downloadFile, value);
+}
+function to_candid_PlanType_n5(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n6(_uploadFile, _downloadFile, value);
+}
+function to_candid_UserProfile_n30(_uploadFile, _downloadFile, value) {
+  return to_candid_record_n31(_uploadFile, _downloadFile, value);
 }
 function to_candid_UserRole_n1(_uploadFile, _downloadFile, value) {
   return to_candid_variant_n2(_uploadFile, _downloadFile, value);
 }
-function to_candid_record_n12(_uploadFile, _downloadFile, value) {
+function to_candid_WalletType_n7(_uploadFile, _downloadFile, value) {
+  return to_candid_variant_n8(_uploadFile, _downloadFile, value);
+}
+function to_candid_record_n31(_uploadFile, _downloadFile, value) {
   return {
     clientId: value.clientId ? candid_some(value.clientId) : candid_none(),
     name: value.name,
-    businessRole: to_candid_BusinessRole_n13(_uploadFile, _downloadFile, value.businessRole),
+    businessRole: to_candid_BusinessRole_n32(_uploadFile, _downloadFile, value.businessRole),
     email: value.email
   };
 }
-function to_candid_variant_n14(_uploadFile, _downloadFile, value) {
-  return value == "accountant" ? {
-    accountant: null
-  } : value == "client" ? {
-    client: null
-  } : value == "admin" ? {
-    admin: null
-  } : value;
+function to_candid_record_n4(_uploadFile, _downloadFile, value) {
+  return {
+    id: value.id,
+    active: value.active,
+    cnpj: value.cnpj,
+    name: value.name,
+    createdAt: value.createdAt,
+    plan: to_candid_PlanType_n5(_uploadFile, _downloadFile, value.plan),
+    walletType: value.walletType ? candid_some(to_candid_WalletType_n7(_uploadFile, _downloadFile, value.walletType)) : candid_none(),
+    email: value.email,
+    updatedAt: value.updatedAt,
+    address: value.address,
+    bitcoinAddress: value.bitcoinAddress ? candid_some(value.bitcoinAddress) : candid_none(),
+    phone: value.phone
+  };
 }
 function to_candid_variant_n2(_uploadFile, _downloadFile, value) {
   return value == "admin" ? {
@@ -44278,6 +44580,31 @@ function to_candid_variant_n2(_uploadFile, _downloadFile, value) {
     user: null
   } : value == "guest" ? {
     guest: null
+  } : value;
+}
+function to_candid_variant_n33(_uploadFile, _downloadFile, value) {
+  return value == "accountant" ? {
+    accountant: null
+  } : value == "client" ? {
+    client: null
+  } : value == "admin" ? {
+    admin: null
+  } : value;
+}
+function to_candid_variant_n6(_uploadFile, _downloadFile, value) {
+  return value == "enterprise" ? {
+    enterprise: null
+  } : value == "professional" ? {
+    professional: null
+  } : value == "basic" ? {
+    basic: null
+  } : value;
+}
+function to_candid_variant_n8(_uploadFile, _downloadFile, value) {
+  return value == "ckbtc" ? {
+    ckbtc: null
+  } : value == "manual" ? {
+    manual: null
   } : value;
 }
 function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {
@@ -45708,6 +46035,7 @@ var VisuallyHidden = reactExports.forwardRef(
   }
 );
 VisuallyHidden.displayName = NAME$2;
+var Root$3 = VisuallyHidden;
 var OPEN_KEYS = [" ", "Enter", "ArrowUp", "ArrowDown"];
 var SELECTION_KEYS = [" ", "Enter"];
 var SELECT_NAME = "Select";
@@ -45716,7 +46044,7 @@ var [createSelectContext] = createContextScope(SELECT_NAME, [
   createCollectionScope,
   createPopperScope
 ]);
-var usePopperScope = createPopperScope();
+var usePopperScope$1 = createPopperScope();
 var [SelectProvider, useSelectContext] = createSelectContext(SELECT_NAME);
 var [SelectNativeOptionsProvider, useSelectNativeOptionsContext] = createSelectContext(SELECT_NAME);
 var Select$1 = (props) => {
@@ -45736,7 +46064,7 @@ var Select$1 = (props) => {
     required,
     form
   } = props;
-  const popperScope = usePopperScope(__scopeSelect);
+  const popperScope = usePopperScope$1(__scopeSelect);
   const [trigger, setTrigger] = reactExports.useState(null);
   const [valueNode, setValueNode] = reactExports.useState(null);
   const [valueNodeHasChildren, setValueNodeHasChildren] = reactExports.useState(false);
@@ -45757,7 +46085,7 @@ var Select$1 = (props) => {
   const isFormControl = trigger ? form || !!trigger.closest("form") : true;
   const [nativeOptionsSet, setNativeOptionsSet] = reactExports.useState(/* @__PURE__ */ new Set());
   const nativeSelectKey = Array.from(nativeOptionsSet).map((option) => option.props.value).join(";");
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$3, { ...popperScope, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$4, { ...popperScope, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
     SelectProvider,
     {
       required,
@@ -45818,12 +46146,12 @@ var Select$1 = (props) => {
   ) });
 };
 Select$1.displayName = SELECT_NAME;
-var TRIGGER_NAME$2 = "SelectTrigger";
+var TRIGGER_NAME$3 = "SelectTrigger";
 var SelectTrigger$1 = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, disabled = false, ...triggerProps } = props;
-    const popperScope = usePopperScope(__scopeSelect);
-    const context = useSelectContext(TRIGGER_NAME$2, __scopeSelect);
+    const popperScope = usePopperScope$1(__scopeSelect);
+    const context = useSelectContext(TRIGGER_NAME$3, __scopeSelect);
     const isDisabled = context.disabled || disabled;
     const composedRefs = useComposedRefs$1(forwardedRef, context.onTriggerChange);
     const getItems = useCollection(__scopeSelect);
@@ -45895,7 +46223,7 @@ var SelectTrigger$1 = reactExports.forwardRef(
     ) });
   }
 );
-SelectTrigger$1.displayName = TRIGGER_NAME$2;
+SelectTrigger$1.displayName = TRIGGER_NAME$3;
 var VALUE_NAME = "SelectValue";
 var SelectValue$1 = reactExports.forwardRef(
   (props, forwardedRef) => {
@@ -45927,15 +46255,15 @@ var SelectIcon = reactExports.forwardRef(
   }
 );
 SelectIcon.displayName = ICON_NAME;
-var PORTAL_NAME$1 = "SelectPortal";
+var PORTAL_NAME$2 = "SelectPortal";
 var SelectPortal = (props) => {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$3, { asChild: true, ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$4, { asChild: true, ...props });
 };
-SelectPortal.displayName = PORTAL_NAME$1;
-var CONTENT_NAME$2 = "SelectContent";
+SelectPortal.displayName = PORTAL_NAME$2;
+var CONTENT_NAME$3 = "SelectContent";
 var SelectContent$1 = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const context = useSelectContext(CONTENT_NAME$2, props.__scopeSelect);
+    const context = useSelectContext(CONTENT_NAME$3, props.__scopeSelect);
     const [fragment, setFragment] = reactExports.useState();
     useLayoutEffect2(() => {
       setFragment(new DocumentFragment());
@@ -45950,9 +46278,9 @@ var SelectContent$1 = reactExports.forwardRef(
     return /* @__PURE__ */ jsxRuntimeExports.jsx(SelectContentImpl, { ...props, ref: forwardedRef });
   }
 );
-SelectContent$1.displayName = CONTENT_NAME$2;
+SelectContent$1.displayName = CONTENT_NAME$3;
 var CONTENT_MARGIN = 10;
-var [SelectContentProvider, useSelectContentContext] = createSelectContext(CONTENT_NAME$2);
+var [SelectContentProvider, useSelectContentContext] = createSelectContext(CONTENT_NAME$3);
 var CONTENT_IMPL_NAME = "SelectContentImpl";
 var Slot$1 = /* @__PURE__ */ createSlot("SelectContent.RemoveScroll");
 var SelectContentImpl = reactExports.forwardRef(
@@ -45978,7 +46306,7 @@ var SelectContentImpl = reactExports.forwardRef(
       //
       ...contentProps
     } = props;
-    const context = useSelectContext(CONTENT_NAME$2, __scopeSelect);
+    const context = useSelectContext(CONTENT_NAME$3, __scopeSelect);
     const [content, setContent] = reactExports.useState(null);
     const [viewport, setViewport] = reactExports.useState(null);
     const composedRefs = useComposedRefs$1(forwardedRef, (node) => setContent(node));
@@ -46193,8 +46521,8 @@ SelectContentImpl.displayName = CONTENT_IMPL_NAME;
 var ITEM_ALIGNED_POSITION_NAME = "SelectItemAlignedPosition";
 var SelectItemAlignedPosition = reactExports.forwardRef((props, forwardedRef) => {
   const { __scopeSelect, onPlaced, ...popperProps } = props;
-  const context = useSelectContext(CONTENT_NAME$2, __scopeSelect);
-  const contentContext = useSelectContentContext(CONTENT_NAME$2, __scopeSelect);
+  const context = useSelectContext(CONTENT_NAME$3, __scopeSelect);
+  const contentContext = useSelectContentContext(CONTENT_NAME$3, __scopeSelect);
   const [contentWrapper, setContentWrapper] = reactExports.useState(null);
   const [content, setContent] = reactExports.useState(null);
   const composedRefs = useComposedRefs$1(forwardedRef, (node) => setContent(node));
@@ -46362,7 +46690,7 @@ var SelectPopperPosition = reactExports.forwardRef((props, forwardedRef) => {
     collisionPadding = CONTENT_MARGIN,
     ...popperProps
   } = props;
-  const popperScope = usePopperScope(__scopeSelect);
+  const popperScope = usePopperScope$1(__scopeSelect);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     Content$2,
     {
@@ -46388,7 +46716,7 @@ var SelectPopperPosition = reactExports.forwardRef((props, forwardedRef) => {
   );
 });
 SelectPopperPosition.displayName = POPPER_POSITION_NAME;
-var [SelectViewportProvider, useSelectViewportContext] = createSelectContext(CONTENT_NAME$2, {});
+var [SelectViewportProvider, useSelectViewportContext] = createSelectContext(CONTENT_NAME$3, {});
 var VIEWPORT_NAME = "SelectViewport";
 var SelectViewport = reactExports.forwardRef(
   (props, forwardedRef) => {
@@ -46476,8 +46804,8 @@ var SelectLabel = reactExports.forwardRef(
   }
 );
 SelectLabel.displayName = LABEL_NAME;
-var ITEM_NAME = "SelectItem";
-var [SelectItemContextProvider, useSelectItemContext] = createSelectContext(ITEM_NAME);
+var ITEM_NAME$1 = "SelectItem";
+var [SelectItemContextProvider, useSelectItemContext] = createSelectContext(ITEM_NAME$1);
 var SelectItem$1 = reactExports.forwardRef(
   (props, forwardedRef) => {
     const {
@@ -46487,8 +46815,8 @@ var SelectItem$1 = reactExports.forwardRef(
       textValue: textValueProp,
       ...itemProps
     } = props;
-    const context = useSelectContext(ITEM_NAME, __scopeSelect);
-    const contentContext = useSelectContentContext(ITEM_NAME, __scopeSelect);
+    const context = useSelectContext(ITEM_NAME$1, __scopeSelect);
+    const contentContext = useSelectContentContext(ITEM_NAME$1, __scopeSelect);
     const isSelected = context.value === value;
     const [textValue, setTextValue] = reactExports.useState(textValueProp ?? "");
     const [isFocused, setIsFocused] = reactExports.useState(false);
@@ -46584,7 +46912,7 @@ var SelectItem$1 = reactExports.forwardRef(
     );
   }
 );
-SelectItem$1.displayName = ITEM_NAME;
+SelectItem$1.displayName = ITEM_NAME$1;
 var ITEM_TEXT_NAME = "SelectItemText";
 var SelectItemText = reactExports.forwardRef(
   (props, forwardedRef) => {
@@ -46748,18 +47076,18 @@ var SelectSeparator = reactExports.forwardRef(
   }
 );
 SelectSeparator.displayName = SEPARATOR_NAME;
-var ARROW_NAME = "SelectArrow";
+var ARROW_NAME$1 = "SelectArrow";
 var SelectArrow = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, ...arrowProps } = props;
-    const popperScope = usePopperScope(__scopeSelect);
-    const context = useSelectContext(ARROW_NAME, __scopeSelect);
-    const contentContext = useSelectContentContext(ARROW_NAME, __scopeSelect);
+    const popperScope = usePopperScope$1(__scopeSelect);
+    const context = useSelectContext(ARROW_NAME$1, __scopeSelect);
+    const contentContext = useSelectContentContext(ARROW_NAME$1, __scopeSelect);
     return context.open && contentContext.position === "popper" ? /* @__PURE__ */ jsxRuntimeExports.jsx(Arrow, { ...popperScope, ...arrowProps, ref: forwardedRef }) : null;
   }
 );
-SelectArrow.displayName = ARROW_NAME;
-var BUBBLE_INPUT_NAME = "SelectBubbleInput";
+SelectArrow.displayName = ARROW_NAME$1;
+var BUBBLE_INPUT_NAME$1 = "SelectBubbleInput";
 var SelectBubbleInput = reactExports.forwardRef(
   ({ __scopeSelect, value, ...props }, forwardedRef) => {
     const ref = reactExports.useRef(null);
@@ -46791,7 +47119,7 @@ var SelectBubbleInput = reactExports.forwardRef(
     );
   }
 );
-SelectBubbleInput.displayName = BUBBLE_INPUT_NAME;
+SelectBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
 function shouldShowPlaceholder(value) {
   return value === "" || value === void 0;
 }
@@ -46835,12 +47163,12 @@ function findNextItem(items, search, currentItem) {
 function wrapArray(array2, startIndex) {
   return array2.map((_2, index2) => array2[(startIndex + index2) % array2.length]);
 }
-var Root2$1 = Select$1;
-var Trigger$2 = SelectTrigger$1;
+var Root2$2 = Select$1;
+var Trigger$3 = SelectTrigger$1;
 var Value = SelectValue$1;
 var Icon = SelectIcon;
-var Portal$1 = SelectPortal;
-var Content2 = SelectContent$1;
+var Portal$2 = SelectPortal;
+var Content2$1 = SelectContent$1;
 var Viewport = SelectViewport;
 var Item = SelectItem$1;
 var ItemText = SelectItemText;
@@ -46850,7 +47178,7 @@ var ScrollDownButton = SelectScrollDownButton$1;
 function Select({
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$1, { "data-slot": "select", ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$2, { "data-slot": "select", ...props });
 }
 function SelectValue({
   ...props
@@ -46864,7 +47192,7 @@ function SelectTrigger({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Trigger$2,
+    Trigger$3,
     {
       "data-slot": "select-trigger",
       "data-size": size2,
@@ -46886,8 +47214,8 @@ function SelectContent({
   position = "popper",
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$1, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Content2,
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$2, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Content2$1,
     {
       "data-slot": "select-content",
       className: cn(
@@ -47317,11 +47645,11 @@ var Dialog$1 = (props) => {
   );
 };
 Dialog$1.displayName = DIALOG_NAME;
-var TRIGGER_NAME$1 = "DialogTrigger";
+var TRIGGER_NAME$2 = "DialogTrigger";
 var DialogTrigger$1 = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, ...triggerProps } = props;
-    const context = useDialogContext(TRIGGER_NAME$1, __scopeDialog);
+    const context = useDialogContext(TRIGGER_NAME$2, __scopeDialog);
     const composedTriggerRef = useComposedRefs$1(forwardedRef, context.triggerRef);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Primitive.button,
@@ -47330,7 +47658,7 @@ var DialogTrigger$1 = reactExports.forwardRef(
         "aria-haspopup": "dialog",
         "aria-expanded": context.open,
         "aria-controls": context.contentId,
-        "data-state": getState(context.open),
+        "data-state": getState$1(context.open),
         ...triggerProps,
         ref: composedTriggerRef,
         onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
@@ -47338,21 +47666,21 @@ var DialogTrigger$1 = reactExports.forwardRef(
     );
   }
 );
-DialogTrigger$1.displayName = TRIGGER_NAME$1;
-var PORTAL_NAME = "DialogPortal";
-var [PortalProvider, usePortalContext] = createDialogContext(PORTAL_NAME, {
+DialogTrigger$1.displayName = TRIGGER_NAME$2;
+var PORTAL_NAME$1 = "DialogPortal";
+var [PortalProvider$1, usePortalContext$1] = createDialogContext(PORTAL_NAME$1, {
   forceMount: void 0
 });
 var DialogPortal$1 = (props) => {
   const { __scopeDialog, forceMount, children, container } = props;
-  const context = useDialogContext(PORTAL_NAME, __scopeDialog);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider, { scope: __scopeDialog, forceMount, children: reactExports.Children.map(children, (child) => /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$3, { asChild: true, container, children: child }) })) });
+  const context = useDialogContext(PORTAL_NAME$1, __scopeDialog);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider$1, { scope: __scopeDialog, forceMount, children: reactExports.Children.map(children, (child) => /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$4, { asChild: true, container, children: child }) })) });
 };
-DialogPortal$1.displayName = PORTAL_NAME;
+DialogPortal$1.displayName = PORTAL_NAME$1;
 var OVERLAY_NAME = "DialogOverlay";
 var DialogOverlay$1 = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const portalContext = usePortalContext(OVERLAY_NAME, props.__scopeDialog);
+    const portalContext = usePortalContext$1(OVERLAY_NAME, props.__scopeDialog);
     const { forceMount = portalContext.forceMount, ...overlayProps } = props;
     const context = useDialogContext(OVERLAY_NAME, props.__scopeDialog);
     return context.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogOverlayImpl, { ...overlayProps, ref: forwardedRef }) }) : null;
@@ -47370,7 +47698,7 @@ var DialogOverlayImpl = reactExports.forwardRef(
       /* @__PURE__ */ jsxRuntimeExports.jsx(ReactRemoveScroll, { as: Slot, allowPinchZoom: true, shards: [context.contentRef], children: /* @__PURE__ */ jsxRuntimeExports.jsx(
         Primitive.div,
         {
-          "data-state": getState(context.open),
+          "data-state": getState$1(context.open),
           ...overlayProps,
           ref: forwardedRef,
           style: { pointerEvents: "auto", ...overlayProps.style }
@@ -47379,19 +47707,19 @@ var DialogOverlayImpl = reactExports.forwardRef(
     );
   }
 );
-var CONTENT_NAME$1 = "DialogContent";
+var CONTENT_NAME$2 = "DialogContent";
 var DialogContent$1 = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const portalContext = usePortalContext(CONTENT_NAME$1, props.__scopeDialog);
+    const portalContext = usePortalContext$1(CONTENT_NAME$2, props.__scopeDialog);
     const { forceMount = portalContext.forceMount, ...contentProps } = props;
-    const context = useDialogContext(CONTENT_NAME$1, props.__scopeDialog);
+    const context = useDialogContext(CONTENT_NAME$2, props.__scopeDialog);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: context.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentModal, { ...contentProps, ref: forwardedRef }) : /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentNonModal, { ...contentProps, ref: forwardedRef }) });
   }
 );
-DialogContent$1.displayName = CONTENT_NAME$1;
+DialogContent$1.displayName = CONTENT_NAME$2;
 var DialogContentModal = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const context = useDialogContext(CONTENT_NAME$1, props.__scopeDialog);
+    const context = useDialogContext(CONTENT_NAME$2, props.__scopeDialog);
     const contentRef = reactExports.useRef(null);
     const composedRefs = useComposedRefs$1(forwardedRef, context.contentRef, contentRef);
     reactExports.useEffect(() => {
@@ -47426,7 +47754,7 @@ var DialogContentModal = reactExports.forwardRef(
 );
 var DialogContentNonModal = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const context = useDialogContext(CONTENT_NAME$1, props.__scopeDialog);
+    const context = useDialogContext(CONTENT_NAME$2, props.__scopeDialog);
     const hasInteractedOutsideRef = reactExports.useRef(false);
     const hasPointerDownOutsideRef = reactExports.useRef(false);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -47469,7 +47797,7 @@ var DialogContentNonModal = reactExports.forwardRef(
 var DialogContentImpl = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
-    const context = useDialogContext(CONTENT_NAME$1, __scopeDialog);
+    const context = useDialogContext(CONTENT_NAME$2, __scopeDialog);
     const contentRef = reactExports.useRef(null);
     const composedRefs = useComposedRefs$1(forwardedRef, contentRef);
     useFocusGuards();
@@ -47489,7 +47817,7 @@ var DialogContentImpl = reactExports.forwardRef(
               id: context.contentId,
               "aria-describedby": context.descriptionId,
               "aria-labelledby": context.titleId,
-              "data-state": getState(context.open),
+              "data-state": getState$1(context.open),
               ...contentProps,
               ref: composedRefs,
               onDismiss: () => context.onOpenChange(false)
@@ -47539,12 +47867,12 @@ var DialogClose = reactExports.forwardRef(
   }
 );
 DialogClose.displayName = CLOSE_NAME;
-function getState(open) {
+function getState$1(open) {
   return open ? "open" : "closed";
 }
 var TITLE_WARNING_NAME = "DialogTitleWarning";
 var [WarningProvider, useWarningContext] = createContext2(TITLE_WARNING_NAME, {
-  contentName: CONTENT_NAME$1,
+  contentName: CONTENT_NAME$2,
   titleName: TITLE_NAME,
   docsSlug: "dialog"
 });
@@ -47578,8 +47906,8 @@ var DescriptionWarning = ({ contentRef, descriptionId }) => {
   return null;
 };
 var Root$2 = Dialog$1;
-var Trigger$1 = DialogTrigger$1;
-var Portal = DialogPortal$1;
+var Trigger$2 = DialogTrigger$1;
+var Portal$1 = DialogPortal$1;
 var Overlay = DialogOverlay$1;
 var Content$1 = DialogContent$1;
 var Title = DialogTitle$1;
@@ -47592,12 +47920,12 @@ function Dialog({
 function DialogTrigger({
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger$1, { "data-slot": "dialog-trigger", ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger$2, { "data-slot": "dialog-trigger", ...props });
 }
 function DialogPortal({
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal, { "data-slot": "dialog-portal", ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$1, { "data-slot": "dialog-portal", ...props });
 }
 function DialogOverlay({
   className,
@@ -47708,6 +48036,874 @@ function Label$1({
     }
   );
 }
+var RADIO_NAME = "Radio";
+var [createRadioContext, createRadioScope] = createContextScope(RADIO_NAME);
+var [RadioProvider, useRadioContext] = createRadioContext(RADIO_NAME);
+var Radio = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeRadio,
+      name,
+      checked = false,
+      required,
+      disabled,
+      value = "on",
+      onCheck,
+      form,
+      ...radioProps
+    } = props;
+    const [button, setButton] = reactExports.useState(null);
+    const composedRefs = useComposedRefs$1(forwardedRef, (node) => setButton(node));
+    const hasConsumerStoppedPropagationRef = reactExports.useRef(false);
+    const isFormControl = button ? form || !!button.closest("form") : true;
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(RadioProvider, { scope: __scopeRadio, checked, disabled, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Primitive.button,
+        {
+          type: "button",
+          role: "radio",
+          "aria-checked": checked,
+          "data-state": getState(checked),
+          "data-disabled": disabled ? "" : void 0,
+          disabled,
+          value,
+          ...radioProps,
+          ref: composedRefs,
+          onClick: composeEventHandlers(props.onClick, (event) => {
+            if (!checked) onCheck == null ? void 0 : onCheck();
+            if (isFormControl) {
+              hasConsumerStoppedPropagationRef.current = event.isPropagationStopped();
+              if (!hasConsumerStoppedPropagationRef.current) event.stopPropagation();
+            }
+          })
+        }
+      ),
+      isFormControl && /* @__PURE__ */ jsxRuntimeExports.jsx(
+        RadioBubbleInput,
+        {
+          control: button,
+          bubbles: !hasConsumerStoppedPropagationRef.current,
+          name,
+          value,
+          checked,
+          required,
+          disabled,
+          form,
+          style: { transform: "translateX(-100%)" }
+        }
+      )
+    ] });
+  }
+);
+Radio.displayName = RADIO_NAME;
+var INDICATOR_NAME = "RadioIndicator";
+var RadioIndicator = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeRadio, forceMount, ...indicatorProps } = props;
+    const context = useRadioContext(INDICATOR_NAME, __scopeRadio);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.checked, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Primitive.span,
+      {
+        "data-state": getState(context.checked),
+        "data-disabled": context.disabled ? "" : void 0,
+        ...indicatorProps,
+        ref: forwardedRef
+      }
+    ) });
+  }
+);
+RadioIndicator.displayName = INDICATOR_NAME;
+var BUBBLE_INPUT_NAME = "RadioBubbleInput";
+var RadioBubbleInput = reactExports.forwardRef(
+  ({
+    __scopeRadio,
+    control,
+    checked,
+    bubbles = true,
+    ...props
+  }, forwardedRef) => {
+    const ref = reactExports.useRef(null);
+    const composedRefs = useComposedRefs$1(ref, forwardedRef);
+    const prevChecked = usePrevious(checked);
+    const controlSize = useSize(control);
+    reactExports.useEffect(() => {
+      const input = ref.current;
+      if (!input) return;
+      const inputProto = window.HTMLInputElement.prototype;
+      const descriptor = Object.getOwnPropertyDescriptor(
+        inputProto,
+        "checked"
+      );
+      const setChecked = descriptor.set;
+      if (prevChecked !== checked && setChecked) {
+        const event = new Event("click", { bubbles });
+        setChecked.call(input, checked);
+        input.dispatchEvent(event);
+      }
+    }, [prevChecked, checked, bubbles]);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Primitive.input,
+      {
+        type: "radio",
+        "aria-hidden": true,
+        defaultChecked: checked,
+        ...props,
+        tabIndex: -1,
+        ref: composedRefs,
+        style: {
+          ...props.style,
+          ...controlSize,
+          position: "absolute",
+          pointerEvents: "none",
+          opacity: 0,
+          margin: 0
+        }
+      }
+    );
+  }
+);
+RadioBubbleInput.displayName = BUBBLE_INPUT_NAME;
+function getState(checked) {
+  return checked ? "checked" : "unchecked";
+}
+var ARROW_KEYS = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+var RADIO_GROUP_NAME = "RadioGroup";
+var [createRadioGroupContext] = createContextScope(RADIO_GROUP_NAME, [
+  createRovingFocusGroupScope,
+  createRadioScope
+]);
+var useRovingFocusGroupScope$1 = createRovingFocusGroupScope();
+var useRadioScope = createRadioScope();
+var [RadioGroupProvider, useRadioGroupContext] = createRadioGroupContext(RADIO_GROUP_NAME);
+var RadioGroup$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeRadioGroup,
+      name,
+      defaultValue,
+      value: valueProp,
+      required = false,
+      disabled = false,
+      orientation,
+      dir,
+      loop = true,
+      onValueChange,
+      ...groupProps
+    } = props;
+    const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeRadioGroup);
+    const direction = useDirection(dir);
+    const [value, setValue] = useControllableState({
+      prop: valueProp,
+      defaultProp: defaultValue ?? null,
+      onChange: onValueChange,
+      caller: RADIO_GROUP_NAME
+    });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      RadioGroupProvider,
+      {
+        scope: __scopeRadioGroup,
+        name,
+        required,
+        disabled,
+        value,
+        onValueChange: setValue,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Root$5,
+          {
+            asChild: true,
+            ...rovingFocusGroupScope,
+            orientation,
+            dir: direction,
+            loop,
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Primitive.div,
+              {
+                role: "radiogroup",
+                "aria-required": required,
+                "aria-orientation": orientation,
+                "data-disabled": disabled ? "" : void 0,
+                dir: direction,
+                ...groupProps,
+                ref: forwardedRef
+              }
+            )
+          }
+        )
+      }
+    );
+  }
+);
+RadioGroup$1.displayName = RADIO_GROUP_NAME;
+var ITEM_NAME = "RadioGroupItem";
+var RadioGroupItem$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeRadioGroup, disabled, ...itemProps } = props;
+    const context = useRadioGroupContext(ITEM_NAME, __scopeRadioGroup);
+    const isDisabled = context.disabled || disabled;
+    const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeRadioGroup);
+    const radioScope = useRadioScope(__scopeRadioGroup);
+    const ref = reactExports.useRef(null);
+    const composedRefs = useComposedRefs$1(forwardedRef, ref);
+    const checked = context.value === itemProps.value;
+    const isArrowKeyPressedRef = reactExports.useRef(false);
+    reactExports.useEffect(() => {
+      const handleKeyDown = (event) => {
+        if (ARROW_KEYS.includes(event.key)) {
+          isArrowKeyPressedRef.current = true;
+        }
+      };
+      const handleKeyUp = () => isArrowKeyPressedRef.current = false;
+      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener("keyup", handleKeyUp);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("keyup", handleKeyUp);
+      };
+    }, []);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Item$1,
+      {
+        asChild: true,
+        ...rovingFocusGroupScope,
+        focusable: !isDisabled,
+        active: checked,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Radio,
+          {
+            disabled: isDisabled,
+            required: context.required,
+            checked,
+            ...radioScope,
+            ...itemProps,
+            name: context.name,
+            ref: composedRefs,
+            onCheck: () => context.onValueChange(itemProps.value),
+            onKeyDown: composeEventHandlers((event) => {
+              if (event.key === "Enter") event.preventDefault();
+            }),
+            onFocus: composeEventHandlers(itemProps.onFocus, () => {
+              var _a3;
+              if (isArrowKeyPressedRef.current) (_a3 = ref.current) == null ? void 0 : _a3.click();
+            })
+          }
+        )
+      }
+    );
+  }
+);
+RadioGroupItem$1.displayName = ITEM_NAME;
+var INDICATOR_NAME2 = "RadioGroupIndicator";
+var RadioGroupIndicator = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeRadioGroup, ...indicatorProps } = props;
+    const radioScope = useRadioScope(__scopeRadioGroup);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(RadioIndicator, { ...radioScope, ...indicatorProps, ref: forwardedRef });
+  }
+);
+RadioGroupIndicator.displayName = INDICATOR_NAME2;
+var Root2$1 = RadioGroup$1;
+var Item2 = RadioGroupItem$1;
+var Indicator = RadioGroupIndicator;
+function RadioGroup({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Root2$1,
+    {
+      "data-slot": "radio-group",
+      className: cn("grid gap-3", className),
+      ...props
+    }
+  );
+}
+function RadioGroupItem({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Item2,
+    {
+      "data-slot": "radio-group-item",
+      className: cn(
+        "border-input text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      ),
+      ...props,
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Indicator,
+        {
+          "data-slot": "radio-group-indicator",
+          className: "relative flex items-center justify-center",
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Circle, { className: "fill-primary absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2" })
+        }
+      )
+    }
+  );
+}
+var NAME = "Separator";
+var DEFAULT_ORIENTATION = "horizontal";
+var ORIENTATIONS = ["horizontal", "vertical"];
+var Separator$1 = reactExports.forwardRef((props, forwardedRef) => {
+  const { decorative, orientation: orientationProp = DEFAULT_ORIENTATION, ...domProps } = props;
+  const orientation = isValidOrientation(orientationProp) ? orientationProp : DEFAULT_ORIENTATION;
+  const ariaOrientation = orientation === "vertical" ? orientation : void 0;
+  const semanticProps = decorative ? { role: "none" } : { "aria-orientation": ariaOrientation, role: "separator" };
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Primitive.div,
+    {
+      "data-orientation": orientation,
+      ...semanticProps,
+      ...domProps,
+      ref: forwardedRef
+    }
+  );
+});
+Separator$1.displayName = NAME;
+function isValidOrientation(orientation) {
+  return ORIENTATIONS.includes(orientation);
+}
+var Root = Separator$1;
+function Separator({
+  className,
+  orientation = "horizontal",
+  decorative = true,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Root,
+    {
+      "data-slot": "separator",
+      decorative,
+      orientation,
+      className: cn(
+        "bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",
+        className
+      ),
+      ...props
+    }
+  );
+}
+var [createTooltipContext] = createContextScope("Tooltip", [
+  createPopperScope
+]);
+var usePopperScope = createPopperScope();
+var PROVIDER_NAME = "TooltipProvider";
+var DEFAULT_DELAY_DURATION = 700;
+var TOOLTIP_OPEN = "tooltip.open";
+var [TooltipProviderContextProvider, useTooltipProviderContext] = createTooltipContext(PROVIDER_NAME);
+var TooltipProvider$1 = (props) => {
+  const {
+    __scopeTooltip,
+    delayDuration = DEFAULT_DELAY_DURATION,
+    skipDelayDuration = 300,
+    disableHoverableContent = false,
+    children
+  } = props;
+  const isOpenDelayedRef = reactExports.useRef(true);
+  const isPointerInTransitRef = reactExports.useRef(false);
+  const skipDelayTimerRef = reactExports.useRef(0);
+  reactExports.useEffect(() => {
+    const skipDelayTimer = skipDelayTimerRef.current;
+    return () => window.clearTimeout(skipDelayTimer);
+  }, []);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    TooltipProviderContextProvider,
+    {
+      scope: __scopeTooltip,
+      isOpenDelayedRef,
+      delayDuration,
+      onOpen: reactExports.useCallback(() => {
+        window.clearTimeout(skipDelayTimerRef.current);
+        isOpenDelayedRef.current = false;
+      }, []),
+      onClose: reactExports.useCallback(() => {
+        window.clearTimeout(skipDelayTimerRef.current);
+        skipDelayTimerRef.current = window.setTimeout(
+          () => isOpenDelayedRef.current = true,
+          skipDelayDuration
+        );
+      }, [skipDelayDuration]),
+      isPointerInTransitRef,
+      onPointerInTransitChange: reactExports.useCallback((inTransit) => {
+        isPointerInTransitRef.current = inTransit;
+      }, []),
+      disableHoverableContent,
+      children
+    }
+  );
+};
+TooltipProvider$1.displayName = PROVIDER_NAME;
+var TOOLTIP_NAME = "Tooltip";
+var [TooltipContextProvider, useTooltipContext] = createTooltipContext(TOOLTIP_NAME);
+var Tooltip$2 = (props) => {
+  const {
+    __scopeTooltip,
+    children,
+    open: openProp,
+    defaultOpen,
+    onOpenChange,
+    disableHoverableContent: disableHoverableContentProp,
+    delayDuration: delayDurationProp
+  } = props;
+  const providerContext = useTooltipProviderContext(TOOLTIP_NAME, props.__scopeTooltip);
+  const popperScope = usePopperScope(__scopeTooltip);
+  const [trigger, setTrigger] = reactExports.useState(null);
+  const contentId = useId();
+  const openTimerRef = reactExports.useRef(0);
+  const disableHoverableContent = disableHoverableContentProp ?? providerContext.disableHoverableContent;
+  const delayDuration = delayDurationProp ?? providerContext.delayDuration;
+  const wasOpenDelayedRef = reactExports.useRef(false);
+  const [open, setOpen] = useControllableState({
+    prop: openProp,
+    defaultProp: defaultOpen ?? false,
+    onChange: (open2) => {
+      if (open2) {
+        providerContext.onOpen();
+        document.dispatchEvent(new CustomEvent(TOOLTIP_OPEN));
+      } else {
+        providerContext.onClose();
+      }
+      onOpenChange == null ? void 0 : onOpenChange(open2);
+    },
+    caller: TOOLTIP_NAME
+  });
+  const stateAttribute = reactExports.useMemo(() => {
+    return open ? wasOpenDelayedRef.current ? "delayed-open" : "instant-open" : "closed";
+  }, [open]);
+  const handleOpen = reactExports.useCallback(() => {
+    window.clearTimeout(openTimerRef.current);
+    openTimerRef.current = 0;
+    wasOpenDelayedRef.current = false;
+    setOpen(true);
+  }, [setOpen]);
+  const handleClose = reactExports.useCallback(() => {
+    window.clearTimeout(openTimerRef.current);
+    openTimerRef.current = 0;
+    setOpen(false);
+  }, [setOpen]);
+  const handleDelayedOpen = reactExports.useCallback(() => {
+    window.clearTimeout(openTimerRef.current);
+    openTimerRef.current = window.setTimeout(() => {
+      wasOpenDelayedRef.current = true;
+      setOpen(true);
+      openTimerRef.current = 0;
+    }, delayDuration);
+  }, [delayDuration, setOpen]);
+  reactExports.useEffect(() => {
+    return () => {
+      if (openTimerRef.current) {
+        window.clearTimeout(openTimerRef.current);
+        openTimerRef.current = 0;
+      }
+    };
+  }, []);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$4, { ...popperScope, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    TooltipContextProvider,
+    {
+      scope: __scopeTooltip,
+      contentId,
+      open,
+      stateAttribute,
+      trigger,
+      onTriggerChange: setTrigger,
+      onTriggerEnter: reactExports.useCallback(() => {
+        if (providerContext.isOpenDelayedRef.current) handleDelayedOpen();
+        else handleOpen();
+      }, [providerContext.isOpenDelayedRef, handleDelayedOpen, handleOpen]),
+      onTriggerLeave: reactExports.useCallback(() => {
+        if (disableHoverableContent) {
+          handleClose();
+        } else {
+          window.clearTimeout(openTimerRef.current);
+          openTimerRef.current = 0;
+        }
+      }, [handleClose, disableHoverableContent]),
+      onOpen: handleOpen,
+      onClose: handleClose,
+      disableHoverableContent,
+      children
+    }
+  ) });
+};
+Tooltip$2.displayName = TOOLTIP_NAME;
+var TRIGGER_NAME$1 = "TooltipTrigger";
+var TooltipTrigger$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeTooltip, ...triggerProps } = props;
+    const context = useTooltipContext(TRIGGER_NAME$1, __scopeTooltip);
+    const providerContext = useTooltipProviderContext(TRIGGER_NAME$1, __scopeTooltip);
+    const popperScope = usePopperScope(__scopeTooltip);
+    const ref = reactExports.useRef(null);
+    const composedRefs = useComposedRefs$1(forwardedRef, ref, context.onTriggerChange);
+    const isPointerDownRef = reactExports.useRef(false);
+    const hasPointerMoveOpenedRef = reactExports.useRef(false);
+    const handlePointerUp = reactExports.useCallback(() => isPointerDownRef.current = false, []);
+    reactExports.useEffect(() => {
+      return () => document.removeEventListener("pointerup", handlePointerUp);
+    }, [handlePointerUp]);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Anchor, { asChild: true, ...popperScope, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Primitive.button,
+      {
+        "aria-describedby": context.open ? context.contentId : void 0,
+        "data-state": context.stateAttribute,
+        ...triggerProps,
+        ref: composedRefs,
+        onPointerMove: composeEventHandlers(props.onPointerMove, (event) => {
+          if (event.pointerType === "touch") return;
+          if (!hasPointerMoveOpenedRef.current && !providerContext.isPointerInTransitRef.current) {
+            context.onTriggerEnter();
+            hasPointerMoveOpenedRef.current = true;
+          }
+        }),
+        onPointerLeave: composeEventHandlers(props.onPointerLeave, () => {
+          context.onTriggerLeave();
+          hasPointerMoveOpenedRef.current = false;
+        }),
+        onPointerDown: composeEventHandlers(props.onPointerDown, () => {
+          if (context.open) {
+            context.onClose();
+          }
+          isPointerDownRef.current = true;
+          document.addEventListener("pointerup", handlePointerUp, { once: true });
+        }),
+        onFocus: composeEventHandlers(props.onFocus, () => {
+          if (!isPointerDownRef.current) context.onOpen();
+        }),
+        onBlur: composeEventHandlers(props.onBlur, context.onClose),
+        onClick: composeEventHandlers(props.onClick, context.onClose)
+      }
+    ) });
+  }
+);
+TooltipTrigger$1.displayName = TRIGGER_NAME$1;
+var PORTAL_NAME = "TooltipPortal";
+var [PortalProvider, usePortalContext] = createTooltipContext(PORTAL_NAME, {
+  forceMount: void 0
+});
+var TooltipPortal = (props) => {
+  const { __scopeTooltip, forceMount, children, container } = props;
+  const context = useTooltipContext(PORTAL_NAME, __scopeTooltip);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider, { scope: __scopeTooltip, forceMount, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$4, { asChild: true, container, children }) }) });
+};
+TooltipPortal.displayName = PORTAL_NAME;
+var CONTENT_NAME$1 = "TooltipContent";
+var TooltipContent$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const portalContext = usePortalContext(CONTENT_NAME$1, props.__scopeTooltip);
+    const { forceMount = portalContext.forceMount, side = "top", ...contentProps } = props;
+    const context = useTooltipContext(CONTENT_NAME$1, props.__scopeTooltip);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: context.disableHoverableContent ? /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipContentImpl, { side, ...contentProps, ref: forwardedRef }) : /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipContentHoverable, { side, ...contentProps, ref: forwardedRef }) });
+  }
+);
+var TooltipContentHoverable = reactExports.forwardRef((props, forwardedRef) => {
+  const context = useTooltipContext(CONTENT_NAME$1, props.__scopeTooltip);
+  const providerContext = useTooltipProviderContext(CONTENT_NAME$1, props.__scopeTooltip);
+  const ref = reactExports.useRef(null);
+  const composedRefs = useComposedRefs$1(forwardedRef, ref);
+  const [pointerGraceArea, setPointerGraceArea] = reactExports.useState(null);
+  const { trigger, onClose } = context;
+  const content = ref.current;
+  const { onPointerInTransitChange } = providerContext;
+  const handleRemoveGraceArea = reactExports.useCallback(() => {
+    setPointerGraceArea(null);
+    onPointerInTransitChange(false);
+  }, [onPointerInTransitChange]);
+  const handleCreateGraceArea = reactExports.useCallback(
+    (event, hoverTarget) => {
+      const currentTarget = event.currentTarget;
+      const exitPoint = { x: event.clientX, y: event.clientY };
+      const exitSide = getExitSideFromRect(exitPoint, currentTarget.getBoundingClientRect());
+      const paddedExitPoints = getPaddedExitPoints(exitPoint, exitSide);
+      const hoverTargetPoints = getPointsFromRect(hoverTarget.getBoundingClientRect());
+      const graceArea = getHull([...paddedExitPoints, ...hoverTargetPoints]);
+      setPointerGraceArea(graceArea);
+      onPointerInTransitChange(true);
+    },
+    [onPointerInTransitChange]
+  );
+  reactExports.useEffect(() => {
+    return () => handleRemoveGraceArea();
+  }, [handleRemoveGraceArea]);
+  reactExports.useEffect(() => {
+    if (trigger && content) {
+      const handleTriggerLeave = (event) => handleCreateGraceArea(event, content);
+      const handleContentLeave = (event) => handleCreateGraceArea(event, trigger);
+      trigger.addEventListener("pointerleave", handleTriggerLeave);
+      content.addEventListener("pointerleave", handleContentLeave);
+      return () => {
+        trigger.removeEventListener("pointerleave", handleTriggerLeave);
+        content.removeEventListener("pointerleave", handleContentLeave);
+      };
+    }
+  }, [trigger, content, handleCreateGraceArea, handleRemoveGraceArea]);
+  reactExports.useEffect(() => {
+    if (pointerGraceArea) {
+      const handleTrackPointerGrace = (event) => {
+        const target = event.target;
+        const pointerPosition = { x: event.clientX, y: event.clientY };
+        const hasEnteredTarget = (trigger == null ? void 0 : trigger.contains(target)) || (content == null ? void 0 : content.contains(target));
+        const isPointerOutsideGraceArea = !isPointInPolygon(pointerPosition, pointerGraceArea);
+        if (hasEnteredTarget) {
+          handleRemoveGraceArea();
+        } else if (isPointerOutsideGraceArea) {
+          handleRemoveGraceArea();
+          onClose();
+        }
+      };
+      document.addEventListener("pointermove", handleTrackPointerGrace);
+      return () => document.removeEventListener("pointermove", handleTrackPointerGrace);
+    }
+  }, [trigger, content, pointerGraceArea, onClose, handleRemoveGraceArea]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipContentImpl, { ...props, ref: composedRefs });
+});
+var [VisuallyHiddenContentContextProvider, useVisuallyHiddenContentContext] = createTooltipContext(TOOLTIP_NAME, { isInside: false });
+var Slottable = /* @__PURE__ */ createSlottable("TooltipContent");
+var TooltipContentImpl = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeTooltip,
+      children,
+      "aria-label": ariaLabel,
+      onEscapeKeyDown,
+      onPointerDownOutside,
+      ...contentProps
+    } = props;
+    const context = useTooltipContext(CONTENT_NAME$1, __scopeTooltip);
+    const popperScope = usePopperScope(__scopeTooltip);
+    const { onClose } = context;
+    reactExports.useEffect(() => {
+      document.addEventListener(TOOLTIP_OPEN, onClose);
+      return () => document.removeEventListener(TOOLTIP_OPEN, onClose);
+    }, [onClose]);
+    reactExports.useEffect(() => {
+      if (context.trigger) {
+        const handleScroll2 = (event) => {
+          const target = event.target;
+          if (target == null ? void 0 : target.contains(context.trigger)) onClose();
+        };
+        window.addEventListener("scroll", handleScroll2, { capture: true });
+        return () => window.removeEventListener("scroll", handleScroll2, { capture: true });
+      }
+    }, [context.trigger, onClose]);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      DismissableLayer,
+      {
+        asChild: true,
+        disableOutsidePointerEvents: false,
+        onEscapeKeyDown,
+        onPointerDownOutside,
+        onFocusOutside: (event) => event.preventDefault(),
+        onDismiss: onClose,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Content$2,
+          {
+            "data-state": context.stateAttribute,
+            ...popperScope,
+            ...contentProps,
+            ref: forwardedRef,
+            style: {
+              ...contentProps.style,
+              // re-namespace exposed content custom properties
+              ...{
+                "--radix-tooltip-content-transform-origin": "var(--radix-popper-transform-origin)",
+                "--radix-tooltip-content-available-width": "var(--radix-popper-available-width)",
+                "--radix-tooltip-content-available-height": "var(--radix-popper-available-height)",
+                "--radix-tooltip-trigger-width": "var(--radix-popper-anchor-width)",
+                "--radix-tooltip-trigger-height": "var(--radix-popper-anchor-height)"
+              }
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Slottable, { children }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(VisuallyHiddenContentContextProvider, { scope: __scopeTooltip, isInside: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Root$3, { id: context.contentId, role: "tooltip", children: ariaLabel || children }) })
+            ]
+          }
+        )
+      }
+    );
+  }
+);
+TooltipContent$1.displayName = CONTENT_NAME$1;
+var ARROW_NAME = "TooltipArrow";
+var TooltipArrow = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeTooltip, ...arrowProps } = props;
+    const popperScope = usePopperScope(__scopeTooltip);
+    const visuallyHiddenContentContext = useVisuallyHiddenContentContext(
+      ARROW_NAME,
+      __scopeTooltip
+    );
+    return visuallyHiddenContentContext.isInside ? null : /* @__PURE__ */ jsxRuntimeExports.jsx(Arrow, { ...popperScope, ...arrowProps, ref: forwardedRef });
+  }
+);
+TooltipArrow.displayName = ARROW_NAME;
+function getExitSideFromRect(point2, rect) {
+  const top = Math.abs(rect.top - point2.y);
+  const bottom = Math.abs(rect.bottom - point2.y);
+  const right = Math.abs(rect.right - point2.x);
+  const left = Math.abs(rect.left - point2.x);
+  switch (Math.min(top, bottom, right, left)) {
+    case left:
+      return "left";
+    case right:
+      return "right";
+    case top:
+      return "top";
+    case bottom:
+      return "bottom";
+    default:
+      throw new Error("unreachable");
+  }
+}
+function getPaddedExitPoints(exitPoint, exitSide, padding = 5) {
+  const paddedExitPoints = [];
+  switch (exitSide) {
+    case "top":
+      paddedExitPoints.push(
+        { x: exitPoint.x - padding, y: exitPoint.y + padding },
+        { x: exitPoint.x + padding, y: exitPoint.y + padding }
+      );
+      break;
+    case "bottom":
+      paddedExitPoints.push(
+        { x: exitPoint.x - padding, y: exitPoint.y - padding },
+        { x: exitPoint.x + padding, y: exitPoint.y - padding }
+      );
+      break;
+    case "left":
+      paddedExitPoints.push(
+        { x: exitPoint.x + padding, y: exitPoint.y - padding },
+        { x: exitPoint.x + padding, y: exitPoint.y + padding }
+      );
+      break;
+    case "right":
+      paddedExitPoints.push(
+        { x: exitPoint.x - padding, y: exitPoint.y - padding },
+        { x: exitPoint.x - padding, y: exitPoint.y + padding }
+      );
+      break;
+  }
+  return paddedExitPoints;
+}
+function getPointsFromRect(rect) {
+  const { top, right, bottom, left } = rect;
+  return [
+    { x: left, y: top },
+    { x: right, y: top },
+    { x: right, y: bottom },
+    { x: left, y: bottom }
+  ];
+}
+function isPointInPolygon(point2, polygon) {
+  const { x: x3, y: y2 } = point2;
+  let inside = false;
+  for (let i = 0, j2 = polygon.length - 1; i < polygon.length; j2 = i++) {
+    const ii = polygon[i];
+    const jj = polygon[j2];
+    const xi = ii.x;
+    const yi = ii.y;
+    const xj = jj.x;
+    const yj = jj.y;
+    const intersect = yi > y2 !== yj > y2 && x3 < (xj - xi) * (y2 - yi) / (yj - yi) + xi;
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+function getHull(points) {
+  const newPoints = points.slice();
+  newPoints.sort((a2, b2) => {
+    if (a2.x < b2.x) return -1;
+    else if (a2.x > b2.x) return 1;
+    else if (a2.y < b2.y) return -1;
+    else if (a2.y > b2.y) return 1;
+    else return 0;
+  });
+  return getHullPresorted(newPoints);
+}
+function getHullPresorted(points) {
+  if (points.length <= 1) return points.slice();
+  const upperHull = [];
+  for (let i = 0; i < points.length; i++) {
+    const p2 = points[i];
+    while (upperHull.length >= 2) {
+      const q2 = upperHull[upperHull.length - 1];
+      const r2 = upperHull[upperHull.length - 2];
+      if ((q2.x - r2.x) * (p2.y - r2.y) >= (q2.y - r2.y) * (p2.x - r2.x)) upperHull.pop();
+      else break;
+    }
+    upperHull.push(p2);
+  }
+  upperHull.pop();
+  const lowerHull = [];
+  for (let i = points.length - 1; i >= 0; i--) {
+    const p2 = points[i];
+    while (lowerHull.length >= 2) {
+      const q2 = lowerHull[lowerHull.length - 1];
+      const r2 = lowerHull[lowerHull.length - 2];
+      if ((q2.x - r2.x) * (p2.y - r2.y) >= (q2.y - r2.y) * (p2.x - r2.x)) lowerHull.pop();
+      else break;
+    }
+    lowerHull.push(p2);
+  }
+  lowerHull.pop();
+  if (upperHull.length === 1 && lowerHull.length === 1 && upperHull[0].x === lowerHull[0].x && upperHull[0].y === lowerHull[0].y) {
+    return upperHull;
+  } else {
+    return upperHull.concat(lowerHull);
+  }
+}
+var Provider = TooltipProvider$1;
+var Root3 = Tooltip$2;
+var Trigger$1 = TooltipTrigger$1;
+var Portal = TooltipPortal;
+var Content2 = TooltipContent$1;
+var Arrow2 = TooltipArrow;
+function TooltipProvider({
+  delayDuration = 0,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Provider,
+    {
+      "data-slot": "tooltip-provider",
+      delayDuration,
+      ...props
+    }
+  );
+}
+function Tooltip$1({
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Root3, { "data-slot": "tooltip", ...props }) });
+}
+function TooltipTrigger({
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger$1, { "data-slot": "tooltip-trigger", ...props });
+}
+function TooltipContent({
+  className,
+  sideOffset = 0,
+  children,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Content2,
+    {
+      "data-slot": "tooltip-content",
+      sideOffset,
+      className: cn(
+        "bg-primary text-primary-foreground animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-xs text-balance",
+        className
+      ),
+      ...props,
+      children: [
+        children,
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Arrow2, { className: "bg-primary fill-primary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" })
+      ]
+    }
+  ) });
+}
 const initialClientes = [
   {
     id: 1,
@@ -47717,7 +48913,9 @@ const initialClientes = [
     telefone: "(11) 3456-7890",
     endereco: "Av. Paulista, 1000 — São Paulo, SP",
     plano: "Enterprise",
-    status: "Ativo"
+    status: "Ativo",
+    bitcoinAddress: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+    walletType: "ckbtc"
   },
   {
     id: 2,
@@ -47727,7 +48925,9 @@ const initialClientes = [
     telefone: "(21) 2345-6789",
     endereco: "Rua do Comércio, 500 — Rio de Janeiro, RJ",
     plano: "Profissional",
-    status: "Ativo"
+    status: "Ativo",
+    bitcoinAddress: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+    walletType: "manual"
   },
   {
     id: 3,
@@ -47775,7 +48975,33 @@ const planColors = {
   Profissional: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   Enterprise: "bg-amber-500/20 text-amber-400 border-amber-500/30"
 };
+function truncateAddress(addr) {
+  if (addr.length <= 20) return addr;
+  return `${addr.slice(0, 8)}...${addr.slice(-8)}`;
+}
+function isValidBitcoinAddress(addr) {
+  return addr.startsWith("1") || addr.startsWith("3") || addr.startsWith("bc1");
+}
+function CopyButton({ text }) {
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text).then(() => {
+      ue.success("Endereço copiado!");
+    });
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Button,
+    {
+      type: "button",
+      size: "icon",
+      variant: "ghost",
+      className: "h-6 w-6 text-muted-foreground hover:text-foreground flex-shrink-0",
+      onClick: handleCopy,
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "h-3.5 w-3.5" })
+    }
+  );
+}
 function ClientesPage() {
+  const { actor } = useActor();
   const [clientes, setClientes] = reactExports.useState(initialClientes);
   const [search, setSearch] = reactExports.useState("");
   const [dialogOpen, setDialogOpen] = reactExports.useState(false);
@@ -47789,6 +49015,10 @@ function ClientesPage() {
     plano: "Básico",
     status: "Ativo"
   });
+  const [walletMode, setWalletMode] = reactExports.useState("");
+  const [manualAddress, setManualAddress] = reactExports.useState("");
+  const [generatedAddress, setGeneratedAddress] = reactExports.useState("");
+  const [isGenerating, setIsGenerating] = reactExports.useState(false);
   const filtered = clientes.filter(
     (c2) => c2.empresa.toLowerCase().includes(search.toLowerCase()) || c2.cnpj.includes(search) || c2.email.toLowerCase().includes(search.toLowerCase())
   );
@@ -47802,6 +49032,10 @@ function ClientesPage() {
       plano: "Básico",
       status: "Ativo"
     });
+    setWalletMode("");
+    setManualAddress("");
+    setGeneratedAddress("");
+    setIsGenerating(false);
     setEditingCliente(null);
   };
   const handleOpenEdit = (cliente) => {
@@ -47815,19 +49049,69 @@ function ClientesPage() {
       plano: cliente.plano,
       status: cliente.status
     });
+    setWalletMode(cliente.walletType ?? "");
+    setManualAddress(
+      cliente.walletType === "manual" ? cliente.bitcoinAddress ?? "" : ""
+    );
+    setGeneratedAddress(
+      cliente.walletType === "ckbtc" ? cliente.bitcoinAddress ?? "" : ""
+    );
+    setIsGenerating(false);
     setDialogOpen(true);
   };
-  const handleSubmit = (e3) => {
+  const handleGenerateCkBtcAddress = async () => {
+    if (!editingCliente) return;
+    if (!actor) {
+      ue.error("Canister não disponível. Tente novamente.");
+      return;
+    }
+    setIsGenerating(true);
+    try {
+      const address = await actor.generateCkBtcAddress(
+        BigInt(editingCliente.id)
+      );
+      setGeneratedAddress(address);
+      ue.success("Endereço ckBTC gerado com sucesso!");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Erro ao gerar endereço ckBTC";
+      ue.error(msg);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+  const handleSubmit = async (e3) => {
     e3.preventDefault();
+    const resolvedAddress = walletMode === "manual" ? manualAddress : walletMode === "ckbtc" ? generatedAddress : void 0;
     if (editingCliente) {
       setClientes(
-        (prev) => prev.map((c2) => c2.id === editingCliente.id ? { ...c2, ...form } : c2)
+        (prev) => prev.map(
+          (c2) => c2.id === editingCliente.id ? {
+            ...c2,
+            ...form,
+            bitcoinAddress: resolvedAddress || c2.bitcoinAddress,
+            walletType: walletMode !== "" ? walletMode : c2.walletType
+          } : c2
+        )
       );
+      if (actor && resolvedAddress && walletMode !== "") {
+        try {
+          await actor.setClientBitcoinAddress(
+            BigInt(editingCliente.id),
+            resolvedAddress,
+            walletMode === "ckbtc" ? WalletType.ckbtc : WalletType.manual
+          );
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : "Erro ao salvar endereço no backend";
+          ue.error(msg);
+        }
+      }
       ue.success("Cliente atualizado com sucesso!");
     } else {
       const newCliente = {
         id: Date.now(),
-        ...form
+        ...form,
+        bitcoinAddress: resolvedAddress,
+        walletType: walletMode !== "" ? walletMode : void 0
       };
       setClientes((prev) => [newCliente, ...prev]);
       ue.success("Cliente criado com sucesso!");
@@ -47839,7 +49123,8 @@ function ClientesPage() {
     setClientes((prev) => prev.filter((c2) => c2.id !== id2));
     ue.success(`Cliente "${nome}" removido.`);
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", children: [
+  const manualAddressValid = manualAddress === "" || isValidBitcoinAddress(manualAddress);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full sm:w-80", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { className: "absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" }),
@@ -47879,7 +49164,7 @@ function ClientesPage() {
               DialogContent,
               {
                 "data-ocid": "clientes.dialog",
-                className: "sm:max-w-lg bg-card border-border",
+                className: "sm:max-w-lg bg-card border-border max-h-[90vh] overflow-y-auto",
                 children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "font-display text-lg", children: editingCliente ? "Editar Cliente" : "Novo Cliente" }) }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-4 mt-2", children: [
@@ -47989,7 +49274,10 @@ function ClientesPage() {
                           Select,
                           {
                             value: form.status,
-                            onValueChange: (v2) => setForm((p2) => ({ ...p2, status: v2 })),
+                            onValueChange: (v2) => setForm((p2) => ({
+                              ...p2,
+                              status: v2
+                            })),
                             children: [
                               /* @__PURE__ */ jsxRuntimeExports.jsx(
                                 SelectTrigger,
@@ -48007,6 +49295,140 @@ function ClientesPage() {
                           }
                         )
                       ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Separator, { className: "my-2" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Wallet, { className: "h-4 w-4 text-amber-400" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { className: "text-sm font-semibold text-foreground", children: "Carteira Bitcoin" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-muted-foreground", children: "(opcional)" })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        RadioGroup,
+                        {
+                          value: walletMode,
+                          onValueChange: (v2) => {
+                            setWalletMode(v2);
+                            setGeneratedAddress("");
+                          },
+                          className: "space-y-2",
+                          children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2.5 rounded-md border border-border bg-muted/20 px-3 py-2.5 cursor-pointer hover:bg-muted/40 transition-colors", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                RadioGroupItem,
+                                {
+                                  value: "manual",
+                                  id: "wallet-manual",
+                                  "data-ocid": "clientes.radio",
+                                  className: "mt-0.5"
+                                }
+                              ),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  Label$1,
+                                  {
+                                    htmlFor: "wallet-manual",
+                                    className: "cursor-pointer font-medium text-sm",
+                                    children: "Endereço manual"
+                                  }
+                                ),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground mt-0.5", children: "Digitar/colar endereço de carteira externa (ex: Blue Wallet)" })
+                              ] })
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2.5 rounded-md border border-border bg-muted/20 px-3 py-2.5 cursor-pointer hover:bg-muted/40 transition-colors", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                RadioGroupItem,
+                                {
+                                  value: "ckbtc",
+                                  id: "wallet-ckbtc",
+                                  "data-ocid": "clientes.radio",
+                                  className: "mt-0.5"
+                                }
+                              ),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  Label$1,
+                                  {
+                                    htmlFor: "wallet-ckbtc",
+                                    className: "cursor-pointer font-medium text-sm",
+                                    children: "Gerar via ICP (ckBTC)"
+                                  }
+                                ),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground mt-0.5", children: "Gera endereço exclusivo usando integração nativa do ICP" })
+                              ] })
+                            ] })
+                          ]
+                        }
+                      ),
+                      walletMode === "manual" && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        motion.div,
+                        {
+                          initial: { opacity: 0, y: -6 },
+                          animate: { opacity: 1, y: 0 },
+                          className: "space-y-1.5",
+                          children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { htmlFor: "c-btc", children: "Endereço Bitcoin" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                Input,
+                                {
+                                  id: "c-btc",
+                                  "data-ocid": "clientes.input",
+                                  value: manualAddress,
+                                  onChange: (e3) => setManualAddress(e3.target.value),
+                                  placeholder: "bc1q... ou 3... ou 1...",
+                                  className: `bg-muted/30 border-border pr-10 font-mono text-sm ${manualAddress && !manualAddressValid ? "border-red-500/60 focus-visible:ring-red-500/30" : manualAddress && manualAddressValid ? "border-emerald-500/60 focus-visible:ring-emerald-500/30" : ""}`
+                                }
+                              ),
+                              manualAddress && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute right-2.5 top-1/2 -translate-y-1/2", children: manualAddressValid ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-400 text-xs font-bold", children: "✓" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-400 text-xs font-bold", children: "✗" }) })
+                            ] }),
+                            manualAddress && !manualAddressValid && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "p",
+                              {
+                                "data-ocid": "clientes.error_state",
+                                className: "text-xs text-red-400",
+                                children: 'Endereço Bitcoin inválido. Deve começar com "1", "3" ou "bc1".'
+                              }
+                            ),
+                            manualAddress && manualAddressValid && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 rounded-md bg-muted/30 border border-border px-3 py-2", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-muted-foreground flex-1 truncate", children: truncateAddress(manualAddress) }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(CopyButton, { text: manualAddress })
+                            ] })
+                          ]
+                        }
+                      ),
+                      walletMode === "ckbtc" && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        motion.div,
+                        {
+                          initial: { opacity: 0, y: -6 },
+                          animate: { opacity: 1, y: 0 },
+                          className: "space-y-3",
+                          children: !editingCliente ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-md bg-amber-500/10 border border-amber-500/20 px-3 py-2.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-amber-400", children: "💡 Salve o cliente primeiro para gerar o endereço ckBTC." }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: generatedAddress ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { className: "text-xs text-muted-foreground", children: "Endereço gerado" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 rounded-md bg-muted/30 border border-emerald-500/30 px-3 py-2", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-emerald-400 flex-1 truncate", children: truncateAddress(generatedAddress) }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(CopyButton, { text: generatedAddress })
+                            ] })
+                          ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            Button,
+                            {
+                              type: "button",
+                              "data-ocid": "clientes.secondary_button",
+                              variant: "outline",
+                              className: "w-full border-amber-500/40 text-amber-400 hover:bg-amber-500/10 hover:text-amber-300",
+                              onClick: handleGenerateCkBtcAddress,
+                              disabled: isGenerating,
+                              children: isGenerating ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "mr-2 h-4 w-4 animate-spin" }),
+                                "Gerando..."
+                              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mr-2 text-base leading-none", children: "₿" }),
+                                "Gerar Endereço Bitcoin"
+                              ] })
+                            }
+                          ) })
+                        }
+                      )
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 pt-2", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -48044,6 +49466,7 @@ function ClientesPage() {
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "CNPJ" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "E-mail" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Plano" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Carteira" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Status" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground text-right", children: "Ações" })
       ] }) }),
@@ -48052,7 +49475,7 @@ function ClientesPage() {
           TableCell,
           {
             "data-ocid": "clientes.empty_state",
-            colSpan: 6,
+            colSpan: 7,
             className: "text-center text-muted-foreground py-12",
             children: "Nenhum cliente encontrado."
           }
@@ -48077,6 +49500,36 @@ function ClientesPage() {
                   children: c2.plano
                 }
               ) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: c2.bitcoinAddress ? /* @__PURE__ */ jsxRuntimeExports.jsxs(Tooltip$1, { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 cursor-default", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-amber-400 font-bold text-sm leading-none", children: "₿" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-amber-400/80", children: truncateAddress(c2.bitcoinAddress) }),
+                  c2.walletType === "ckbtc" && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Badge,
+                    {
+                      variant: "outline",
+                      className: "text-[10px] py-0 px-1 h-4 bg-purple-500/20 text-purple-400 border-purple-500/30 leading-none",
+                      children: "ckBTC"
+                    }
+                  )
+                ] }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  TooltipContent,
+                  {
+                    "data-ocid": "clientes.tooltip",
+                    side: "top",
+                    className: "max-w-xs",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs break-all", children: c2.bitcoinAddress }),
+                      c2.walletType && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-muted-foreground mt-1", children: [
+                        "Tipo:",
+                        " ",
+                        c2.walletType === "ckbtc" ? "ckBTC (ICP)" : "Manual"
+                      ] })
+                    ]
+                  }
+                )
+              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-muted-foreground text-sm", children: "—" }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Badge,
                 {
@@ -48115,50 +49568,7 @@ function ClientesPage() {
         ))
       ] })
     ] }) }) }) })
-  ] });
-}
-var NAME = "Separator";
-var DEFAULT_ORIENTATION = "horizontal";
-var ORIENTATIONS = ["horizontal", "vertical"];
-var Separator$1 = reactExports.forwardRef((props, forwardedRef) => {
-  const { decorative, orientation: orientationProp = DEFAULT_ORIENTATION, ...domProps } = props;
-  const orientation = isValidOrientation(orientationProp) ? orientationProp : DEFAULT_ORIENTATION;
-  const ariaOrientation = orientation === "vertical" ? orientation : void 0;
-  const semanticProps = decorative ? { role: "none" } : { "aria-orientation": ariaOrientation, role: "separator" };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Primitive.div,
-    {
-      "data-orientation": orientation,
-      ...semanticProps,
-      ...domProps,
-      ref: forwardedRef
-    }
-  );
-});
-Separator$1.displayName = NAME;
-function isValidOrientation(orientation) {
-  return ORIENTATIONS.includes(orientation);
-}
-var Root = Separator$1;
-function Separator({
-  className,
-  orientation = "horizontal",
-  decorative = true,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root,
-    {
-      "data-slot": "separator",
-      decorative,
-      orientation,
-      className: cn(
-        "bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",
-        className
-      ),
-      ...props
-    }
-  );
+  ] }) });
 }
 var BusinessRole = /* @__PURE__ */ ((BusinessRole2) => {
   BusinessRole2["accountant"] = "accountant";
@@ -48496,7 +49906,7 @@ var TabsList$1 = reactExports.forwardRef(
     const context = useTabsContext(TAB_LIST_NAME, __scopeTabs);
     const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeTabs);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Root$4,
+      Root$5,
       {
         asChild: true,
         ...rovingFocusGroupScope,

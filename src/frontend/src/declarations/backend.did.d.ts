@@ -13,7 +13,29 @@ import type { Principal } from '@icp-sdk/core/principal';
 export type BusinessRole = { 'accountant' : null } |
   { 'client' : null } |
   { 'admin' : null };
+export interface Client {
+  'id' : ClientId,
+  'active' : boolean,
+  'cnpj' : string,
+  'name' : string,
+  'createdAt' : Time,
+  'plan' : PlanType,
+  'walletType' : [] | [WalletType],
+  'email' : string,
+  'updatedAt' : Time,
+  'address' : string,
+  'bitcoinAddress' : [] | [string],
+  'phone' : string,
+}
+export interface ClientBitcoinAddressResult {
+  'walletType' : WalletType,
+  'address' : string,
+}
 export type ClientId = bigint;
+export type PlanType = { 'enterprise' : null } |
+  { 'professional' : null } |
+  { 'basic' : null };
+export type Time = bigint;
 export interface UserProfile {
   'clientId' : [] | [ClientId],
   'name' : string,
@@ -23,14 +45,29 @@ export interface UserProfile {
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
+export type WalletType = { 'ckbtc' : null } |
+  { 'manual' : null };
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'editClient' : ActorMethod<[ClientId, Client], undefined>,
+  'generateCkBtcAddress' : ActorMethod<[ClientId], string>,
+  'getAllClients' : ActorMethod<[], Array<Client>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getClient' : ActorMethod<[ClientId], [] | [Client]>,
+  'getClientBitcoinAddress' : ActorMethod<
+    [ClientId],
+    [] | [ClientBitcoinAddressResult]
+  >,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'registerClient' : ActorMethod<[Client], ClientId>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'setClientBitcoinAddress' : ActorMethod<
+    [ClientId, string, WalletType],
+    undefined
+  >,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

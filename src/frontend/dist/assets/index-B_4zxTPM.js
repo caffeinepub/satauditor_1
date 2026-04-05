@@ -46430,165 +46430,222 @@ const planos = [
     ]
   }
 ];
-const assinaturas = [
-  {
-    id: 1,
-    cliente: "TechFin Brasil Ltda",
-    plano: "Enterprise",
-    inicio: "01/01/2026",
-    vencimento: "01/01/2027",
-    status: "Ativo"
-  },
-  {
-    id: 2,
-    cliente: "Mercado Digital S.A.",
-    plano: "Profissional",
-    inicio: "15/02/2026",
-    vencimento: "15/02/2027",
-    status: "Ativo"
-  },
-  {
-    id: 3,
-    cliente: "CriptoVault Investimentos",
-    plano: "Enterprise",
-    inicio: "10/01/2026",
-    vencimento: "10/04/2026",
-    status: "Ativo"
-  },
-  {
-    id: 4,
-    cliente: "StartupPay Tecnologia",
-    plano: "Básico",
-    inicio: "20/03/2026",
-    vencimento: "20/04/2026",
-    status: "Ativo"
-  },
-  {
-    id: 5,
-    cliente: "Holding Nacional Ltda",
-    plano: "Enterprise",
-    inicio: "05/06/2025",
-    vencimento: "05/01/2026",
-    status: "Vencido"
-  },
-  {
-    id: 6,
-    cliente: "FintechRedes Brasil",
-    plano: "Profissional",
-    inicio: "01/03/2026",
-    vencimento: "01/03/2027",
-    status: "Ativo"
-  }
-];
-const statusColors$2 = {
-  Ativo: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  Vencido: "bg-red-500/20 text-red-400 border-red-500/30",
-  Cancelado: "bg-slate-500/20 text-slate-400 border-slate-500/30"
+const planTypeToNome = {
+  basic: "Básico",
+  professional: "Profissional",
+  enterprise: "Enterprise"
+};
+const planTypeToPlanoId = {
+  basic: "basico",
+  professional: "profissional",
+  enterprise: "enterprise"
+};
+const statusToLabel = {
+  active: "Ativo",
+  inactive: "Inativo",
+  suspended: "Suspenso"
+};
+const statusToColors = {
+  active: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+  inactive: "bg-slate-500/20 text-slate-400 border-slate-500/30",
+  suspended: "bg-red-500/20 text-red-400 border-red-500/30"
 };
 const planColors$1 = {
   Básico: "bg-slate-500/20 text-slate-300 border-slate-500/30",
   Profissional: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   Enterprise: "bg-purple-500/20 text-purple-400 border-purple-500/30"
 };
-const planIdToNome = {
-  basico: "Básico",
-  profissional: "Profissional",
-  enterprise: "Enterprise"
-};
-function AssinaturasPage({ profile }) {
-  const isClient2 = profile.businessRole === BusinessRole$1.client;
-  const clientPlanId = "profissional";
-  const clientPlano = planos.find((p2) => p2.id === clientPlanId) ?? planos[1];
-  const clientPlanNome = planIdToNome[clientPlanId];
-  if (isClient2) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-6 space-y-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        "data-ocid": "assinaturas.client.panel",
-        className: "max-w-xl mx-auto space-y-6",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center space-y-1", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-2xl font-bold text-foreground", children: "Seu Plano Atual" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: "Detalhes da sua assinatura ativa no SatAuditor" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            motion.div,
+const SKELETON_CARD_FIELDS = [
+  "status",
+  "renovacao",
+  "inicio",
+  "plano"
+];
+const SKELETON_RECURSOS = ["r1", "r2", "r3", "r4"];
+const SKELETON_TABLE_ROWS = ["sk1", "sk2", "sk3", "sk4", "sk5"];
+function formatDate(ns) {
+  const ms = Number(ns / 1000000n);
+  return new Date(ms).toLocaleDateString("pt-BR");
+}
+function addOneYear(ns) {
+  const ms = Number(ns / 1000000n);
+  const d2 = new Date(ms);
+  d2.setFullYear(d2.getFullYear() + 1);
+  return d2.toLocaleDateString("pt-BR");
+}
+function ClientView({ profile }) {
+  const { actor, isFetching } = useActor();
+  const clientId = profile.clientId;
+  const { data: subscription, isLoading } = useQuery({
+    queryKey: ["subscription", clientId == null ? void 0 : clientId.toString()],
+    queryFn: async () => {
+      if (!actor || clientId === void 0) return null;
+      return actor.getSubscriptionByClientId(clientId);
+    },
+    enabled: !!actor && !isFetching && clientId !== void 0
+  });
+  if (isLoading) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-xl mx-auto space-y-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center space-y-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-7 w-48 mx-auto" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-64 mx-auto" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-card border-border", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-6 w-32" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-48" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "space-y-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
             {
-              initial: { opacity: 0, y: 20 },
-              animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.3 },
-              className: "relative",
-              "data-ocid": `assinaturas.${clientPlano.id}.card`,
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute -top-3 left-1/2 -translate-x-1/2 z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { className: "bg-emerald-500 text-white px-3 py-1 text-xs font-bold", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "h-3 w-3 mr-1" }),
-                  "Plano Ativo"
-                ] }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-card border-primary/60 shadow-btc", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "font-display text-2xl", children: clientPlano.nome }),
-                      clientPlano.destaque && /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { className: "bg-primary/20 text-primary border border-primary/30 text-xs", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(Crown, { className: "h-3 w-3 mr-1" }),
-                        "Mais Popular"
-                      ] })
-                    ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: clientPlano.descricao })
-                  ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "space-y-4", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3 p-3 rounded-lg bg-muted/20 border border-border", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Status" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          Badge,
-                          {
-                            variant: "outline",
-                            className: "text-xs mt-1 bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-                            children: "Ativo"
-                          }
-                        )
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Renovação" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground mt-1", children: "15/02/2027" })
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Início" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground mt-1", children: "15/02/2026" })
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Plano" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          Badge,
-                          {
-                            variant: "outline",
-                            className: `text-xs mt-1 ${planColors$1[clientPlanNome]}`,
-                            children: clientPlanNome
-                          }
-                        )
-                      ] })
-                    ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "space-y-2", children: clientPlano.recursos.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-start gap-2", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-muted-foreground", children: r2 })
-                    ] }, r2)) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      Button,
-                      {
-                        "data-ocid": "assinaturas.client.button",
-                        variant: "outline",
-                        className: "w-full border-primary/30 hover:border-primary/60 text-primary",
-                        children: "Consultar Upgrade de Plano"
-                      }
-                    )
-                  ] })
-                ] })
-              ]
+              className: "grid grid-cols-2 gap-3 p-3 rounded-lg bg-muted/20 border border-border",
+              "data-ocid": "assinaturas.loading_state",
+              children: SKELETON_CARD_FIELDS.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-3 w-16 mb-2" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-24" })
+              ] }, key))
             }
-          )
-        ]
-      }
-    ) });
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: SKELETON_RECURSOS.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-full" }, key)) })
+        ] })
+      ] })
+    ] }) });
+  }
+  if (!subscription) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-xl mx-auto space-y-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center space-y-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-2xl font-bold text-foreground", children: "Seu Plano Atual" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: "Detalhes da sua assinatura ativa no SatAuditor" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          "data-ocid": "assinaturas.empty_state",
+          className: "text-center py-12 text-muted-foreground",
+          children: "Nenhuma assinatura ativa encontrada."
+        }
+      )
+    ] }) });
+  }
+  const planKey = Object.keys(subscription.plan)[0];
+  const planNome = planTypeToNome[planKey] ?? planKey;
+  const planId = planTypeToPlanoId[planKey] ?? "profissional";
+  const clientePlano = planos.find((p2) => p2.id === planId) ?? planos[1];
+  const statusKey = Object.keys(subscription.status)[0];
+  const statusLabel = statusToLabel[statusKey] ?? statusKey;
+  const statusClass = statusToColors[statusKey] ?? statusToColors.inactive;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-6 space-y-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      "data-ocid": "assinaturas.client.panel",
+      className: "max-w-xl mx-auto space-y-6",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center space-y-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-2xl font-bold text-foreground", children: "Seu Plano Atual" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: "Detalhes da sua assinatura ativa no SatAuditor" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          motion.div,
+          {
+            initial: { opacity: 0, y: 20 },
+            animate: { opacity: 1, y: 0 },
+            transition: { duration: 0.3 },
+            className: "relative",
+            "data-ocid": `assinaturas.${clientePlano.id}.card`,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute -top-3 left-1/2 -translate-x-1/2 z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { className: "bg-emerald-500 text-white px-3 py-1 text-xs font-bold", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "h-3 w-3 mr-1" }),
+                "Plano Ativo"
+              ] }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-card border-primary/60 shadow-btc", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "font-display text-2xl", children: clientePlano.nome }),
+                    clientePlano.destaque && /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { className: "bg-primary/20 text-primary border border-primary/30 text-xs", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Crown, { className: "h-3 w-3 mr-1" }),
+                      "Mais Popular"
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: clientePlano.descricao })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "space-y-4", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3 p-3 rounded-lg bg-muted/20 border border-border", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Status" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        Badge,
+                        {
+                          variant: "outline",
+                          className: `text-xs mt-1 ${statusClass}`,
+                          children: statusLabel
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Renovação" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground mt-1", children: addOneYear(subscription.startDate) })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Início" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground mt-1", children: formatDate(subscription.startDate) })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Plano" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        Badge,
+                        {
+                          variant: "outline",
+                          className: `text-xs mt-1 ${planColors$1[planNome]}`,
+                          children: planNome
+                        }
+                      )
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "space-y-2", children: clientePlano.recursos.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-start gap-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-muted-foreground", children: r2 })
+                  ] }, r2)) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      "data-ocid": "assinaturas.client.button",
+                      variant: "outline",
+                      className: "w-full border-primary/30 hover:border-primary/60 text-primary",
+                      children: "Consultar Upgrade de Plano"
+                    }
+                  )
+                ] })
+              ] })
+            ]
+          }
+        )
+      ]
+    }
+  ) });
+}
+function AdminView() {
+  const { actor, isFetching } = useActor();
+  const { data: subscriptions = [], isLoading: isLoadingSubs } = useQuery({
+    queryKey: ["subscriptions"],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getAllSubscriptions();
+    },
+    enabled: !!actor && !isFetching
+  });
+  const { data: clients = [], isLoading: isLoadingClients } = useQuery({
+    queryKey: ["clients"],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getAllClients();
+    },
+    enabled: !!actor && !isFetching
+  });
+  const isLoading = isLoadingSubs || isLoadingClients;
+  const clientMap = /* @__PURE__ */ new Map();
+  for (const c2 of clients) {
+    clientMap.set(c2.id.toString(), c2.name);
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-8", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: planos.map((plano, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -46642,41 +46699,78 @@ function AssinaturasPage({ profile }) {
           /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Cliente" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Plano" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Início" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Vencimento" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Renovação" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Status" })
         ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: assinaturas.map((a2, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: isLoading ? SKELETON_TABLE_ROWS.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
           TableRow,
           {
-            "data-ocid": `assinaturas.item.${i + 1}`,
-            className: "border-border/50 hover:bg-muted/20 transition-colors",
+            "data-ocid": "assinaturas.loading_state",
+            className: "border-border/50",
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground", children: a2.cliente }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Badge,
-                {
-                  variant: "outline",
-                  className: `text-xs ${planColors$1[a2.plano]}`,
-                  children: a2.plano
-                }
-              ) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: a2.inicio }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: a2.vencimento }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Badge,
-                {
-                  variant: "outline",
-                  className: `text-xs ${statusColors$2[a2.status]}`,
-                  children: a2.status
-                }
-              ) })
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-36" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-20" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-16" }) })
             ]
           },
-          a2.id
-        )) })
+          key
+        )) : subscriptions.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          TableCell,
+          {
+            colSpan: 5,
+            className: "text-center py-8 text-muted-foreground",
+            "data-ocid": "assinaturas.empty_state",
+            children: "Nenhuma assinatura encontrada."
+          }
+        ) }) : subscriptions.map((sub, i) => {
+          const planKey = Object.keys(sub.plan)[0];
+          const planNome = planTypeToNome[planKey] ?? planKey;
+          const statusKey = Object.keys(sub.status)[0];
+          const statusLabel = statusToLabel[statusKey] ?? statusKey;
+          const statusClass = statusToColors[statusKey] ?? statusToColors.inactive;
+          const clientName = clientMap.get(sub.clientId.toString()) ?? `Cliente ${sub.clientId.toString()}`;
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            TableRow,
+            {
+              "data-ocid": `assinaturas.item.${i + 1}`,
+              className: "border-border/50 hover:bg-muted/20 transition-colors",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground", children: clientName }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Badge,
+                  {
+                    variant: "outline",
+                    className: `text-xs ${planColors$1[planNome]}`,
+                    children: planNome
+                  }
+                ) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: formatDate(sub.startDate) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: addOneYear(sub.startDate) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Badge,
+                  {
+                    variant: "outline",
+                    className: `text-xs ${statusClass}`,
+                    children: statusLabel
+                  }
+                ) })
+              ]
+            },
+            sub.id.toString()
+          );
+        }) })
       ] }) }) }) })
     ] })
   ] });
+}
+function AssinaturasPage({ profile }) {
+  const isClient2 = profile.businessRole === BusinessRole$1.client;
+  if (isClient2) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(ClientView, { profile });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(AdminView, {});
 }
 function Input({ className, type, ...props }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(

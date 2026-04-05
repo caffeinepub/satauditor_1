@@ -1,29 +1,44 @@
 # SatAuditor
 
 ## Current State
-O backend (`main.mo`) possui as estruturas de dados `Transaction`, `Subscription`, `AuditLog` com seus respectivos maps estáveis, mas não expõe nenhuma função pública para consultar transações ou assinaturas. O frontend usa exclusivamente dados mock para esses módulos.
+AssinaturasPage usa dois arrays de mock data estáticos:
+- `assinaturas` (array hardcoded com 6 clientes fictícios) — exibido na tabela admin.
+- `clientPlanId` hardcoded como `"profissional"` para a view do cliente.
+
+O backend já expõe:
+- `getAllSubscriptions()` → `Promise<Array<Subscription>>`
+- `getSubscriptionByClientId(clientId)` → `Promise<Subscription | null>`
+- `getClient(clientId)` → `Promise<Client | null>`
+
+Os tipos relevantes:
+- `Subscription.plan: PlanType` (enum: `basic`, `professional`, `enterprise`)
+- `Subscription.status: SubscriptionStatus` (enum: `active`, `inactive`, `suspended`)
+- `Subscription.startDate: Time` (bigint, nanoseconds)
+- `Client.plan: PlanType`
 
 ## Requested Changes (Diff)
 
 ### Add
-- `getAllTransactions()` — query pública, retorna todas as transações (admin/contador). Apenas admins veem todas; usuários comuns só veem as do próprio clientId.
-- `getTransactionsByClientId(clientId)` — query pública, filtra transações por cliente. Admin pode consultar qualquer clientId; usuário comum só o próprio.
-- `addTransaction(tx)` — shared pública, permite admin registrar uma transação.
-- `getAllSubscriptions()` — query pública, retorna todas as assinaturas (admin only).
-- `getSubscriptionByClientId(clientId)` — query pública, retorna a assinatura mais recente de um cliente. Admin ou dono do client.
-- `addSubscription(sub)` — shared pública, permite admin criar uma assinatura.
+- Carregar lista de assinaturas reais via `getAllSubscriptions()` (view admin).
+- Para admin: cruzar `subscription.clientId` com `getAllClients()` para exibir o nome do cliente na tabela.
+- Para cliente: carregar `getSubscriptionByClientId(profile.clientId)` e exibir dados reais (plano, status, startDate, renovação estimada).
+- Estados de loading (skeleton) e empty state ("Nenhuma assinatura encontrada") quando backend retornar vazio.
 
 ### Modify
-- Nenhuma função existente é modificada.
+- Remover array mock `assinaturas` e a variável `clientPlanId` hardcoded.
+- Substituir renderização da tabela por dados do backend.
+- Adaptar mapeamento de `PlanType` enum → nome display e `SubscriptionStatus` → badge.
+- Calcular renovação estimada a partir de `startDate + 1 ano` (Time é bigint nanoseconds).
 
 ### Remove
-- Nada é removido.
+- Interface `AssinaturaCliente` (será substituída pelos tipos do backend).
+- Array `assinaturas` hardcoded.
+- Constante `clientPlanId = "profissional"` hardcoded.
 
 ## Implementation Plan
-1. Adicionar `getAllTransactions()` com filtro por role (admin vê tudo, outros veem só o próprio clientId)
-2. Adicionar `getTransactionsByClientId(clientId)` com verificação de autorização
-3. Adicionar `addTransaction(tx)` para admin registrar transações
-4. Adicionar `getAllSubscriptions()` para admin
-5. Adicionar `getSubscriptionByClientId(clientId)` com verificação de autorização
-6. Adicionar `addSubscription(sub)` para admin
-7. Regenerar `backend.d.ts` via `generate_motoko_code`
+1. Criar helpers para mapear `PlanType` → nome/cor e `SubscriptionStatus` → badge.
+2. Hook/query para `getAllSubscriptions()` + `getAllClients()` (admin).
+3. Hook/query para `getSubscriptionByClientId(clientId)` (cliente).
+4. Adaptar view admin: tabela com dados reais, skeleton, empty state.
+5. Adaptar view cliente: card com dados reais, skeleton, empty state.
+6. Usar `useActor()` + `@tanstack/react-query` para as queries (padrão do projeto).

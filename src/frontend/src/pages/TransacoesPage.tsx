@@ -17,9 +17,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Download, Search } from "lucide-react";
+import { Download, Info, Search } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
+import { BusinessRole } from "../backend.d";
+import type { UserProfile } from "../backend.d";
 
 interface Transacao {
   id: number;
@@ -201,6 +203,10 @@ const transacoes: Transacao[] = [
   },
 ];
 
+// Mock client name mapping for demo — first 3 transactions assigned to
+// the "client" persona so the filtered view is non-empty
+const CLIENT_MOCK_TRANSACTIONS = [1, 3, 5, 9, 11];
+
 const categorias = [...new Set(transacoes.map((t) => t.categoria))];
 
 const categoriaColors: Record<string, string> = {
@@ -219,16 +225,28 @@ const statusColors: Record<string, string> = {
   Falha: "bg-red-500/20 text-red-400 border-red-500/30",
 };
 
-export default function TransacoesPage() {
+interface TransacoesPageProps {
+  profile: UserProfile;
+}
+
+export default function TransacoesPage({ profile }: TransacoesPageProps) {
   const [search, setSearch] = useState("");
   const [filterTipo, setFilterTipo] = useState("todos");
   const [filterCategoria, setFilterCategoria] = useState("todas");
   const [filterPeriodo, setFilterPeriodo] = useState("todos");
 
-  const filtered = transacoes.filter((t) => {
-    const matchSearch =
-      t.hash.includes(search.toLowerCase()) ||
-      t.cliente.toLowerCase().includes(search.toLowerCase());
+  const isClient = profile.businessRole === BusinessRole.client;
+
+  // For client role: show only mock transactions assigned to this client persona
+  const baseTransacoes = isClient
+    ? transacoes.filter((t) => CLIENT_MOCK_TRANSACTIONS.includes(t.id))
+    : transacoes;
+
+  const filtered = baseTransacoes.filter((t) => {
+    const matchSearch = isClient
+      ? t.hash.includes(search.toLowerCase())
+      : t.hash.includes(search.toLowerCase()) ||
+        t.cliente.toLowerCase().includes(search.toLowerCase());
     const matchTipo =
       filterTipo === "todos" ||
       (filterTipo === "entrada" && t.tipo === "Entrada") ||
@@ -245,8 +263,22 @@ export default function TransacoesPage() {
     .filter((t) => t.tipo === "Saída")
     .reduce((acc, t) => acc + t.valorBrl, 0);
 
+  // Number of visible columns depends on role
+  const colSpan = isClient ? 7 : 8;
+
   return (
     <div className="p-6 space-y-6">
+      {/* Client-only banner */}
+      {isClient && (
+        <div
+          data-ocid="transacoes.client.panel"
+          className="flex items-center gap-2 px-4 py-3 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-sm"
+        >
+          <Info className="h-4 w-4 flex-shrink-0" />
+          Exibindo suas transações vinculadas à sua conta.
+        </div>
+      )}
+
       {/* Summary */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-card border border-border rounded-lg p-4">
@@ -281,7 +313,9 @@ export default function TransacoesPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             data-ocid="transacoes.search_input"
-            placeholder="Buscar hash ou cliente..."
+            placeholder={
+              isClient ? "Buscar por hash..." : "Buscar hash ou cliente..."
+            }
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9 bg-card border-border"
@@ -361,9 +395,11 @@ export default function TransacoesPage() {
                   <TableHead className="text-muted-foreground">
                     Categoria
                   </TableHead>
-                  <TableHead className="text-muted-foreground">
-                    Cliente
-                  </TableHead>
+                  {!isClient && (
+                    <TableHead className="text-muted-foreground">
+                      Cliente
+                    </TableHead>
+                  )}
                   <TableHead className="text-muted-foreground">
                     Status
                   </TableHead>
@@ -374,7 +410,7 @@ export default function TransacoesPage() {
                   <TableRow>
                     <TableCell
                       data-ocid="transacoes.empty_state"
-                      colSpan={8}
+                      colSpan={colSpan}
                       className="text-center text-muted-foreground py-12"
                     >
                       Nenhuma transação encontrada.
@@ -422,9 +458,11 @@ export default function TransacoesPage() {
                         {t.categoria}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {t.cliente}
-                    </TableCell>
+                    {!isClient && (
+                      <TableCell className="text-sm text-muted-foreground">
+                        {t.cliente}
+                      </TableCell>
+                    )}
                     <TableCell>
                       <Badge
                         variant="outline"

@@ -1,10 +1,12 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/sonner";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { BusinessRole } from "./backend.d";
 import AppLayout from "./components/AppLayout";
 import { useActor } from "./hooks/useActor";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
+import { ROLE_PERMISSIONS } from "./lib/permissions";
 import AssinaturasPage from "./pages/AssinaturasPage";
 import AuditoriaPage from "./pages/AuditoriaPage";
 import ClientesPage from "./pages/ClientesPage";
@@ -41,6 +43,17 @@ export default function App() {
     },
     enabled: isAuthenticated && !!actor && !isFetching,
   });
+
+  // Redirect to dashboard if current page is not allowed for this role
+  useEffect(() => {
+    if (!profile) return;
+    const role = profile.businessRole ?? BusinessRole.client;
+    const allowed =
+      ROLE_PERMISSIONS[role] ?? ROLE_PERMISSIONS[BusinessRole.client];
+    if (!allowed.includes(currentPage)) {
+      setCurrentPage("dashboard");
+    }
+  }, [profile, currentPage]);
 
   if (isInitializing || (isAuthenticated && (isFetching || profileLoading))) {
     return (
@@ -81,11 +94,11 @@ export default function App() {
   const pageComponents: Record<PageName, React.ReactNode> = {
     dashboard: <DashboardPage />,
     clientes: <ClientesPage />,
-    transacoes: <TransacoesPage />,
+    transacoes: <TransacoesPage profile={profile} />,
     contabilidade: <ContabilidadePage />,
     relatorios: <RelatoriosPage />,
     auditoria: <AuditoriaPage />,
-    assinaturas: <AssinaturasPage />,
+    assinaturas: <AssinaturasPage profile={profile} />,
     configuracoes: <ConfiguracoesPage />,
   };
 

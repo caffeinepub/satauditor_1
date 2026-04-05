@@ -26,8 +26,14 @@ import { AnimatePresence, motion } from "motion/react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import type { PageName } from "../App";
+import { BusinessRole } from "../backend.d";
 import type { UserProfile } from "../backend.d";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import {
+  ROLE_BADGE_CLASSES,
+  ROLE_LABELS,
+  ROLE_PERMISSIONS,
+} from "../lib/permissions";
 
 interface NavItem {
   id: PageName;
@@ -73,6 +79,13 @@ export default function AppLayout({
   const { clear } = useInternetIdentity();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const role = profile.businessRole ?? BusinessRole.client;
+  const allowedPages =
+    ROLE_PERMISSIONS[role] ?? ROLE_PERMISSIONS[BusinessRole.client];
+  const visibleNavItems = NAV_ITEMS.filter((item) =>
+    allowedPages.includes(item.id),
+  );
+
   const initials = profile.name
     .split(" ")
     .slice(0, 2)
@@ -102,7 +115,7 @@ export default function AppLayout({
       {/* Nav */}
       <ScrollArea className="flex-1 py-4">
         <nav className="px-3 space-y-1">
-          {NAV_ITEMS.map((item) => {
+          {visibleNavItems.map((item) => {
             const active = currentPage === item.id;
             return (
               <button
@@ -157,6 +170,15 @@ export default function AppLayout({
                 <p className="text-xs text-muted-foreground truncate">
                   {profile.email}
                 </p>
+                {/* Role badge */}
+                <span
+                  data-ocid="nav.user.role_badge"
+                  className={`inline-block mt-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full leading-none ${
+                    ROLE_BADGE_CLASSES[role]
+                  }`}
+                >
+                  {ROLE_LABELS[role]}
+                </span>
               </div>
             </button>
           </DropdownMenuTrigger>

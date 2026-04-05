@@ -17553,6 +17553,12 @@ const Toaster = ({ ...props }) => {
     }
   );
 };
+var BusinessRole$1 = /* @__PURE__ */ ((BusinessRole2) => {
+  BusinessRole2["accountant"] = "accountant";
+  BusinessRole2["client"] = "client";
+  BusinessRole2["admin"] = "admin";
+  return BusinessRole2;
+})(BusinessRole$1 || {});
 function createContext2(rootComponentName, defaultContext) {
   const Context = reactExports.createContext(defaultContext);
   const Provider2 = (props) => {
@@ -23124,20 +23130,20 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$y = [
+const __iconNode$A = [
   ["path", { d: "M8 3 4 7l4 4", key: "9rb6wj" }],
   ["path", { d: "M4 7h16", key: "6tx8e3" }],
   ["path", { d: "m16 21 4-4-4-4", key: "siv7j2" }],
   ["path", { d: "M20 17H4", key: "h6l3hr" }]
 ];
-const ArrowLeftRight = createLucideIcon("arrow-left-right", __iconNode$y);
+const ArrowLeftRight = createLucideIcon("arrow-left-right", __iconNode$A);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$x = [
+const __iconNode$z = [
   ["path", { d: "M10.268 21a2 2 0 0 0 3.464 0", key: "vwvbt9" }],
   [
     "path",
@@ -23147,14 +23153,14 @@ const __iconNode$x = [
     }
   ]
 ];
-const Bell = createLucideIcon("bell", __iconNode$x);
+const Bell = createLucideIcon("bell", __iconNode$z);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$w = [
+const __iconNode$y = [
   [
     "path",
     {
@@ -23163,14 +23169,14 @@ const __iconNode$w = [
     }
   ]
 ];
-const Bitcoin = createLucideIcon("bitcoin", __iconNode$w);
+const Bitcoin = createLucideIcon("bitcoin", __iconNode$y);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$v = [
+const __iconNode$x = [
   ["path", { d: "M12 7v14", key: "1akyts" }],
   [
     "path",
@@ -23180,52 +23186,72 @@ const __iconNode$v = [
     }
   ]
 ];
-const BookOpen = createLucideIcon("book-open", __iconNode$v);
+const BookOpen = createLucideIcon("book-open", __iconNode$x);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$u = [
+const __iconNode$w = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$u);
+const ChartColumn = createLucideIcon("chart-column", __iconNode$w);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$t = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$t);
+const __iconNode$v = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$v);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$s = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$s);
+const __iconNode$u = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$u);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$r = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$r);
+const __iconNode$t = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$t);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$q = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$q);
+const __iconNode$s = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$s);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$r = [
+  ["path", { d: "M18 20a6 6 0 0 0-12 0", key: "1qehca" }],
+  ["circle", { cx: "12", cy: "10", r: "4", key: "1h16sb" }],
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+];
+const CircleUserRound = createLucideIcon("circle-user-round", __iconNode$r);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$q = [["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]];
+const Circle = createLucideIcon("circle", __iconNode$q);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23233,19 +23259,21 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$q);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$p = [
-  ["path", { d: "M18 20a6 6 0 0 0-12 0", key: "1qehca" }],
-  ["circle", { cx: "12", cy: "10", r: "4", key: "1h16sb" }],
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
 ];
-const CircleUserRound = createLucideIcon("circle-user-round", __iconNode$p);
+const Copy = createLucideIcon("copy", __iconNode$p);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$o = [["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]];
-const Circle = createLucideIcon("circle", __iconNode$o);
+const __iconNode$o = [
+  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
+  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
+];
+const CreditCard = createLucideIcon("credit-card", __iconNode$o);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23253,28 +23281,6 @@ const Circle = createLucideIcon("circle", __iconNode$o);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$n = [
-  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
-];
-const Copy = createLucideIcon("copy", __iconNode$n);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$m = [
-  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
-  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
-];
-const CreditCard = createLucideIcon("credit-card", __iconNode$m);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$l = [
   [
     "path",
     {
@@ -23284,7 +23290,33 @@ const __iconNode$l = [
   ],
   ["path", { d: "M5 21h14", key: "11awu3" }]
 ];
-const Crown = createLucideIcon("crown", __iconNode$l);
+const Crown = createLucideIcon("crown", __iconNode$n);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$m = [
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+];
+const Download = createLucideIcon("download", __iconNode$m);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$l = [
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M8 18v-2", key: "qcmpov" }],
+  ["path", { d: "M12 18v-4", key: "q1q25u" }],
+  ["path", { d: "M16 18v-6", key: "15y0np" }]
+];
+const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$l);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23292,11 +23324,11 @@ const Crown = createLucideIcon("crown", __iconNode$l);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$k = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 16v-4", key: "1dtifu" }],
+  ["path", { d: "M12 8h.01", key: "e9boi3" }]
 ];
-const Download = createLucideIcon("download", __iconNode$k);
+const Info = createLucideIcon("info", __iconNode$k);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23304,34 +23336,32 @@ const Download = createLucideIcon("download", __iconNode$k);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$j = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M8 18v-2", key: "qcmpov" }],
-  ["path", { d: "M12 18v-4", key: "q1q25u" }],
-  ["path", { d: "M16 18v-6", key: "15y0np" }]
-];
-const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$j);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$i = [
   ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
   ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
   ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
   ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
 ];
-const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$i);
+const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$j);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$h = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$h);
+const __iconNode$i = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$i);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$h = [
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+];
+const LogOut = createLucideIcon("log-out", __iconNode$h);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23339,11 +23369,11 @@ const LoaderCircle = createLucideIcon("loader-circle", __iconNode$h);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$g = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$g);
+const Menu = createLucideIcon("menu", __iconNode$g);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23351,18 +23381,6 @@ const LogOut = createLucideIcon("log-out", __iconNode$g);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$f = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
-];
-const Menu = createLucideIcon("menu", __iconNode$f);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$e = [
   [
     "path",
     {
@@ -23375,14 +23393,14 @@ const __iconNode$e = [
   ["circle", { cx: "6.5", cy: "12.5", r: ".5", fill: "currentColor", key: "qy21gx" }],
   ["circle", { cx: "8.5", cy: "7.5", r: ".5", fill: "currentColor", key: "fotxhn" }]
 ];
-const Palette = createLucideIcon("palette", __iconNode$e);
+const Palette = createLucideIcon("palette", __iconNode$f);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$d = [
+const __iconNode$e = [
   [
     "path",
     {
@@ -23392,7 +23410,18 @@ const __iconNode$d = [
   ],
   ["path", { d: "m15 5 4 4", key: "1mk7zo" }]
 ];
-const Pencil = createLucideIcon("pencil", __iconNode$d);
+const Pencil = createLucideIcon("pencil", __iconNode$e);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$d = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "M12 5v14", key: "s699le" }]
+];
+const Plus = createLucideIcon("plus", __iconNode$d);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23400,17 +23429,6 @@ const Pencil = createLucideIcon("pencil", __iconNode$d);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$c = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "M12 5v14", key: "s699le" }]
-];
-const Plus = createLucideIcon("plus", __iconNode$c);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$b = [
   [
     "path",
     {
@@ -23421,7 +23439,18 @@ const __iconNode$b = [
   ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
   ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
 ];
-const Save = createLucideIcon("save", __iconNode$b);
+const Save = createLucideIcon("save", __iconNode$c);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$b = [
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+];
+const Search = createLucideIcon("search", __iconNode$b);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23429,10 +23458,16 @@ const Save = createLucideIcon("save", __iconNode$b);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$a = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+  [
+    "path",
+    {
+      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
+      key: "1qme2f"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ];
-const Search = createLucideIcon("search", __iconNode$a);
+const Settings = createLucideIcon("settings", __iconNode$a);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23443,13 +23478,12 @@ const __iconNode$9 = [
   [
     "path",
     {
-      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
-      key: "1qme2f"
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
     }
-  ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+  ]
 ];
-const Settings = createLucideIcon("settings", __iconNode$9);
+const Shield = createLucideIcon("shield", __iconNode$9);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23460,12 +23494,12 @@ const __iconNode$8 = [
   [
     "path",
     {
-      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-      key: "oel41y"
+      d: "M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z",
+      key: "r04s7s"
     }
   ]
 ];
-const Shield = createLucideIcon("shield", __iconNode$8);
+const Star = createLucideIcon("star", __iconNode$8);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -44228,7 +44262,7 @@ const Client = Record({
   "bitcoinAddress": Opt(Text$1),
   "phone": Text$1
 });
-const BusinessRole$1 = Variant({
+const BusinessRole = Variant({
   "accountant": Null,
   "client": Null,
   "admin": Null
@@ -44236,7 +44270,7 @@ const BusinessRole$1 = Variant({
 const UserProfile = Record({
   "clientId": Opt(ClientId),
   "name": Text$1,
-  "businessRole": BusinessRole$1,
+  "businessRole": BusinessRole,
   "email": Text$1
 });
 const ClientBitcoinAddressResult = Record({
@@ -45508,6 +45542,43 @@ function InternetIdentityProvider({
     children
   });
 }
+const ROLE_PERMISSIONS = {
+  [BusinessRole$1.admin]: [
+    "dashboard",
+    "clientes",
+    "transacoes",
+    "contabilidade",
+    "relatorios",
+    "auditoria",
+    "assinaturas",
+    "configuracoes"
+  ],
+  [BusinessRole$1.accountant]: [
+    "dashboard",
+    "transacoes",
+    "contabilidade",
+    "relatorios",
+    "auditoria",
+    "configuracoes"
+  ],
+  [BusinessRole$1.client]: [
+    "dashboard",
+    "transacoes",
+    "relatorios",
+    "assinaturas",
+    "configuracoes"
+  ]
+};
+const ROLE_LABELS = {
+  [BusinessRole$1.admin]: "Administrador",
+  [BusinessRole$1.accountant]: "Contador",
+  [BusinessRole$1.client]: "Cliente"
+};
+const ROLE_BADGE_CLASSES = {
+  [BusinessRole$1.admin]: "bg-primary/20 text-primary border border-primary/30",
+  [BusinessRole$1.accountant]: "bg-blue-500/20 text-blue-400 border border-blue-500/30",
+  [BusinessRole$1.client]: "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+};
 const NAV_ITEMS = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "clientes", label: "Clientes", icon: Users },
@@ -45536,6 +45607,11 @@ function AppLayout({
 }) {
   const { clear } = useInternetIdentity();
   const [sidebarOpen, setSidebarOpen] = reactExports.useState(false);
+  const role = profile.businessRole ?? BusinessRole$1.client;
+  const allowedPages = ROLE_PERMISSIONS[role] ?? ROLE_PERMISSIONS[BusinessRole$1.client];
+  const visibleNavItems = NAV_ITEMS.filter(
+    (item) => allowedPages.includes(item.id)
+  );
   const initials = profile.name.split(" ").slice(0, 2).map((n2) => n2[0]).join("").toUpperCase();
   const SidebarContent = () => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-6 py-5 border-b border-sidebar-border", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
@@ -45548,7 +45624,7 @@ function AppLayout({
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-muted-foreground mt-0.5", children: "v1.0 • Beta" })
       ] })
     ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollArea, { className: "flex-1 py-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "px-3 space-y-1", children: NAV_ITEMS.map((item) => {
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollArea, { className: "flex-1 py-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "px-3 space-y-1", children: visibleNavItems.map((item) => {
       const active = currentPage === item.id;
       return /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "button",
@@ -45585,7 +45661,15 @@ function AppLayout({
             /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { className: "h-8 w-8 flex-shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AvatarFallback, { className: "bg-primary/20 text-primary text-xs font-bold", children: initials }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 text-left min-w-0", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-sidebar-foreground truncate", children: profile.name }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground truncate", children: profile.email })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground truncate", children: profile.email }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "span",
+                {
+                  "data-ocid": "nav.user.role_badge",
+                  className: `inline-block mt-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full leading-none ${ROLE_BADGE_CLASSES[role]}`,
+                  children: ROLE_LABELS[role]
+                }
+              )
             ] })
           ]
         }
@@ -46085,7 +46169,106 @@ const planColors$1 = {
   Profissional: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   Enterprise: "bg-purple-500/20 text-purple-400 border-purple-500/30"
 };
-function AssinaturasPage() {
+const planIdToNome = {
+  basico: "Básico",
+  profissional: "Profissional",
+  enterprise: "Enterprise"
+};
+function AssinaturasPage({ profile }) {
+  const isClient2 = profile.businessRole === BusinessRole$1.client;
+  const clientPlanId = "profissional";
+  const clientPlano = planos.find((p2) => p2.id === clientPlanId) ?? planos[1];
+  const clientPlanNome = planIdToNome[clientPlanId];
+  if (isClient2) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-6 space-y-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        "data-ocid": "assinaturas.client.panel",
+        className: "max-w-xl mx-auto space-y-6",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center space-y-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-2xl font-bold text-foreground", children: "Seu Plano Atual" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: "Detalhes da sua assinatura ativa no SatAuditor" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            motion.div,
+            {
+              initial: { opacity: 0, y: 20 },
+              animate: { opacity: 1, y: 0 },
+              transition: { duration: 0.3 },
+              className: "relative",
+              "data-ocid": `assinaturas.${clientPlano.id}.card`,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute -top-3 left-1/2 -translate-x-1/2 z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { className: "bg-emerald-500 text-white px-3 py-1 text-xs font-bold", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "h-3 w-3 mr-1" }),
+                  "Plano Ativo"
+                ] }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-card border-primary/60 shadow-btc", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "font-display text-2xl", children: clientPlano.nome }),
+                      clientPlano.destaque && /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { className: "bg-primary/20 text-primary border border-primary/30 text-xs", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Crown, { className: "h-3 w-3 mr-1" }),
+                        "Mais Popular"
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: clientPlano.descricao })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "space-y-4", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3 p-3 rounded-lg bg-muted/20 border border-border", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Status" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          Badge,
+                          {
+                            variant: "outline",
+                            className: "text-xs mt-1 bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+                            children: "Ativo"
+                          }
+                        )
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Renovação" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground mt-1", children: "15/02/2027" })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Início" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground mt-1", children: "15/02/2026" })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Plano" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          Badge,
+                          {
+                            variant: "outline",
+                            className: `text-xs mt-1 ${planColors$1[clientPlanNome]}`,
+                            children: clientPlanNome
+                          }
+                        )
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "space-y-2", children: clientPlano.recursos.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-start gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-muted-foreground", children: r2 })
+                    ] }, r2)) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      Button,
+                      {
+                        "data-ocid": "assinaturas.client.button",
+                        variant: "outline",
+                        className: "w-full border-primary/30 hover:border-primary/60 text-primary",
+                        children: "Consultar Upgrade de Plano"
+                      }
+                    )
+                  ] })
+                ] })
+              ]
+            }
+          )
+        ]
+      }
+    ) });
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-8", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: planos.map((plano, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
       motion.div,
@@ -49892,16 +50075,10 @@ function ClientesPage() {
     ] }) }) }) })
   ] }) });
 }
-var BusinessRole = /* @__PURE__ */ ((BusinessRole2) => {
-  BusinessRole2["accountant"] = "accountant";
-  BusinessRole2["client"] = "client";
-  BusinessRole2["admin"] = "admin";
-  return BusinessRole2;
-})(BusinessRole || {});
 const roleLabels = {
-  [BusinessRole.client]: "Cliente — Empresa usando o serviço",
-  [BusinessRole.accountant]: "Contador — Profissional contábil",
-  [BusinessRole.admin]: "Administrador — Gestor da plataforma"
+  [BusinessRole$1.client]: "Cliente — Empresa usando o serviço",
+  [BusinessRole$1.accountant]: "Contador — Profissional contábil",
+  [BusinessRole$1.admin]: "Administrador — Gestor da plataforma"
 };
 function ConfiguracoesPage() {
   const { actor } = useActor();
@@ -49909,7 +50086,7 @@ function ConfiguracoesPage() {
   const queryClient2 = useQueryClient();
   const [name, setName] = reactExports.useState("");
   const [email, setEmail] = reactExports.useState("");
-  const [role, setRole] = reactExports.useState(BusinessRole.client);
+  const [role, setRole] = reactExports.useState(BusinessRole$1.client);
   const [loading, setLoading] = reactExports.useState(true);
   const [saving, setSaving] = reactExports.useState(false);
   reactExports.useEffect(() => {
@@ -50038,7 +50215,7 @@ function ConfiguracoesPage() {
                         children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectValue, {})
                       }
                     ),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(SelectContent, { children: Object.values(BusinessRole).map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: r2, children: roleLabels[r2] }, r2)) })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(SelectContent, { children: Object.values(BusinessRole$1).map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: r2, children: roleLabels[r2] }, r2)) })
                   ]
                 }
               )
@@ -74423,7 +74600,7 @@ function OnboardingPage() {
   const queryClient2 = useQueryClient();
   const [name, setName] = reactExports.useState("");
   const [email, setEmail] = reactExports.useState("");
-  const [role, setRole] = reactExports.useState(BusinessRole.client);
+  const [role, setRole] = reactExports.useState(BusinessRole$1.client);
   const [saving, setSaving] = reactExports.useState(false);
   const handleSubmit = async (e3) => {
     e3.preventDefault();
@@ -74527,9 +74704,9 @@ function OnboardingPage() {
                       }
                     ),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs(SelectContent, { children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole.client, children: "Cliente — Empresa usando o serviço" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole.accountant, children: "Contador — Profissional contábil" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole.admin, children: "Administrador — Gestor da plataforma" })
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.client, children: "Cliente — Empresa usando o serviço" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.accountant, children: "Contador — Profissional contábil" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.admin, children: "Administrador — Gestor da plataforma" })
                     ] })
                   ]
                 }
@@ -75000,6 +75177,7 @@ const transacoes = [
     status: "Confirmada"
   }
 ];
+const CLIENT_MOCK_TRANSACTIONS = [1, 3, 5, 9, 11];
 const categorias = [...new Set(transacoes.map((t2) => t2.categoria))];
 const categoriaColors = {
   "Receita de Serviço": "bg-amber-500/15 text-amber-400 border-amber-500/30",
@@ -75014,20 +75192,34 @@ const statusColors = {
   Pendente: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   Falha: "bg-red-500/20 text-red-400 border-red-500/30"
 };
-function TransacoesPage() {
+function TransacoesPage({ profile }) {
   const [search, setSearch] = reactExports.useState("");
   const [filterTipo, setFilterTipo] = reactExports.useState("todos");
   const [filterCategoria, setFilterCategoria] = reactExports.useState("todas");
   const [filterPeriodo, setFilterPeriodo] = reactExports.useState("todos");
-  const filtered = transacoes.filter((t2) => {
-    const matchSearch = t2.hash.includes(search.toLowerCase()) || t2.cliente.toLowerCase().includes(search.toLowerCase());
+  const isClient2 = profile.businessRole === BusinessRole$1.client;
+  const baseTransacoes = isClient2 ? transacoes.filter((t2) => CLIENT_MOCK_TRANSACTIONS.includes(t2.id)) : transacoes;
+  const filtered = baseTransacoes.filter((t2) => {
+    const matchSearch = isClient2 ? t2.hash.includes(search.toLowerCase()) : t2.hash.includes(search.toLowerCase()) || t2.cliente.toLowerCase().includes(search.toLowerCase());
     const matchTipo = filterTipo === "todos" || filterTipo === "entrada" && t2.tipo === "Entrada" || filterTipo === "saida" && t2.tipo === "Saída";
     const matchCat = filterCategoria === "todas" || t2.categoria === filterCategoria;
     return matchSearch && matchTipo && matchCat;
   });
   const totalEntradas = filtered.filter((t2) => t2.tipo === "Entrada").reduce((acc, t2) => acc + t2.valorBrl, 0);
   const totalSaidas = filtered.filter((t2) => t2.tipo === "Saída").reduce((acc, t2) => acc + t2.valorBrl, 0);
+  const colSpan = isClient2 ? 7 : 8;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", children: [
+    isClient2 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        "data-ocid": "transacoes.client.panel",
+        className: "flex items-center gap-2 px-4 py-3 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-sm",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Info, { className: "h-4 w-4 flex-shrink-0" }),
+          "Exibindo suas transações vinculadas à sua conta."
+        ]
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-3 gap-4", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border border-border rounded-lg p-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground mb-1", children: "Total Entradas" }),
@@ -75064,7 +75256,7 @@ function TransacoesPage() {
           Input,
           {
             "data-ocid": "transacoes.search_input",
-            placeholder: "Buscar hash ou cliente...",
+            placeholder: isClient2 ? "Buscar por hash..." : "Buscar hash ou cliente...",
             value: search,
             onChange: (e3) => setSearch(e3.target.value),
             className: "pl-9 bg-card border-border"
@@ -75137,7 +75329,7 @@ function TransacoesPage() {
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-right text-muted-foreground", children: "Valor BRL" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Data" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Categoria" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Cliente" }),
+        !isClient2 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Cliente" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Status" })
       ] }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(TableBody, { children: [
@@ -75145,7 +75337,7 @@ function TransacoesPage() {
           TableCell,
           {
             "data-ocid": "transacoes.empty_state",
-            colSpan: 8,
+            colSpan,
             className: "text-center text-muted-foreground py-12",
             children: "Nenhuma transação encontrada."
           }
@@ -75189,7 +75381,7 @@ function TransacoesPage() {
                   children: t2.categoria
                 }
               ) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: t2.cliente }),
+              !isClient2 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: t2.cliente }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Badge,
                 {
@@ -75219,6 +75411,14 @@ function App() {
     },
     enabled: isAuthenticated && !!actor && !isFetching
   });
+  reactExports.useEffect(() => {
+    if (!profile) return;
+    const role = profile.businessRole ?? BusinessRole$1.client;
+    const allowed = ROLE_PERMISSIONS[role] ?? ROLE_PERMISSIONS[BusinessRole$1.client];
+    if (!allowed.includes(currentPage)) {
+      setCurrentPage("dashboard");
+    }
+  }, [profile, currentPage]);
   if (isInitializing || isAuthenticated && (isFetching || profileLoading)) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen bg-background flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-4", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-4xl font-display font-bold", children: [
@@ -75247,11 +75447,11 @@ function App() {
   const pageComponents = {
     dashboard: /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPage, {}),
     clientes: /* @__PURE__ */ jsxRuntimeExports.jsx(ClientesPage, {}),
-    transacoes: /* @__PURE__ */ jsxRuntimeExports.jsx(TransacoesPage, {}),
+    transacoes: /* @__PURE__ */ jsxRuntimeExports.jsx(TransacoesPage, { profile }),
     contabilidade: /* @__PURE__ */ jsxRuntimeExports.jsx(ContabilidadePage, {}),
     relatorios: /* @__PURE__ */ jsxRuntimeExports.jsx(RelatoriosPage, {}),
     auditoria: /* @__PURE__ */ jsxRuntimeExports.jsx(AuditoriaPage, {}),
-    assinaturas: /* @__PURE__ */ jsxRuntimeExports.jsx(AssinaturasPage, {}),
+    assinaturas: /* @__PURE__ */ jsxRuntimeExports.jsx(AssinaturasPage, { profile }),
     configuracoes: /* @__PURE__ */ jsxRuntimeExports.jsx(ConfiguracoesPage, {})
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [

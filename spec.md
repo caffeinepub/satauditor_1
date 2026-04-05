@@ -1,30 +1,42 @@
 # SatAuditor
 
 ## Current State
-- Cadastro de clientes funcional (ClientesPage.tsx) com campos: empresa, CNPJ, email, telefone, endereço, plano, status.
-- Backend (main.mo) tem tipo `Client` sem nenhum campo de carteira Bitcoin.
-- Nenhuma integração Bitcoin vinculada a clientes ainda.
+
+O backend (`src/backend/main.mo`) já possui os tipos e funções de gerenciamento de clientes:
+- `Client` com campos: id, name, cnpj, email, phone, address, plan, active, bitcoinAddress, walletType, createdAt, updatedAt
+- `registerClient`, `editClient`, `getClient`, `getAllClients`
+- `generateCkBtcAddress` — implementado como `Runtime.trap("Not yet implemented")`
+- `setClientBitcoinAddress`, `getClientBitcoinAddress`
+- Armazenamento in-memory com `Map` (não persistente entre upgrades)
+
+O frontend (`ClientesPage.tsx`) usa uma lista estática `initialClientes` hardcoded no componente. As chamadas ao backend existem apenas para `setClientBitcoinAddress` e `generateCkBtcAddress`, mas `registerClient`, `editClient`, `getAllClients` e remoção não estão integrados ao backend real.
 
 ## Requested Changes (Diff)
 
 ### Add
-- **Backend:** Campos `bitcoinAddress: ?Text` e `walletType: ?{#manual; #ckbtc}` no tipo `Client`.
-- **Backend:** Função `generateCkBtcAddress(clientId)` que deriva endereço P2PKH exclusivo via API de gerenciamento do ICP (ecdsa_public_key + derivation path por clientId).
-- **Backend:** Função `setClientBitcoinAddress(clientId, address)` para vinculação manual.
-- **Backend:** Função `getClientBitcoinAddress(clientId)` para consulta do endereço.
-- **Frontend:** Seção "Carteira Bitcoin" no modal de cadastro/edição: RadioGroup entre endereço manual e gerar via ICP (ckBTC), campo de input manual, botão Gerar com resultado exibido, botão copiar.
-- **Frontend:** Ícone Bitcoin colorido na tabela quando cliente tem carteira vinculada.
+- Persistência estável no backend: usar `stable var` com `Map.fromIter` / `Map.toIter` via `preupgrade`/`postupgrade` para clientes não perderem dados entre upgrades
+- Função `deleteClient(clientId: ClientId): async ()` no backend
+- Integração ICRC-1 para consultar saldo ckBTC: nova função `getCkBtcBalance(clientId: ClientId): async Nat` que chama o ledger ckBTC via inter-canister call (ICRC-1 `icrc1_balance_of`)
+- Frontend: carregar clientes do backend ao montar a página (`getAllClients`)
+- Frontend: criar cliente via `registerClient` no submit do form (novo)
+- Frontend: editar cliente via `editClient` no submit do form (edição)
+- Frontend: excluir cliente via `deleteClient` no botão de exclusão
+- Frontend: exibir saldo ckBTC ao lado do endereço de carteira (via `getCkBtcBalance`)
+- Estados de loading e error handling no frontend
 
 ### Modify
-- **Backend:** Tipo `Client` recebe `bitcoinAddress` e `walletType` como campos opcionais.
-- **Frontend:** Interface `Cliente` e form state incluem `bitcoinAddress` e `walletType`.
+- `generateCkBtcAddress`: implementar geração real usando o sub-account derivado do clientId (via ICP Management Canister e Bitcoin API)
+- Backend: garantir que `Map` é stable (usar upgrade hooks)
+- Frontend `ClientesPage.tsx`: substituir `initialClientes` por dados do backend; conectar todos os CRUD ao actor
 
 ### Remove
-- Nada.
+- Lista estática `initialClientes` do frontend
+- IDs numéricos locais (`Date.now()`) — substituídos pelos IDs reais do backend
 
 ## Implementation Plan
-1. Atualizar tipo `Client` no backend com campos opcionais de carteira.
-2. Implementar `generateCkBtcAddress` via ecdsa_public_key do ICP (derivação por clientId).
-3. Implementar `setClientBitcoinAddress` e `getClientBitcoinAddress`.
-4. Atualizar `backend.d.ts` com novos tipos e funções.
-5. Atualizar `ClientesPage.tsx`: seção de carteira no modal, ícone na tabela, botão copiar.
+
+1. **Backend — persistência stable**: converter `clients`, `nextClientId`, `transactions`, `nextTransactionId`, `subscriptions`, `nextSubscriptionId` para `stable var` com hooks de upgrade
+2. **Backend — deleteClient**: adicionar função `deleteClient(clientId: ClientId): async ()` com verificação de permissão admin
+3. **Backend — getCkBtcBalance**: adicionar função que faz inter-canister call ao ledger ckBTC mainnet (canister `mxzaz-hqaaa-aaaar-qaada-cai`) usando ICRC-1 `icrc1_balance_of` com o endereço Bitcoin do cliente como subaccount
+4. **Frontend — useClientes hook**: criar `src/frontend/src/hooks/useClientes.ts` com `useQuery` para `getAllClients` e mutations para `registerClient`, `editClient`, `deleteClient`
+5. **Frontend — ClientesPage**: substituir estado local pelo hook, adicionar loading states, error handling e exibição de saldo ckBTC

@@ -137,11 +137,13 @@ export enum WalletType {
 export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    deleteClient(clientId: ClientId): Promise<void>;
     editClient(clientId: ClientId, updatedClient: Client): Promise<void>;
     generateCkBtcAddress(clientId: ClientId): Promise<string>;
     getAllClients(): Promise<Array<Client>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getCkBtcBalance(clientId: ClientId): Promise<bigint>;
     getClient(clientId: ClientId): Promise<Client | null>;
     getClientBitcoinAddress(clientId: ClientId): Promise<ClientBitcoinAddressResult | null>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
@@ -178,6 +180,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async deleteClient(arg0: ClientId): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteClient(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteClient(arg0);
             return result;
         }
     }
@@ -249,6 +265,20 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.getCallerUserRole();
             return from_candid_UserRole_n24(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCkBtcBalance(arg0: ClientId): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCkBtcBalance(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCkBtcBalance(arg0);
+            return result;
         }
     }
     async getClient(arg0: ClientId): Promise<Client | null> {

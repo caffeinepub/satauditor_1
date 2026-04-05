@@ -57,11 +57,13 @@ export const ClientBitcoinAddressResult = IDL.Record({
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'deleteClient' : IDL.Func([ClientId], [], []),
   'editClient' : IDL.Func([ClientId, Client], [], []),
   'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
   'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getCkBtcBalance' : IDL.Func([ClientId], [IDL.Nat], []),
   'getClient' : IDL.Func([ClientId], [IDL.Opt(Client)], ['query']),
   'getClientBitcoinAddress' : IDL.Func(
       [ClientId],
@@ -132,11 +134,13 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'deleteClient' : IDL.Func([ClientId], [], []),
     'editClient' : IDL.Func([ClientId, Client], [], []),
     'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
     'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getCkBtcBalance' : IDL.Func([ClientId], [IDL.Nat], []),
     'getClient' : IDL.Func([ClientId], [IDL.Opt(Client)], ['query']),
     'getClientBitcoinAddress' : IDL.Func(
         [ClientId],

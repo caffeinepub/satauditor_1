@@ -1,4 +1,4 @@
-import { WalletType } from "@/backend";
+import { PlanType, WalletType } from "@/backend";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -35,6 +36,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useActor } from "@/hooks/useActor";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Copy,
   Loader2,
@@ -45,7 +47,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface Cliente {
@@ -61,72 +63,64 @@ interface Cliente {
   walletType?: "manual" | "ckbtc";
 }
 
-const initialClientes: Cliente[] = [
-  {
-    id: 1,
-    empresa: "TechFin Brasil Ltda",
-    cnpj: "12.345.678/0001-90",
-    email: "contato@techfinbrasil.com.br",
-    telefone: "(11) 3456-7890",
-    endereco: "Av. Paulista, 1000 — São Paulo, SP",
-    plano: "Enterprise",
-    status: "Ativo",
-    bitcoinAddress: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
-    walletType: "ckbtc",
-  },
-  {
-    id: 2,
-    empresa: "Mercado Digital S.A.",
-    cnpj: "23.456.789/0001-01",
-    email: "financeiro@mercadodigital.com",
-    telefone: "(21) 2345-6789",
-    endereco: "Rua do Comércio, 500 — Rio de Janeiro, RJ",
-    plano: "Profissional",
-    status: "Ativo",
-    bitcoinAddress: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
-    walletType: "manual",
-  },
-  {
-    id: 3,
-    empresa: "CriptoVault Investimentos",
-    cnpj: "34.567.890/0001-12",
-    email: "ops@criptovault.com.br",
-    telefone: "(51) 3456-1234",
-    endereco: "Av. Ipiranga, 200 — Porto Alegre, RS",
-    plano: "Enterprise",
-    status: "Ativo",
-  },
-  {
-    id: 4,
-    empresa: "StartupPay Tecnologia",
-    cnpj: "45.678.901/0001-23",
-    email: "tech@startuppay.io",
-    telefone: "(31) 4567-8901",
-    endereco: "R. da Bahia, 1234 — Belo Horizonte, MG",
-    plano: "Básico",
-    status: "Ativo",
-  },
-  {
-    id: 5,
-    empresa: "Holding Nacional Ltda",
-    cnpj: "56.789.012/0001-34",
-    email: "diretoria@holdingnacional.com.br",
-    telefone: "(11) 5678-9012",
-    endereco: "Faria Lima, 4321 — São Paulo, SP",
-    plano: "Enterprise",
-    status: "Inativo",
-  },
-  {
-    id: 6,
-    empresa: "FintechRedes Brasil",
-    cnpj: "67.890.123/0001-45",
-    email: "suporte@fintechredes.com.br",
-    telefone: "(41) 6789-0123",
-    endereco: "R. XV de Novembro, 321 — Curitiba, PR",
-    plano: "Profissional",
-    status: "Ativo",
-  },
-];
+// ── Mapping helpers ──────────────────────────────────────────────────────────
+
+function planTypeToPortuguese(plan: PlanType): Cliente["plano"] {
+  switch (plan) {
+    case PlanType.basic:
+      return "Básico";
+    case PlanType.professional:
+      return "Profissional";
+    case PlanType.enterprise:
+      return "Enterprise";
+  }
+}
+
+function portugueseToPlanType(plano: Cliente["plano"]): PlanType {
+  switch (plano) {
+    case "Básico":
+      return PlanType.basic;
+    case "Profissional":
+      return PlanType.professional;
+    case "Enterprise":
+      return PlanType.enterprise;
+  }
+}
+
+function backendToLocal(c: {
+  id: bigint;
+  active: boolean;
+  cnpj: string;
+  name: string;
+  createdAt: bigint;
+  plan: PlanType;
+  walletType?: WalletType;
+  email: string;
+  updatedAt: bigint;
+  address: string;
+  bitcoinAddress?: string;
+  phone: string;
+}): Cliente {
+  return {
+    id: Number(c.id),
+    empresa: c.name,
+    cnpj: c.cnpj,
+    email: c.email,
+    telefone: c.phone,
+    endereco: c.address,
+    plano: planTypeToPortuguese(c.plan),
+    status: c.active ? "Ativo" : "Inativo",
+    bitcoinAddress: c.bitcoinAddress,
+    walletType:
+      c.walletType === WalletType.ckbtc
+        ? "ckbtc"
+        : c.walletType === WalletType.manual
+          ? "manual"
+          : undefined,
+  };
+}
+
+// ── Visual helpers ────────────────────────────────────────────────────────────
 
 const planColors: Record<string, string> = {
   Básico: "bg-slate-500/20 text-slate-300 border-slate-500/30",
@@ -141,6 +135,10 @@ function truncateAddress(addr: string): string {
 
 function isValidBitcoinAddress(addr: string): boolean {
   return addr.startsWith("1") || addr.startsWith("3") || addr.startsWith("bc1");
+}
+
+function formatSats(sats: bigint): string {
+  return `${sats.toLocaleString("pt-BR")} sats`;
 }
 
 function CopyButton({ text }: { text: string }) {
@@ -162,9 +160,39 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
+// ── ckBTC balance badge (non-blocking) ────────────────────────────────────────
+
+function CkBtcBalanceBadge({
+  clientId,
+  actor,
+}: { clientId: number; actor: any }) {
+  const { data: balance } = useQuery({
+    queryKey: ["ckbtc-balance", clientId],
+    queryFn: async () => {
+      const result = await actor.getCkBtcBalance(BigInt(clientId));
+      return result as bigint;
+    },
+    enabled: !!actor,
+    // soft refresh every 5 minutes; failures are silently ignored
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+
+  if (balance === undefined || balance === null) return null;
+
+  return (
+    <span className="text-[10px] text-purple-300/70 ml-1">
+      {formatSats(balance)}
+    </span>
+  );
+}
+
+// ── Main Page ─────────────────────────────────────────────────────────────────
+
 export default function ClientesPage() {
-  const { actor } = useActor();
-  const [clientes, setClientes] = useState<Cliente[]>(initialClientes);
+  const { actor, isFetching: actorLoading } = useActor();
+  const queryClient = useQueryClient();
+
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingCliente, setEditingCliente] = useState<Cliente | null>(null);
@@ -184,6 +212,178 @@ export default function ClientesPage() {
   const [generatedAddress, setGeneratedAddress] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
 
+  // ── Query: list all clients ──────────────────────────────────────────────
+  const {
+    data: clientes = [],
+    isLoading: clientesLoading,
+    isError: clientesError,
+  } = useQuery<Cliente[]>({
+    queryKey: ["clients"],
+    queryFn: async () => {
+      if (!actor) return [];
+      const result = await actor.getAllClients();
+      return result.map(backendToLocal);
+    },
+    enabled: !!actor && !actorLoading,
+  });
+
+  // ── Mutation: create client ──────────────────────────────────────────────
+  const createMutation = useMutation({
+    mutationFn: async ({
+      formData,
+      walletModeVal,
+      manualAddressVal,
+    }: {
+      formData: typeof form;
+      walletModeVal: "manual" | "ckbtc" | "";
+      manualAddressVal: string;
+    }) => {
+      if (!actor) throw new Error("Actor não disponível");
+
+      const newClient = {
+        id: 0n,
+        name: formData.empresa,
+        cnpj: formData.cnpj,
+        email: formData.email,
+        phone: formData.telefone,
+        address: formData.endereco,
+        plan: portugueseToPlanType(formData.plano),
+        active: formData.status === "Ativo",
+        createdAt: BigInt(Date.now()) * 1_000_000n,
+        updatedAt: BigInt(Date.now()) * 1_000_000n,
+        bitcoinAddress:
+          walletModeVal === "manual" && manualAddressVal
+            ? manualAddressVal
+            : undefined,
+        walletType:
+          walletModeVal === "ckbtc"
+            ? WalletType.ckbtc
+            : walletModeVal === "manual"
+              ? WalletType.manual
+              : undefined,
+      };
+
+      const newId = await actor.registerClient(newClient);
+
+      if (walletModeVal === "manual" && manualAddressVal) {
+        await actor.setClientBitcoinAddress(
+          newId,
+          manualAddressVal,
+          WalletType.manual,
+        );
+      }
+
+      return newId;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      toast.success("Cliente criado com sucesso!");
+      setDialogOpen(false);
+      resetForm();
+    },
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "Erro ao criar cliente";
+      toast.error(msg);
+    },
+  });
+
+  // ── Mutation: edit client ────────────────────────────────────────────────
+  const editMutation = useMutation({
+    mutationFn: async ({
+      clienteId,
+      formData,
+      walletModeVal,
+      manualAddressVal,
+      generatedAddressVal,
+      originalCliente,
+    }: {
+      clienteId: number;
+      formData: typeof form;
+      walletModeVal: "manual" | "ckbtc" | "";
+      manualAddressVal: string;
+      generatedAddressVal: string;
+      originalCliente: Cliente;
+    }) => {
+      if (!actor) throw new Error("Actor não disponível");
+
+      const resolvedAddress =
+        walletModeVal === "manual"
+          ? manualAddressVal
+          : walletModeVal === "ckbtc"
+            ? generatedAddressVal
+            : undefined;
+
+      const updatedClient = {
+        id: BigInt(clienteId),
+        name: formData.empresa,
+        cnpj: formData.cnpj,
+        email: formData.email,
+        phone: formData.telefone,
+        address: formData.endereco,
+        plan: portugueseToPlanType(formData.plano),
+        active: formData.status === "Ativo",
+        createdAt: 0n,
+        updatedAt: BigInt(Date.now()) * 1_000_000n,
+        bitcoinAddress: resolvedAddress ?? originalCliente.bitcoinAddress,
+        walletType:
+          walletModeVal !== ""
+            ? walletModeVal === "ckbtc"
+              ? WalletType.ckbtc
+              : WalletType.manual
+            : originalCliente.walletType === "ckbtc"
+              ? WalletType.ckbtc
+              : originalCliente.walletType === "manual"
+                ? WalletType.manual
+                : undefined,
+      };
+
+      await actor.editClient(BigInt(clienteId), updatedClient);
+
+      if (walletModeVal !== "" && resolvedAddress) {
+        await actor.setClientBitcoinAddress(
+          BigInt(clienteId),
+          resolvedAddress,
+          walletModeVal === "ckbtc" ? WalletType.ckbtc : WalletType.manual,
+        );
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      toast.success("Cliente atualizado com sucesso!");
+      setDialogOpen(false);
+      resetForm();
+    },
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "Erro ao editar cliente";
+      toast.error(msg);
+    },
+  });
+
+  // ── Mutation: delete client ──────────────────────────────────────────────
+  const deleteMutation = useMutation({
+    mutationFn: async ({ clienteId }: { clienteId: number }) => {
+      if (!actor) throw new Error("Actor não disponível");
+      await actor.deleteClient(BigInt(clienteId));
+    },
+    onSuccess: (_, { clienteId }) => {
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      const nome =
+        clientes.find((c) => c.id === clienteId)?.empresa ?? "Cliente";
+      toast.success(`Cliente "${nome}" removido.`);
+    },
+    onError: (err) => {
+      const msg =
+        err instanceof Error ? err.message : "Erro ao remover cliente";
+      toast.error(msg);
+    },
+  });
+
+  const isMutating =
+    createMutation.isPending ||
+    editMutation.isPending ||
+    deleteMutation.isPending;
+
+  // ── Filtered list ────────────────────────────────────────────────────────
   const filtered = clientes.filter(
     (c) =>
       c.empresa.toLowerCase().includes(search.toLowerCase()) ||
@@ -191,6 +391,7 @@ export default function ClientesPage() {
       c.email.toLowerCase().includes(search.toLowerCase()),
   );
 
+  // ── Form helpers ─────────────────────────────────────────────────────────
   const resetForm = () => {
     setForm({
       empresa: "",
@@ -255,66 +456,32 @@ export default function ClientesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const resolvedAddress =
-      walletMode === "manual"
-        ? manualAddress
-        : walletMode === "ckbtc"
-          ? generatedAddress
-          : undefined;
-
     if (editingCliente) {
-      setClientes((prev) =>
-        prev.map((c) =>
-          c.id === editingCliente.id
-            ? {
-                ...c,
-                ...form,
-                bitcoinAddress: resolvedAddress || c.bitcoinAddress,
-                walletType: walletMode !== "" ? walletMode : c.walletType,
-              }
-            : c,
-        ),
-      );
-
-      if (actor && resolvedAddress && walletMode !== "") {
-        try {
-          await actor.setClientBitcoinAddress(
-            BigInt(editingCliente.id),
-            resolvedAddress,
-            walletMode === "ckbtc" ? WalletType.ckbtc : WalletType.manual,
-          );
-        } catch (err) {
-          const msg =
-            err instanceof Error
-              ? err.message
-              : "Erro ao salvar endereço no backend";
-          toast.error(msg);
-        }
-      }
-
-      toast.success("Cliente atualizado com sucesso!");
+      editMutation.mutate({
+        clienteId: editingCliente.id,
+        formData: form,
+        walletModeVal: walletMode,
+        manualAddressVal: manualAddress,
+        generatedAddressVal: generatedAddress,
+        originalCliente: editingCliente,
+      });
     } else {
-      const newCliente: Cliente = {
-        id: Date.now(),
-        ...form,
-        bitcoinAddress: resolvedAddress,
-        walletType: walletMode !== "" ? walletMode : undefined,
-      };
-      setClientes((prev) => [newCliente, ...prev]);
-      toast.success("Cliente criado com sucesso!");
+      createMutation.mutate({
+        formData: form,
+        walletModeVal: walletMode,
+        manualAddressVal: manualAddress,
+      });
     }
-
-    setDialogOpen(false);
-    resetForm();
   };
 
-  const handleDelete = (id: number, nome: string) => {
-    setClientes((prev) => prev.filter((c) => c.id !== id));
-    toast.success(`Cliente "${nome}" removido.`);
+  const handleDelete = (id: number) => {
+    deleteMutation.mutate({ clienteId: id });
   };
 
   const manualAddressValid =
     manualAddress === "" || isValidBitcoinAddress(manualAddress);
+
+  const isSubmitting = createMutation.isPending || editMutation.isPending;
 
   return (
     <TooltipProvider>
@@ -343,6 +510,7 @@ export default function ClientesPage() {
                 data-ocid="clientes.open_modal_button"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-btc"
                 onClick={resetForm}
+                disabled={actorLoading}
               >
                 <Plus className="mr-2 h-4 w-4" />
                 Novo Cliente
@@ -661,6 +829,7 @@ export default function ClientesPage() {
                     data-ocid="clientes.cancel_button"
                     className="flex-1"
                     onClick={() => setDialogOpen(false)}
+                    disabled={isSubmitting}
                   >
                     Cancelar
                   </Button>
@@ -668,14 +837,34 @@ export default function ClientesPage() {
                     type="submit"
                     data-ocid="clientes.submit_button"
                     className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+                    disabled={isSubmitting}
                   >
-                    {editingCliente ? "Salvar alterações" : "Criar cliente"}
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        {editingCliente ? "Salvando..." : "Criando..."}
+                      </>
+                    ) : editingCliente ? (
+                      "Salvar alterações"
+                    ) : (
+                      "Criar cliente"
+                    )}
                   </Button>
                 </div>
               </form>
             </DialogContent>
           </Dialog>
         </div>
+
+        {/* Error state */}
+        {clientesError && (
+          <div
+            data-ocid="clientes.error_state"
+            className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400"
+          >
+            Erro ao carregar clientes. Verifique a conexão e tente novamente.
+          </div>
+        )}
 
         {/* Table */}
         <Card className="bg-card border-border shadow-card">
@@ -708,124 +897,175 @@ export default function ClientesPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filtered.length === 0 && (
+                  {/* Loading skeleton */}
+                  {clientesLoading &&
+                    [1, 2, 3, 4].map((i) => (
+                      <TableRow
+                        key={i}
+                        data-ocid="clientes.loading_state"
+                        className="border-b border-border/50"
+                      >
+                        <TableCell>
+                          <Skeleton className="h-4 w-36" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="h-4 w-28" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="h-4 w-40" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="h-5 w-20 rounded-full" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="h-5 w-14 rounded-full" />
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Skeleton className="h-7 w-16 ml-auto" />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+
+                  {/* Empty state */}
+                  {!clientesLoading && filtered.length === 0 && (
                     <TableRow>
                       <TableCell
                         data-ocid="clientes.empty_state"
                         colSpan={7}
                         className="text-center text-muted-foreground py-12"
                       >
-                        Nenhum cliente encontrado.
+                        {search
+                          ? "Nenhum cliente encontrado para esta busca."
+                          : "Nenhum cliente cadastrado ainda."}
                       </TableCell>
                     </TableRow>
                   )}
-                  {filtered.map((c, i) => (
-                    <motion.tr
-                      key={c.id}
-                      data-ocid={`clientes.item.${i + 1}`}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: i * 0.04 }}
-                      className="border-b border-border/50 hover:bg-muted/20 transition-colors"
-                    >
-                      <TableCell className="font-medium text-foreground">
-                        {c.empresa}
-                      </TableCell>
-                      <TableCell className="font-mono text-sm text-muted-foreground">
-                        {c.cnpj}
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {c.email}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant="outline"
-                          className={`text-xs ${planColors[c.plano]}`}
-                        >
-                          {c.plano}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {c.bitcoinAddress ? (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <div className="flex items-center gap-1.5 cursor-default">
-                                <span className="text-amber-400 font-bold text-sm leading-none">
-                                  ₿
-                                </span>
-                                <span className="font-mono text-xs text-amber-400/80">
-                                  {truncateAddress(c.bitcoinAddress)}
-                                </span>
-                                {c.walletType === "ckbtc" && (
-                                  <Badge
-                                    variant="outline"
-                                    className="text-[10px] py-0 px-1 h-4 bg-purple-500/20 text-purple-400 border-purple-500/30 leading-none"
-                                  >
-                                    ckBTC
-                                  </Badge>
-                                )}
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent
-                              data-ocid="clientes.tooltip"
-                              side="top"
-                              className="max-w-xs"
-                            >
-                              <p className="font-mono text-xs break-all">
-                                {c.bitcoinAddress}
-                              </p>
-                              {c.walletType && (
-                                <p className="text-xs text-muted-foreground mt-1">
-                                  Tipo:{" "}
-                                  {c.walletType === "ckbtc"
-                                    ? "ckBTC (ICP)"
-                                    : "Manual"}
+
+                  {/* Client rows */}
+                  {!clientesLoading &&
+                    filtered.map((c, i) => (
+                      <motion.tr
+                        key={c.id}
+                        data-ocid={`clientes.item.${i + 1}`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: i * 0.04 }}
+                        className="border-b border-border/50 hover:bg-muted/20 transition-colors"
+                      >
+                        <TableCell className="font-medium text-foreground">
+                          {c.empresa}
+                        </TableCell>
+                        <TableCell className="font-mono text-sm text-muted-foreground">
+                          {c.cnpj}
+                        </TableCell>
+                        <TableCell className="text-sm text-muted-foreground">
+                          {c.email}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant="outline"
+                            className={`text-xs ${planColors[c.plano]}`}
+                          >
+                            {c.plano}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {c.bitcoinAddress ? (
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className="flex items-center gap-1.5 cursor-default">
+                                  <span className="text-amber-400 font-bold text-sm leading-none">
+                                    ₿
+                                  </span>
+                                  <span className="font-mono text-xs text-amber-400/80">
+                                    {truncateAddress(c.bitcoinAddress)}
+                                  </span>
+                                  {c.walletType === "ckbtc" && (
+                                    <>
+                                      <Badge
+                                        variant="outline"
+                                        className="text-[10px] py-0 px-1 h-4 bg-purple-500/20 text-purple-400 border-purple-500/30 leading-none"
+                                      >
+                                        ckBTC
+                                      </Badge>
+                                      <CkBtcBalanceBadge
+                                        clientId={c.id}
+                                        actor={actor}
+                                      />
+                                    </>
+                                  )}
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent
+                                data-ocid="clientes.tooltip"
+                                side="top"
+                                className="max-w-xs"
+                              >
+                                <p className="font-mono text-xs break-all">
+                                  {c.bitcoinAddress}
                                 </p>
+                                {c.walletType && (
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    Tipo:{" "}
+                                    {c.walletType === "ckbtc"
+                                      ? "ckBTC (ICP)"
+                                      : "Manual"}
+                                  </p>
+                                )}
+                              </TooltipContent>
+                            </Tooltip>
+                          ) : (
+                            <span className="text-muted-foreground text-sm">
+                              —
+                            </span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant="outline"
+                            className={`text-xs ${
+                              c.status === "Ativo"
+                                ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
+                                : "bg-red-500/20 text-red-400 border-red-500/30"
+                            }`}
+                          >
+                            {c.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-1">
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              data-ocid={`clientes.edit_button.${i + 1}`}
+                              className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                              onClick={() => handleOpenEdit(c)}
+                              disabled={isMutating}
+                            >
+                              <Pencil className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              data-ocid={`clientes.delete_button.${i + 1}`}
+                              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                              onClick={() => handleDelete(c.id)}
+                              disabled={isMutating || deleteMutation.isPending}
+                            >
+                              {deleteMutation.isPending &&
+                              deleteMutation.variables?.clienteId === c.id ? (
+                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              ) : (
+                                <Trash2 className="h-3.5 w-3.5" />
                               )}
-                            </TooltipContent>
-                          </Tooltip>
-                        ) : (
-                          <span className="text-muted-foreground text-sm">
-                            —
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant="outline"
-                          className={`text-xs ${
-                            c.status === "Ativo"
-                              ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
-                              : "bg-red-500/20 text-red-400 border-red-500/30"
-                          }`}
-                        >
-                          {c.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-1">
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            data-ocid={`clientes.edit_button.${i + 1}`}
-                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                            onClick={() => handleOpenEdit(c)}
-                          >
-                            <Pencil className="h-3.5 w-3.5" />
-                          </Button>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            data-ocid={`clientes.delete_button.${i + 1}`}
-                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                            onClick={() => handleDelete(c.id, c.empresa)}
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </motion.tr>
-                  ))}
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </motion.tr>
+                    ))}
                 </TableBody>
               </Table>
             </div>

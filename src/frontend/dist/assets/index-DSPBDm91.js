@@ -17,7 +17,7 @@ var __privateWrapper = (obj, member, setter, getter) => ({
     return __privateGet(obj, member, getter);
   }
 });
-var _provider, _providerCalled, _a2, _focused, _cleanup, _setup, _b2, _online, _cleanup2, _setup2, _c, _gcTimeout, _d, _initialState, _revertState, _cache, _client, _retryer, _defaultOptions, _abortSignalConsumed, _Query_instances, dispatch_fn, _e, _client2, _currentQuery, _currentQueryInitialState, _currentResult, _currentResultState, _currentResultOptions, _currentThenable, _selectError, _selectFn, _selectResult, _lastQueryWithDefinedData, _staleTimeoutId, _refetchIntervalId, _currentRefetchInterval, _trackedProps, _QueryObserver_instances, executeFetch_fn, updateStaleTimeout_fn, computeRefetchInterval_fn, updateRefetchInterval_fn, updateTimers_fn, clearStaleTimeout_fn, clearRefetchInterval_fn, updateQuery_fn, notify_fn, _f, _client3, _observers, _mutationCache, _retryer2, _Mutation_instances, dispatch_fn2, _g, _mutations, _scopes, _mutationId, _h, _queries, _i, _queryCache, _mutationCache2, _defaultOptions2, _queryDefaults, _mutationDefaults, _mountCount, _unsubscribeFocus, _unsubscribeOnline, _j, _disableTimeVerification, _agent, _inner, _expirationTime, _rawKey, _derKey, _k, _currentInterval, _randomizationFactor, _multiplier, _maxInterval, _startTime, _maxElapsedTime, _maxIterations, _date, _count, _rootKeyPromise, _shouldFetchRootKey, _timeDiffMsecs, _hasSyncedTime, _syncTimePromise, _shouldSyncTime, _identity, _fetch, _fetchOptions, _callOptions, _credentials, _retryTimes, _backoffStrategy, _maxIngressExpiryInMinutes, _HttpAgent_instances, maxIngressExpiryInMs_get, _queryPipeline, _updatePipeline, _subnetKeys, _verifyQuerySignatures, requestAndRetryQuery_fn, requestAndRetry_fn, _verifyQueryResponse, asyncGuard_fn, rootKeyGuard_fn, syncTimeGuard_fn, _rawKey2, _derKey2, _publicKey, _privateKey, _inner2, _delegation, _options;
+var _provider, _providerCalled, _a2, _focused, _cleanup, _setup, _b2, _online, _cleanup2, _setup2, _c, _gcTimeout, _d, _initialState, _revertState, _cache, _client, _retryer, _defaultOptions, _abortSignalConsumed, _Query_instances, dispatch_fn, _e, _client2, _currentQuery, _currentQueryInitialState, _currentResult, _currentResultState, _currentResultOptions, _currentThenable, _selectError, _selectFn, _selectResult, _lastQueryWithDefinedData, _staleTimeoutId, _refetchIntervalId, _currentRefetchInterval, _trackedProps, _QueryObserver_instances, executeFetch_fn, updateStaleTimeout_fn, computeRefetchInterval_fn, updateRefetchInterval_fn, updateTimers_fn, clearStaleTimeout_fn, clearRefetchInterval_fn, updateQuery_fn, notify_fn, _f, _client3, _observers, _mutationCache, _retryer2, _Mutation_instances, dispatch_fn2, _g, _mutations, _scopes, _mutationId, _h, _client4, _currentResult2, _currentMutation, _mutateOptions, _MutationObserver_instances, updateResult_fn, notify_fn2, _i, _queries, _j, _queryCache, _mutationCache2, _defaultOptions2, _queryDefaults, _mutationDefaults, _mountCount, _unsubscribeFocus, _unsubscribeOnline, _k, _disableTimeVerification, _agent, _inner, _expirationTime, _rawKey, _derKey, _l, _currentInterval, _randomizationFactor, _multiplier, _maxInterval, _startTime, _maxElapsedTime, _maxIterations, _date, _count, _rootKeyPromise, _shouldFetchRootKey, _timeDiffMsecs, _hasSyncedTime, _syncTimePromise, _shouldSyncTime, _identity, _fetch, _fetchOptions, _callOptions, _credentials, _retryTimes, _backoffStrategy, _maxIngressExpiryInMinutes, _HttpAgent_instances, maxIngressExpiryInMs_get, _queryPipeline, _updatePipeline, _subnetKeys, _verifyQuerySignatures, requestAndRetryQuery_fn, requestAndRetry_fn, _verifyQueryResponse, asyncGuard_fn, rootKeyGuard_fn, syncTimeGuard_fn, _rawKey2, _derKey2, _publicKey, _privateKey, _inner2, _delegation, _options;
 function _mergeNamespaces(n2, m2) {
   for (var i = 0; i < m2.length; i++) {
     const e3 = m2[i];
@@ -925,7 +925,7 @@ var Query = (_e = class extends Removable {
     }
   }
   async fetch(options, fetchOptions) {
-    var _a3, _b3, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j2, _k2, _l;
+    var _a3, _b3, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j2, _k2, _l2;
     if (this.state.fetchStatus !== "idle" && // If the promise in the retyer is already rejected, we have to definitely
     // re-start the fetch; there is a chance that the query is still in a
     // pending state when that happens
@@ -1057,7 +1057,7 @@ var Query = (_e = class extends Removable {
         error,
         this
       );
-      (_l = (_k2 = __privateGet(this, _cache).config).onSettled) == null ? void 0 : _l.call(
+      (_l2 = (_k2 = __privateGet(this, _cache).config).onSettled) == null ? void 0 : _l2.call(
         _k2,
         this.state.data,
         error,
@@ -1783,7 +1783,7 @@ var Mutation = (_g = class extends Removable {
     this.execute(this.state.variables);
   }
   async execute(variables) {
-    var _a3, _b3, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j2, _k2, _l, _m, _n, _o, _p, _q, _r, _s, _t2;
+    var _a3, _b3, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j2, _k2, _l2, _m, _n, _o, _p, _q, _r, _s, _t2;
     const onContinue = () => {
       __privateMethod(this, _Mutation_instances, dispatch_fn2).call(this, { type: "continue" });
     };
@@ -1863,7 +1863,7 @@ var Mutation = (_g = class extends Removable {
         this,
         mutationFnContext
       ));
-      await ((_l = (_k2 = this.options).onSettled) == null ? void 0 : _l.call(
+      await ((_l2 = (_k2 = this.options).onSettled) == null ? void 0 : _l2.call(
         _k2,
         data,
         null,
@@ -2111,7 +2111,131 @@ function scopeFor(mutation) {
   var _a3;
   return (_a3 = mutation.options.scope) == null ? void 0 : _a3.id;
 }
-var QueryCache = (_i = class extends Subscribable {
+var MutationObserver$1 = (_i = class extends Subscribable {
+  constructor(client2, options) {
+    super();
+    __privateAdd(this, _MutationObserver_instances);
+    __privateAdd(this, _client4);
+    __privateAdd(this, _currentResult2);
+    __privateAdd(this, _currentMutation);
+    __privateAdd(this, _mutateOptions);
+    __privateSet(this, _client4, client2);
+    this.setOptions(options);
+    this.bindMethods();
+    __privateMethod(this, _MutationObserver_instances, updateResult_fn).call(this);
+  }
+  bindMethods() {
+    this.mutate = this.mutate.bind(this);
+    this.reset = this.reset.bind(this);
+  }
+  setOptions(options) {
+    var _a3;
+    const prevOptions = this.options;
+    this.options = __privateGet(this, _client4).defaultMutationOptions(options);
+    if (!shallowEqualObjects(this.options, prevOptions)) {
+      __privateGet(this, _client4).getMutationCache().notify({
+        type: "observerOptionsUpdated",
+        mutation: __privateGet(this, _currentMutation),
+        observer: this
+      });
+    }
+    if ((prevOptions == null ? void 0 : prevOptions.mutationKey) && this.options.mutationKey && hashKey(prevOptions.mutationKey) !== hashKey(this.options.mutationKey)) {
+      this.reset();
+    } else if (((_a3 = __privateGet(this, _currentMutation)) == null ? void 0 : _a3.state.status) === "pending") {
+      __privateGet(this, _currentMutation).setOptions(this.options);
+    }
+  }
+  onUnsubscribe() {
+    var _a3;
+    if (!this.hasListeners()) {
+      (_a3 = __privateGet(this, _currentMutation)) == null ? void 0 : _a3.removeObserver(this);
+    }
+  }
+  onMutationUpdate(action) {
+    __privateMethod(this, _MutationObserver_instances, updateResult_fn).call(this);
+    __privateMethod(this, _MutationObserver_instances, notify_fn2).call(this, action);
+  }
+  getCurrentResult() {
+    return __privateGet(this, _currentResult2);
+  }
+  reset() {
+    var _a3;
+    (_a3 = __privateGet(this, _currentMutation)) == null ? void 0 : _a3.removeObserver(this);
+    __privateSet(this, _currentMutation, void 0);
+    __privateMethod(this, _MutationObserver_instances, updateResult_fn).call(this);
+    __privateMethod(this, _MutationObserver_instances, notify_fn2).call(this);
+  }
+  mutate(variables, options) {
+    var _a3;
+    __privateSet(this, _mutateOptions, options);
+    (_a3 = __privateGet(this, _currentMutation)) == null ? void 0 : _a3.removeObserver(this);
+    __privateSet(this, _currentMutation, __privateGet(this, _client4).getMutationCache().build(__privateGet(this, _client4), this.options));
+    __privateGet(this, _currentMutation).addObserver(this);
+    return __privateGet(this, _currentMutation).execute(variables);
+  }
+}, _client4 = new WeakMap(), _currentResult2 = new WeakMap(), _currentMutation = new WeakMap(), _mutateOptions = new WeakMap(), _MutationObserver_instances = new WeakSet(), updateResult_fn = function() {
+  var _a3;
+  const state = ((_a3 = __privateGet(this, _currentMutation)) == null ? void 0 : _a3.state) ?? getDefaultState();
+  __privateSet(this, _currentResult2, {
+    ...state,
+    isPending: state.status === "pending",
+    isSuccess: state.status === "success",
+    isError: state.status === "error",
+    isIdle: state.status === "idle",
+    mutate: this.mutate,
+    reset: this.reset
+  });
+}, notify_fn2 = function(action) {
+  notifyManager.batch(() => {
+    var _a3, _b3, _c2, _d2, _e2, _f2, _g2, _h2;
+    if (__privateGet(this, _mutateOptions) && this.hasListeners()) {
+      const variables = __privateGet(this, _currentResult2).variables;
+      const onMutateResult = __privateGet(this, _currentResult2).context;
+      const context = {
+        client: __privateGet(this, _client4),
+        meta: this.options.meta,
+        mutationKey: this.options.mutationKey
+      };
+      if ((action == null ? void 0 : action.type) === "success") {
+        (_b3 = (_a3 = __privateGet(this, _mutateOptions)).onSuccess) == null ? void 0 : _b3.call(
+          _a3,
+          action.data,
+          variables,
+          onMutateResult,
+          context
+        );
+        (_d2 = (_c2 = __privateGet(this, _mutateOptions)).onSettled) == null ? void 0 : _d2.call(
+          _c2,
+          action.data,
+          null,
+          variables,
+          onMutateResult,
+          context
+        );
+      } else if ((action == null ? void 0 : action.type) === "error") {
+        (_f2 = (_e2 = __privateGet(this, _mutateOptions)).onError) == null ? void 0 : _f2.call(
+          _e2,
+          action.error,
+          variables,
+          onMutateResult,
+          context
+        );
+        (_h2 = (_g2 = __privateGet(this, _mutateOptions)).onSettled) == null ? void 0 : _h2.call(
+          _g2,
+          void 0,
+          action.error,
+          variables,
+          onMutateResult,
+          context
+        );
+      }
+    }
+    this.listeners.forEach((listener) => {
+      listener(__privateGet(this, _currentResult2));
+    });
+  });
+}, _i);
+var QueryCache = (_j = class extends Subscribable {
   constructor(config2 = {}) {
     super();
     __privateAdd(this, _queries);
@@ -2198,8 +2322,8 @@ var QueryCache = (_i = class extends Subscribable {
       });
     });
   }
-}, _queries = new WeakMap(), _i);
-var QueryClient = (_j = class {
+}, _queries = new WeakMap(), _j);
+var QueryClient = (_k = class {
   constructor(config2 = {}) {
     __privateAdd(this, _queryCache);
     __privateAdd(this, _mutationCache2);
@@ -2486,7 +2610,7 @@ var QueryClient = (_j = class {
     __privateGet(this, _queryCache).clear();
     __privateGet(this, _mutationCache2).clear();
   }
-}, _queryCache = new WeakMap(), _mutationCache2 = new WeakMap(), _defaultOptions2 = new WeakMap(), _queryDefaults = new WeakMap(), _mutationDefaults = new WeakMap(), _mountCount = new WeakMap(), _unsubscribeFocus = new WeakMap(), _unsubscribeOnline = new WeakMap(), _j);
+}, _queryCache = new WeakMap(), _mutationCache2 = new WeakMap(), _defaultOptions2 = new WeakMap(), _queryDefaults = new WeakMap(), _mutationDefaults = new WeakMap(), _mountCount = new WeakMap(), _unsubscribeFocus = new WeakMap(), _unsubscribeOnline = new WeakMap(), _k);
 var react = { exports: {} };
 var react_production = {};
 /**
@@ -3083,6 +3207,36 @@ function useBaseQuery(options, Observer, queryClient2) {
 }
 function useQuery(options, queryClient2) {
   return useBaseQuery(options, QueryObserver);
+}
+function useMutation(options, queryClient2) {
+  const client2 = useQueryClient();
+  const [observer2] = reactExports.useState(
+    () => new MutationObserver$1(
+      client2,
+      options
+    )
+  );
+  reactExports.useEffect(() => {
+    observer2.setOptions(options);
+  }, [observer2, options]);
+  const result = reactExports.useSyncExternalStore(
+    reactExports.useCallback(
+      (onStoreChange) => observer2.subscribe(notifyManager.batchCalls(onStoreChange)),
+      [observer2]
+    ),
+    () => observer2.getCurrentResult(),
+    () => observer2.getCurrentResult()
+  );
+  const mutate = reactExports.useCallback(
+    (variables, mutateOptions) => {
+      observer2.mutate(variables, mutateOptions).catch(noop$8);
+    },
+    [observer2]
+  );
+  if (result.error && shouldThrowError(observer2.options.throwOnError, [result.error])) {
+    throw result.error;
+  }
+  return { ...result, mutate, mutateAsync: result.mutate };
 }
 var client = { exports: {} };
 var reactDomClient_production = {};
@@ -32759,7 +32913,7 @@ function split(lst, le2 = false) {
   }
   return [Ah, Al];
 }
-const shrSH = (h2, _l, s2) => h2 >>> s2;
+const shrSH = (h2, _l2, s2) => h2 >>> s2;
 const shrSL = (h2, l2, s2) => h2 << 32 - s2 | l2 >>> s2;
 const rotrSH = (h2, l2, s2) => h2 >>> s2 | l2 << 32 - s2;
 const rotrSL = (h2, l2, s2) => h2 << 32 - s2 | l2 >>> s2;
@@ -41267,25 +41421,25 @@ const unwrapDER = (derEncoded, oid) => {
   }
   return result;
 };
-let Ed25519PublicKey$1 = (_k = class {
+let Ed25519PublicKey$1 = (_l = class {
   // `fromRaw` and `fromDer` should be used for instantiation, not this constructor.
   constructor(key) {
     __privateAdd(this, _rawKey);
     __privateAdd(this, _derKey);
-    if (key.byteLength !== _k.RAW_KEY_LENGTH) {
+    if (key.byteLength !== _l.RAW_KEY_LENGTH) {
       throw InputError.fromCode(new DerDecodeErrorCode("An Ed25519 public key must be exactly 32 bytes long"));
     }
     __privateSet(this, _rawKey, key);
-    __privateSet(this, _derKey, _k.derEncode(key));
+    __privateSet(this, _derKey, _l.derEncode(key));
   }
   static from(key) {
     return this.fromDer(key.toDer());
   }
   static fromRaw(rawKey) {
-    return new _k(rawKey);
+    return new _l(rawKey);
   }
   static fromDer(derKey) {
-    return new _k(this.derDecode(derKey));
+    return new _l(this.derDecode(derKey));
   }
   static derEncode(publicKey) {
     return wrapDER(publicKey, ED25519_OID);
@@ -41309,7 +41463,7 @@ let Ed25519PublicKey$1 = (_k = class {
   toRaw() {
     return this.rawKey;
   }
-}, _rawKey = new WeakMap(), _derKey = new WeakMap(), _k.RAW_KEY_LENGTH = 32, _k);
+}, _rawKey = new WeakMap(), _derKey = new WeakMap(), _l.RAW_KEY_LENGTH = 32, _l);
 class Observable {
   constructor() {
     this.observers = [];
@@ -44051,7 +44205,7 @@ const UserRole = Variant({
 });
 const ClientId = Nat;
 const Time = Int;
-const PlanType = Variant({
+const PlanType$1 = Variant({
   "enterprise": Null,
   "professional": Null,
   "basic": Null
@@ -44066,7 +44220,7 @@ const Client = Record({
   "cnpj": Text$1,
   "name": Text$1,
   "createdAt": Time,
-  "plan": PlanType,
+  "plan": PlanType$1,
   "walletType": Opt(WalletType$1),
   "email": Text$1,
   "updatedAt": Time,
@@ -44092,11 +44246,13 @@ const ClientBitcoinAddressResult = Record({
 Service({
   "_initializeAccessControlWithSecret": Func([Text$1], [], []),
   "assignCallerUserRole": Func([Principal2, UserRole], [], []),
+  "deleteClient": Func([ClientId], [], []),
   "editClient": Func([ClientId, Client], [], []),
   "generateCkBtcAddress": Func([ClientId], [Text$1], []),
   "getAllClients": Func([], [Vec(Client)], ["query"]),
   "getCallerUserProfile": Func([], [Opt(UserProfile)], ["query"]),
   "getCallerUserRole": Func([], [UserRole], ["query"]),
+  "getCkBtcBalance": Func([ClientId], [Nat], []),
   "getClient": Func([ClientId], [Opt(Client)], ["query"]),
   "getClientBitcoinAddress": Func(
     [ClientId],
@@ -44163,11 +44319,13 @@ const idlFactory = ({ IDL: IDL2 }) => {
   return IDL2.Service({
     "_initializeAccessControlWithSecret": IDL2.Func([IDL2.Text], [], []),
     "assignCallerUserRole": IDL2.Func([IDL2.Principal, UserRole2], [], []),
+    "deleteClient": IDL2.Func([ClientId2], [], []),
     "editClient": IDL2.Func([ClientId2, Client2], [], []),
     "generateCkBtcAddress": IDL2.Func([ClientId2], [IDL2.Text], []),
     "getAllClients": IDL2.Func([], [IDL2.Vec(Client2)], ["query"]),
     "getCallerUserProfile": IDL2.Func([], [IDL2.Opt(UserProfile2)], ["query"]),
     "getCallerUserRole": IDL2.Func([], [UserRole2], ["query"]),
+    "getCkBtcBalance": IDL2.Func([ClientId2], [IDL2.Nat], []),
     "getClient": IDL2.Func([ClientId2], [IDL2.Opt(Client2)], ["query"]),
     "getClientBitcoinAddress": IDL2.Func(
       [ClientId2],
@@ -44238,6 +44396,12 @@ class ExternalBlob {
     return this;
   }
 }
+var PlanType = /* @__PURE__ */ ((PlanType2) => {
+  PlanType2["enterprise"] = "enterprise";
+  PlanType2["professional"] = "professional";
+  PlanType2["basic"] = "basic";
+  return PlanType2;
+})(PlanType || {});
 var WalletType = /* @__PURE__ */ ((WalletType2) => {
   WalletType2["ckbtc"] = "ckbtc";
   WalletType2["manual"] = "manual";
@@ -44275,6 +44439,20 @@ class Backend {
       }
     } else {
       const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+      return result;
+    }
+  }
+  async deleteClient(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.deleteClient(arg0);
+        return result;
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.deleteClient(arg0);
       return result;
     }
   }
@@ -44346,6 +44524,20 @@ class Backend {
     } else {
       const result = await this.actor.getCallerUserRole();
       return from_candid_UserRole_n24(this._uploadFile, this._downloadFile, result);
+    }
+  }
+  async getCkBtcBalance(arg0) {
+    if (this.processError) {
+      try {
+        const result = await this.actor.getCkBtcBalance(arg0);
+        return result;
+      } catch (e3) {
+        this.processError(e3);
+        throw new Error("unreachable");
+      }
+    } else {
+      const result = await this.actor.getCkBtcBalance(arg0);
+      return result;
     }
   }
   async getClient(arg0) {
@@ -48904,72 +49096,40 @@ function TooltipContent({
     }
   ) });
 }
-const initialClientes = [
-  {
-    id: 1,
-    empresa: "TechFin Brasil Ltda",
-    cnpj: "12.345.678/0001-90",
-    email: "contato@techfinbrasil.com.br",
-    telefone: "(11) 3456-7890",
-    endereco: "Av. Paulista, 1000 — São Paulo, SP",
-    plano: "Enterprise",
-    status: "Ativo",
-    bitcoinAddress: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
-    walletType: "ckbtc"
-  },
-  {
-    id: 2,
-    empresa: "Mercado Digital S.A.",
-    cnpj: "23.456.789/0001-01",
-    email: "financeiro@mercadodigital.com",
-    telefone: "(21) 2345-6789",
-    endereco: "Rua do Comércio, 500 — Rio de Janeiro, RJ",
-    plano: "Profissional",
-    status: "Ativo",
-    bitcoinAddress: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
-    walletType: "manual"
-  },
-  {
-    id: 3,
-    empresa: "CriptoVault Investimentos",
-    cnpj: "34.567.890/0001-12",
-    email: "ops@criptovault.com.br",
-    telefone: "(51) 3456-1234",
-    endereco: "Av. Ipiranga, 200 — Porto Alegre, RS",
-    plano: "Enterprise",
-    status: "Ativo"
-  },
-  {
-    id: 4,
-    empresa: "StartupPay Tecnologia",
-    cnpj: "45.678.901/0001-23",
-    email: "tech@startuppay.io",
-    telefone: "(31) 4567-8901",
-    endereco: "R. da Bahia, 1234 — Belo Horizonte, MG",
-    plano: "Básico",
-    status: "Ativo"
-  },
-  {
-    id: 5,
-    empresa: "Holding Nacional Ltda",
-    cnpj: "56.789.012/0001-34",
-    email: "diretoria@holdingnacional.com.br",
-    telefone: "(11) 5678-9012",
-    endereco: "Faria Lima, 4321 — São Paulo, SP",
-    plano: "Enterprise",
-    status: "Inativo"
-  },
-  {
-    id: 6,
-    empresa: "FintechRedes Brasil",
-    cnpj: "67.890.123/0001-45",
-    email: "suporte@fintechredes.com.br",
-    telefone: "(41) 6789-0123",
-    endereco: "R. XV de Novembro, 321 — Curitiba, PR",
-    plano: "Profissional",
-    status: "Ativo"
+function planTypeToPortuguese(plan) {
+  switch (plan) {
+    case PlanType.basic:
+      return "Básico";
+    case PlanType.professional:
+      return "Profissional";
+    case PlanType.enterprise:
+      return "Enterprise";
   }
-];
+}
+function portugueseToPlanType(plano) {
+  switch (plano) {
+    case "Básico":
+      return PlanType.basic;
+    case "Profissional":
+      return PlanType.professional;
+    case "Enterprise":
+      return PlanType.enterprise;
+  }
+}
+function backendToLocal(c2) {
+  return {
+    id: Number(c2.id),
+    empresa: c2.name,
+    cnpj: c2.cnpj,
+    email: c2.email,
+    telefone: c2.phone,
+    endereco: c2.address,
+    plano: planTypeToPortuguese(c2.plan),
+    status: c2.active ? "Ativo" : "Inativo",
+    bitcoinAddress: c2.bitcoinAddress,
+    walletType: c2.walletType === WalletType.ckbtc ? "ckbtc" : c2.walletType === WalletType.manual ? "manual" : void 0
+  };
+}
 const planColors = {
   Básico: "bg-slate-500/20 text-slate-300 border-slate-500/30",
   Profissional: "bg-blue-500/20 text-blue-400 border-blue-500/30",
@@ -48981,6 +49141,9 @@ function truncateAddress(addr) {
 }
 function isValidBitcoinAddress(addr) {
   return addr.startsWith("1") || addr.startsWith("3") || addr.startsWith("bc1");
+}
+function formatSats(sats) {
+  return `${sats.toLocaleString("pt-BR")} sats`;
 }
 function CopyButton({ text }) {
   const handleCopy = () => {
@@ -49000,9 +49163,27 @@ function CopyButton({ text }) {
     }
   );
 }
+function CkBtcBalanceBadge({
+  clientId,
+  actor
+}) {
+  const { data: balance } = useQuery({
+    queryKey: ["ckbtc-balance", clientId],
+    queryFn: async () => {
+      const result = await actor.getCkBtcBalance(BigInt(clientId));
+      return result;
+    },
+    enabled: !!actor,
+    // soft refresh every 5 minutes; failures are silently ignored
+    staleTime: 5 * 60 * 1e3,
+    retry: 1
+  });
+  if (balance === void 0 || balance === null) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-purple-300/70 ml-1", children: formatSats(balance) });
+}
 function ClientesPage() {
-  const { actor } = useActor();
-  const [clientes, setClientes] = reactExports.useState(initialClientes);
+  const { actor, isFetching: actorLoading } = useActor();
+  const queryClient2 = useQueryClient();
   const [search, setSearch] = reactExports.useState("");
   const [dialogOpen, setDialogOpen] = reactExports.useState(false);
   const [editingCliente, setEditingCliente] = reactExports.useState(null);
@@ -49019,6 +49200,123 @@ function ClientesPage() {
   const [manualAddress, setManualAddress] = reactExports.useState("");
   const [generatedAddress, setGeneratedAddress] = reactExports.useState("");
   const [isGenerating, setIsGenerating] = reactExports.useState(false);
+  const {
+    data: clientes = [],
+    isLoading: clientesLoading,
+    isError: clientesError
+  } = useQuery({
+    queryKey: ["clients"],
+    queryFn: async () => {
+      if (!actor) return [];
+      const result = await actor.getAllClients();
+      return result.map(backendToLocal);
+    },
+    enabled: !!actor && !actorLoading
+  });
+  const createMutation = useMutation({
+    mutationFn: async ({
+      formData,
+      walletModeVal,
+      manualAddressVal
+    }) => {
+      if (!actor) throw new Error("Actor não disponível");
+      const newClient = {
+        id: 0n,
+        name: formData.empresa,
+        cnpj: formData.cnpj,
+        email: formData.email,
+        phone: formData.telefone,
+        address: formData.endereco,
+        plan: portugueseToPlanType(formData.plano),
+        active: formData.status === "Ativo",
+        createdAt: BigInt(Date.now()) * 1000000n,
+        updatedAt: BigInt(Date.now()) * 1000000n,
+        bitcoinAddress: walletModeVal === "manual" && manualAddressVal ? manualAddressVal : void 0,
+        walletType: walletModeVal === "ckbtc" ? WalletType.ckbtc : walletModeVal === "manual" ? WalletType.manual : void 0
+      };
+      const newId = await actor.registerClient(newClient);
+      if (walletModeVal === "manual" && manualAddressVal) {
+        await actor.setClientBitcoinAddress(
+          newId,
+          manualAddressVal,
+          WalletType.manual
+        );
+      }
+      return newId;
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["clients"] });
+      ue.success("Cliente criado com sucesso!");
+      setDialogOpen(false);
+      resetForm();
+    },
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "Erro ao criar cliente";
+      ue.error(msg);
+    }
+  });
+  const editMutation = useMutation({
+    mutationFn: async ({
+      clienteId,
+      formData,
+      walletModeVal,
+      manualAddressVal,
+      generatedAddressVal,
+      originalCliente
+    }) => {
+      if (!actor) throw new Error("Actor não disponível");
+      const resolvedAddress = walletModeVal === "manual" ? manualAddressVal : walletModeVal === "ckbtc" ? generatedAddressVal : void 0;
+      const updatedClient = {
+        id: BigInt(clienteId),
+        name: formData.empresa,
+        cnpj: formData.cnpj,
+        email: formData.email,
+        phone: formData.telefone,
+        address: formData.endereco,
+        plan: portugueseToPlanType(formData.plano),
+        active: formData.status === "Ativo",
+        createdAt: 0n,
+        updatedAt: BigInt(Date.now()) * 1000000n,
+        bitcoinAddress: resolvedAddress ?? originalCliente.bitcoinAddress,
+        walletType: walletModeVal !== "" ? walletModeVal === "ckbtc" ? WalletType.ckbtc : WalletType.manual : originalCliente.walletType === "ckbtc" ? WalletType.ckbtc : originalCliente.walletType === "manual" ? WalletType.manual : void 0
+      };
+      await actor.editClient(BigInt(clienteId), updatedClient);
+      if (walletModeVal !== "" && resolvedAddress) {
+        await actor.setClientBitcoinAddress(
+          BigInt(clienteId),
+          resolvedAddress,
+          walletModeVal === "ckbtc" ? WalletType.ckbtc : WalletType.manual
+        );
+      }
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["clients"] });
+      ue.success("Cliente atualizado com sucesso!");
+      setDialogOpen(false);
+      resetForm();
+    },
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "Erro ao editar cliente";
+      ue.error(msg);
+    }
+  });
+  const deleteMutation = useMutation({
+    mutationFn: async ({ clienteId }) => {
+      if (!actor) throw new Error("Actor não disponível");
+      await actor.deleteClient(BigInt(clienteId));
+    },
+    onSuccess: (_2, { clienteId }) => {
+      var _a3;
+      queryClient2.invalidateQueries({ queryKey: ["clients"] });
+      const nome = ((_a3 = clientes.find((c2) => c2.id === clienteId)) == null ? void 0 : _a3.empresa) ?? "Cliente";
+      ue.success(`Cliente "${nome}" removido.`);
+    },
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : "Erro ao remover cliente";
+      ue.error(msg);
+    }
+  });
+  const isMutating = createMutation.isPending || editMutation.isPending || deleteMutation.isPending;
   const filtered = clientes.filter(
     (c2) => c2.empresa.toLowerCase().includes(search.toLowerCase()) || c2.cnpj.includes(search) || c2.email.toLowerCase().includes(search.toLowerCase())
   );
@@ -49081,49 +49379,28 @@ function ClientesPage() {
   };
   const handleSubmit = async (e3) => {
     e3.preventDefault();
-    const resolvedAddress = walletMode === "manual" ? manualAddress : walletMode === "ckbtc" ? generatedAddress : void 0;
     if (editingCliente) {
-      setClientes(
-        (prev) => prev.map(
-          (c2) => c2.id === editingCliente.id ? {
-            ...c2,
-            ...form,
-            bitcoinAddress: resolvedAddress || c2.bitcoinAddress,
-            walletType: walletMode !== "" ? walletMode : c2.walletType
-          } : c2
-        )
-      );
-      if (actor && resolvedAddress && walletMode !== "") {
-        try {
-          await actor.setClientBitcoinAddress(
-            BigInt(editingCliente.id),
-            resolvedAddress,
-            walletMode === "ckbtc" ? WalletType.ckbtc : WalletType.manual
-          );
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : "Erro ao salvar endereço no backend";
-          ue.error(msg);
-        }
-      }
-      ue.success("Cliente atualizado com sucesso!");
+      editMutation.mutate({
+        clienteId: editingCliente.id,
+        formData: form,
+        walletModeVal: walletMode,
+        manualAddressVal: manualAddress,
+        generatedAddressVal: generatedAddress,
+        originalCliente: editingCliente
+      });
     } else {
-      const newCliente = {
-        id: Date.now(),
-        ...form,
-        bitcoinAddress: resolvedAddress,
-        walletType: walletMode !== "" ? walletMode : void 0
-      };
-      setClientes((prev) => [newCliente, ...prev]);
-      ue.success("Cliente criado com sucesso!");
+      createMutation.mutate({
+        formData: form,
+        walletModeVal: walletMode,
+        manualAddressVal: manualAddress
+      });
     }
-    setDialogOpen(false);
-    resetForm();
   };
-  const handleDelete = (id2, nome) => {
-    setClientes((prev) => prev.filter((c2) => c2.id !== id2));
-    ue.success(`Cliente "${nome}" removido.`);
+  const handleDelete = (id2) => {
+    deleteMutation.mutate({ clienteId: id2 });
   };
   const manualAddressValid = manualAddress === "" || isValidBitcoinAddress(manualAddress);
+  const isSubmitting = createMutation.isPending || editMutation.isPending;
   return /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full sm:w-80", children: [
@@ -49154,6 +49431,7 @@ function ClientesPage() {
                 "data-ocid": "clientes.open_modal_button",
                 className: "bg-primary hover:bg-primary/90 text-primary-foreground shadow-btc",
                 onClick: resetForm,
+                disabled: actorLoading,
                 children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "mr-2 h-4 w-4" }),
                   "Novo Cliente"
@@ -49439,6 +49717,7 @@ function ClientesPage() {
                           "data-ocid": "clientes.cancel_button",
                           className: "flex-1",
                           onClick: () => setDialogOpen(false),
+                          disabled: isSubmitting,
                           children: "Cancelar"
                         }
                       ),
@@ -49448,7 +49727,11 @@ function ClientesPage() {
                           type: "submit",
                           "data-ocid": "clientes.submit_button",
                           className: "flex-1 bg-primary hover:bg-primary/90 text-primary-foreground",
-                          children: editingCliente ? "Salvar alterações" : "Criar cliente"
+                          disabled: isSubmitting,
+                          children: isSubmitting ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "mr-2 h-4 w-4 animate-spin" }),
+                            editingCliente ? "Salvando..." : "Criando..."
+                          ] }) : editingCliente ? "Salvar alterações" : "Criar cliente"
                         }
                       )
                     ] })
@@ -49460,6 +49743,14 @@ function ClientesPage() {
         }
       )
     ] }),
+    clientesError && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        "data-ocid": "clientes.error_state",
+        className: "rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400",
+        children: "Erro ao carregar clientes. Verifique a conexão e tente novamente."
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border hover:bg-transparent", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Empresa" }),
@@ -49471,101 +49762,132 @@ function ClientesPage() {
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground text-right", children: "Ações" })
       ] }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(TableBody, { children: [
-        filtered.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        clientesLoading && [1, 2, 3, 4].map((i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          TableRow,
+          {
+            "data-ocid": "clientes.loading_state",
+            className: "border-b border-border/50",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-36" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-28" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-40" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-20 rounded-full" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-24" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-14 rounded-full" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-7 w-16 ml-auto" }) })
+            ]
+          },
+          i
+        )),
+        !clientesLoading && filtered.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           TableCell,
           {
             "data-ocid": "clientes.empty_state",
             colSpan: 7,
             className: "text-center text-muted-foreground py-12",
-            children: "Nenhum cliente encontrado."
+            children: search ? "Nenhum cliente encontrado para esta busca." : "Nenhum cliente cadastrado ainda."
           }
         ) }),
-        filtered.map((c2, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          motion.tr,
-          {
-            "data-ocid": `clientes.item.${i + 1}`,
-            initial: { opacity: 0 },
-            animate: { opacity: 1 },
-            transition: { delay: i * 0.04 },
-            className: "border-b border-border/50 hover:bg-muted/20 transition-colors",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground", children: c2.empresa }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-mono text-sm text-muted-foreground", children: c2.cnpj }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: c2.email }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Badge,
-                {
-                  variant: "outline",
-                  className: `text-xs ${planColors[c2.plano]}`,
-                  children: c2.plano
-                }
-              ) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: c2.bitcoinAddress ? /* @__PURE__ */ jsxRuntimeExports.jsxs(Tooltip$1, { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 cursor-default", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-amber-400 font-bold text-sm leading-none", children: "₿" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-amber-400/80", children: truncateAddress(c2.bitcoinAddress) }),
-                  c2.walletType === "ckbtc" && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    Badge,
+        !clientesLoading && filtered.map((c2, i) => {
+          var _a3;
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            motion.tr,
+            {
+              "data-ocid": `clientes.item.${i + 1}`,
+              initial: { opacity: 0 },
+              animate: { opacity: 1 },
+              transition: { delay: i * 0.04 },
+              className: "border-b border-border/50 hover:bg-muted/20 transition-colors",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground", children: c2.empresa }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-mono text-sm text-muted-foreground", children: c2.cnpj }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: c2.email }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Badge,
+                  {
+                    variant: "outline",
+                    className: `text-xs ${planColors[c2.plano]}`,
+                    children: c2.plano
+                  }
+                ) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: c2.bitcoinAddress ? /* @__PURE__ */ jsxRuntimeExports.jsxs(Tooltip$1, { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 cursor-default", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-amber-400 font-bold text-sm leading-none", children: "₿" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-amber-400/80", children: truncateAddress(c2.bitcoinAddress) }),
+                    c2.walletType === "ckbtc" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        Badge,
+                        {
+                          variant: "outline",
+                          className: "text-[10px] py-0 px-1 h-4 bg-purple-500/20 text-purple-400 border-purple-500/30 leading-none",
+                          children: "ckBTC"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        CkBtcBalanceBadge,
+                        {
+                          clientId: c2.id,
+                          actor
+                        }
+                      )
+                    ] })
+                  ] }) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    TooltipContent,
                     {
-                      variant: "outline",
-                      className: "text-[10px] py-0 px-1 h-4 bg-purple-500/20 text-purple-400 border-purple-500/30 leading-none",
-                      children: "ckBTC"
+                      "data-ocid": "clientes.tooltip",
+                      side: "top",
+                      className: "max-w-xs",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs break-all", children: c2.bitcoinAddress }),
+                        c2.walletType && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-muted-foreground mt-1", children: [
+                          "Tipo:",
+                          " ",
+                          c2.walletType === "ckbtc" ? "ckBTC (ICP)" : "Manual"
+                        ] })
+                      ]
                     }
                   )
-                ] }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  TooltipContent,
+                ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-muted-foreground text-sm", children: "—" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Badge,
                   {
-                    "data-ocid": "clientes.tooltip",
-                    side: "top",
-                    className: "max-w-xs",
-                    children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono text-xs break-all", children: c2.bitcoinAddress }),
-                      c2.walletType && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-muted-foreground mt-1", children: [
-                        "Tipo:",
-                        " ",
-                        c2.walletType === "ckbtc" ? "ckBTC (ICP)" : "Manual"
-                      ] })
-                    ]
+                    variant: "outline",
+                    className: `text-xs ${c2.status === "Ativo" ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" : "bg-red-500/20 text-red-400 border-red-500/30"}`,
+                    children: c2.status
                   }
-                )
-              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-muted-foreground text-sm", children: "—" }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Badge,
-                {
-                  variant: "outline",
-                  className: `text-xs ${c2.status === "Ativo" ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" : "bg-red-500/20 text-red-400 border-red-500/30"}`,
-                  children: c2.status
-                }
-              ) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-end gap-1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Button,
-                  {
-                    size: "icon",
-                    variant: "ghost",
-                    "data-ocid": `clientes.edit_button.${i + 1}`,
-                    className: "h-8 w-8 text-muted-foreground hover:text-foreground",
-                    onClick: () => handleOpenEdit(c2),
-                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(Pencil, { className: "h-3.5 w-3.5" })
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Button,
-                  {
-                    size: "icon",
-                    variant: "ghost",
-                    "data-ocid": `clientes.delete_button.${i + 1}`,
-                    className: "h-8 w-8 text-muted-foreground hover:text-destructive",
-                    onClick: () => handleDelete(c2.id, c2.empresa),
-                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "h-3.5 w-3.5" })
-                  }
-                )
-              ] }) })
-            ]
-          },
-          c2.id
-        ))
+                ) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-end gap-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      size: "icon",
+                      variant: "ghost",
+                      "data-ocid": `clientes.edit_button.${i + 1}`,
+                      className: "h-8 w-8 text-muted-foreground hover:text-foreground",
+                      onClick: () => handleOpenEdit(c2),
+                      disabled: isMutating,
+                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Pencil, { className: "h-3.5 w-3.5" })
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      size: "icon",
+                      variant: "ghost",
+                      "data-ocid": `clientes.delete_button.${i + 1}`,
+                      className: "h-8 w-8 text-muted-foreground hover:text-destructive",
+                      onClick: () => handleDelete(c2.id),
+                      disabled: isMutating || deleteMutation.isPending,
+                      children: deleteMutation.isPending && ((_a3 = deleteMutation.variables) == null ? void 0 : _a3.clienteId) === c2.id ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-3.5 w-3.5 animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "h-3.5 w-3.5" })
+                    }
+                  )
+                ] }) })
+              ]
+            },
+            c2.id
+          );
+        })
       ] })
     ] }) }) }) })
   ] }) });

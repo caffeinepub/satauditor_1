@@ -50,11 +50,13 @@ export type WalletType = { 'ckbtc' : null } |
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'deleteClient' : ActorMethod<[ClientId], undefined>,
   'editClient' : ActorMethod<[ClientId, Client], undefined>,
   'generateCkBtcAddress' : ActorMethod<[ClientId], string>,
   'getAllClients' : ActorMethod<[], Array<Client>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getCkBtcBalance' : ActorMethod<[ClientId], bigint>,
   'getClient' : ActorMethod<[ClientId], [] | [Client]>,
   'getClientBitcoinAddress' : ActorMethod<
     [ClientId],

@@ -3,9 +3,11 @@ import Time "mo:core/Time";
 import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
 import Iter "mo:core/Iter";
+import Blob "mo:core/Blob";
+import Array "mo:core/Array";
+import Migration "migration";
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
-import Migration "migration";
 
 (with migration = Migration.run)
 actor {
@@ -74,6 +76,7 @@ actor {
     #equity;
   };
 
+  // Chart of Accounts, Balance Sheet, and Income Statement
   type Account = {
     code : Text;
     name : Text;
@@ -140,27 +143,39 @@ actor {
     walletType : WalletType;
   };
 
-  let accessControlState = AccessControl.initState();
+  // ICRC-1 types for ckBTC ledger
+  type Icrc1Account = {
+    owner : Principal;
+    subaccount : ?Blob;
+  };
+
+  type Icrc1Ledger = actor {
+    icrc1_balance_of : query (Icrc1Account) -> async Nat;
+  };
+
+  let ckBtcLedger : Icrc1Ledger = actor ("mxzaz-hqaaa-aaaar-qaada-cai");
+
+  var accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
 
-  let clients = Map.empty<ClientId, Client>();
+  var clients = Map.empty<ClientId, Client>();
   var nextClientId = 1;
 
-  let transactions = Map.empty<TransactionId, Transaction>();
+  var transactions = Map.empty<TransactionId, Transaction>();
   var nextTransactionId = 1;
 
-  let accounts = Map.empty<Text, Account>();
+  var accounts = Map.empty<Text, Account>();
 
-  let subscriptions = Map.empty<SubscriptionId, Subscription>();
+  var subscriptions = Map.empty<SubscriptionId, Subscription>();
   var nextSubscriptionId = 1;
 
-  let auditLogs = Map.empty<Nat, AuditLog>();
+  var auditLogs = Map.empty<Nat, AuditLog>();
   var nextAuditLogId = 1;
 
-  let complianceAlerts = Map.empty<Nat, ComplianceAlert>();
+  var complianceAlerts = Map.empty<Nat, ComplianceAlert>();
   var nextAlertId = 1;
 
-  let userProfiles = Map.empty<Principal, UserProfile>();
+  var userProfiles = Map.empty<Principal, UserProfile>();
 
   // Helper function to check if caller owns the client
   private func callerOwnsClient(caller : Principal, clientId : ClientId) : Bool {
@@ -173,6 +188,12 @@ actor {
         };
       };
     };
+  };
+
+  // Helper function to convert clientId to single-byte Blob for ICRC-1 subaccount
+  private func clientIdToSubaccount(clientId : ClientId) : Blob {
+    let byteArray = [Nat8.fromNat(clientId)];
+    Blob.fromArray(byteArray);
   };
 
   // User profile management (required by frontend)
@@ -197,6 +218,7 @@ actor {
     userProfiles.add(caller, profile);
   };
 
+  // Bitcoin wallet management
   public shared ({ caller }) func generateCkBtcAddress(clientId : ClientId) : async Text {
     if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
       Runtime.trap("Unauthorized: Only admins or client owners can generate Bitcoin addresses");
@@ -246,6 +268,36 @@ actor {
     };
   };
 
+  // NEW: Get ckBTC balance for a client
+  public shared ({ caller }) func getCkBtcBalance(clientId : ClientId) : async Nat {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can view balances");
+    };
+    if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
+      Runtime.trap("Unauthorized: Can only view balance for your own client");
+    };
+
+    switch (clients.get(clientId)) {
+      case (null) {
+        Runtime.trap("Client does not exist");
+      };
+      case (?client) {
+        switch (client.bitcoinAddress) {
+          case (null) { 0 };
+          case (?_) {
+            let subaccount = clientIdToSubaccount(clientId);
+            let account : Icrc1Account = {
+              owner = Principal.fromText("mxzaz-hqaaa-aaaar-qaada-cai");
+              subaccount = ?subaccount;
+            };
+            await ckBtcLedger.icrc1_balance_of(account);
+          };
+        };
+      };
+    };
+  };
+
+  // Client management
   public shared ({ caller }) func registerClient(newClient : Client) : async ClientId {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can register clients");
@@ -275,6 +327,21 @@ actor {
           walletType = existingClient.walletType; // Preserve wallet type
         };
         clients.add(clientId, clientToUpdate);
+      };
+    };
+  };
+
+  // NEW: Delete client (admin only)
+  public shared ({ caller }) func deleteClient(clientId : ClientId) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can delete clients");
+    };
+    switch (clients.get(clientId)) {
+      case (null) {
+        Runtime.trap("Client not found");
+      };
+      case (?_) {
+        clients.remove(clientId);
       };
     };
   };

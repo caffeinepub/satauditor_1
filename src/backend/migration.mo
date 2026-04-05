@@ -16,20 +16,7 @@ module {
 
   type ClientId = Nat;
 
-  type OldClient = {
-    id : ClientId;
-    name : Text;
-    cnpj : Text;
-    email : Text;
-    phone : Text;
-    address : Text;
-    plan : PlanType;
-    active : Bool;
-    createdAt : Time.Time;
-    updatedAt : Time.Time;
-  };
-
-  type NewClient = {
+  type Client = {
     id : ClientId;
     name : Text;
     cnpj : Text;
@@ -44,12 +31,12 @@ module {
     updatedAt : Time.Time;
   };
 
-  type TransactionId = Nat;
-
   type TransactionType = {
     #income;
     #expense;
   };
+
+  type TransactionId = Nat;
 
   type Transaction = {
     id : TransactionId;
@@ -121,7 +108,7 @@ module {
     resolved : Bool;
   };
 
-  public type Address = {
+  type Address = {
     street : Text;
     city : Text;
     state : Text;
@@ -129,13 +116,13 @@ module {
     country : Text;
   };
 
-  public type BusinessRole = {
+  type BusinessRole = {
     #admin;
     #accountant;
     #client;
   };
 
-  public type UserProfile = {
+  type UserProfile = {
     name : Text;
     email : Text;
     businessRole : BusinessRole;
@@ -143,10 +130,10 @@ module {
   };
 
   type OldActor = {
-    clients : Map.Map<ClientId, OldClient>;
+    clients : Map.Map<ClientId, Client>;
     nextClientId : ClientId;
     transactions : Map.Map<TransactionId, Transaction>;
-    nextTransactionId : Nat;
+    nextTransactionId : TransactionId;
     accounts : Map.Map<Text, Account>;
     subscriptions : Map.Map<SubscriptionId, Subscription>;
     nextSubscriptionId : SubscriptionId;
@@ -157,30 +144,7 @@ module {
     userProfiles : Map.Map<Principal.Principal, UserProfile>;
   };
 
-  type NewActor = {
-    clients : Map.Map<ClientId, NewClient>;
-    nextClientId : ClientId;
-    transactions : Map.Map<TransactionId, Transaction>;
-    nextTransactionId : Nat;
-    accounts : Map.Map<Text, Account>;
-    subscriptions : Map.Map<SubscriptionId, Subscription>;
-    nextSubscriptionId : SubscriptionId;
-    auditLogs : Map.Map<Nat, AuditLog>;
-    nextAuditLogId : Nat;
-    complianceAlerts : Map.Map<Nat, ComplianceAlert>;
-    nextAlertId : Nat;
-    userProfiles : Map.Map<Principal.Principal, UserProfile>;
-  };
-
-  public func run(old : OldActor) : NewActor {
-    let newClients = old.clients.map<ClientId, OldClient, NewClient>(
-      func(_id, oldClient) {
-        { oldClient with bitcoinAddress = null; walletType = null };
-      }
-    );
-    {
-      old with
-      clients = newClients;
-    };
+  public func run(old : OldActor) : OldActor {
+    old;
   };
 };

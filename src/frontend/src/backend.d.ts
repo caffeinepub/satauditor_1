@@ -54,11 +54,13 @@ export enum WalletType {
 }
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    deleteClient(clientId: ClientId): Promise<void>;
     editClient(clientId: ClientId, updatedClient: Client): Promise<void>;
     generateCkBtcAddress(clientId: ClientId): Promise<string>;
     getAllClients(): Promise<Array<Client>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getCkBtcBalance(clientId: ClientId): Promise<bigint>;
     getClient(clientId: ClientId): Promise<Client | null>;
     getClientBitcoinAddress(clientId: ClientId): Promise<ClientBitcoinAddressResult | null>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;

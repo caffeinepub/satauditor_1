@@ -74437,122 +74437,162 @@ const categoryData = [
   { name: "Assinaturas SaaS", value: 25, color: "#6366f1" },
   { name: "Consultoria", value: 10, color: "#ec4899" }
 ];
-const recentTransactions = [
-  {
-    hash: "3a8f2c1d9e",
-    tipo: "Entrada",
-    valorBtc: "0.2847 BTC",
-    valorBrl: "R$ 86.400",
-    data: "04/04/2026",
-    cliente: "TechFin Brasil",
-    status: "Confirmada"
-  },
-  {
-    hash: "7b3e1f5a0c",
-    tipo: "Saída",
-    valorBtc: "0.0512 BTC",
-    valorBrl: "R$ 15.540",
-    data: "04/04/2026",
-    cliente: "Mercado Digital",
-    status: "Confirmada"
-  },
-  {
-    hash: "9d2c4b8e1f",
-    tipo: "Entrada",
-    valorBtc: "0.1203 BTC",
-    valorBrl: "R$ 36.511",
-    data: "03/04/2026",
-    cliente: "CriptoVault",
-    status: "Confirmada"
-  },
-  {
-    hash: "2e9a7f3c5d",
-    tipo: "Saída",
-    valorBtc: "0.0081 BTC",
-    valorBrl: "R$ 2.460",
-    data: "03/04/2026",
-    cliente: "StartupPay",
-    status: "Pendente"
-  },
-  {
-    hash: "6c1b4d8f2a",
-    tipo: "Entrada",
-    valorBtc: "0.3922 BTC",
-    valorBrl: "R$ 119.118",
-    data: "02/04/2026",
-    cliente: "Holding Nacional",
-    status: "Confirmada"
-  }
-];
-const metrics = [
-  {
-    title: "Total Clientes",
-    value: "24",
-    icon: Users,
-    change: "+3 este mês",
-    positive: true
-  },
-  {
-    title: "Volume BTC",
-    value: "12.847 BTC",
-    icon: Bitcoin,
-    change: "+8.4% vs mês anterior",
-    positive: true
-  },
-  {
-    title: "Transações/Mês",
-    value: "342",
-    icon: ArrowLeftRight,
-    change: "+42 este mês",
-    positive: true
-  },
-  {
-    title: "Receita Líquida",
-    value: "R$ 48.920",
-    icon: TrendingUp,
-    change: "+12.3% vs mês anterior",
-    positive: true
-  }
-];
+const SKELETON_ROWS$1 = ["sk-1", "sk-2", "sk-3", "sk-4", "sk-5"];
 const statusColors = {
   Confirmada: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
   Pendente: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   Falha: "bg-red-500/20 text-red-400 border-red-500/30"
 };
-function DashboardPage() {
+function formatBtc(satoshis) {
+  const btc = Number(satoshis) / 1e8;
+  return `${btc.toFixed(4)} BTC`;
+}
+function isCurrentMonth(nanos) {
+  const d2 = new Date(Number(nanos) / 1e6);
+  const now2 = /* @__PURE__ */ new Date();
+  return d2.getMonth() === now2.getMonth() && d2.getFullYear() === now2.getFullYear();
+}
+function DashboardPage({ profile }) {
+  var _a3;
+  const { actor, isFetching } = useActor();
+  const isAdmin = profile.businessRole === BusinessRole$1.admin;
+  const isClient2 = profile.businessRole === BusinessRole$1.client;
+  const { data: clients, isLoading: clientsLoading } = useQuery({
+    queryKey: ["allClients"],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getAllClients();
+    },
+    enabled: !!actor && !isFetching && isAdmin
+  });
+  const { data: transactions, isLoading: txLoading } = useQuery({
+    queryKey: isClient2 ? ["transactionsByClient", (_a3 = profile.clientId) == null ? void 0 : _a3.toString()] : ["allTransactions"],
+    queryFn: async () => {
+      if (!actor) return [];
+      if (isClient2 && profile.clientId !== void 0) {
+        return actor.getTransactionsByClientId(profile.clientId);
+      }
+      return actor.getAllTransactions();
+    },
+    enabled: !!actor && !isFetching && (!isClient2 || profile.clientId !== void 0)
+  });
+  const txThisMonth = (transactions == null ? void 0 : transactions.filter((tx) => isCurrentMonth(tx.date))) ?? [];
+  const recentTransactions = [...transactions ?? []].sort((a2, b2) => Number(b2.date - a2.date)).slice(0, 5);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4", children: metrics.map((metric, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-      motion.div,
-      {
-        initial: { opacity: 0, y: 20 },
-        animate: { opacity: 1, y: 0 },
-        transition: { delay: i * 0.08 },
-        children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          Card,
-          {
-            "data-ocid": `dashboard.${metric.title.toLowerCase().replace(/\s+/g, "_")}.card`,
-            className: "bg-card border-border hover:border-primary/30 transition-colors shadow-card",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-sm font-medium text-muted-foreground", children: metric.title }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-2 rounded-lg bg-primary/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(metric.icon, { className: "h-4 w-4 text-primary" }) })
-              ] }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-2xl font-display font-bold text-foreground", children: metric.value }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "p",
-                  {
-                    className: `text-xs mt-1 ${metric.positive ? "text-emerald-400" : "text-red-400"}`,
-                    children: metric.change
-                  }
-                )
-              ] })
-            ]
-          }
-        )
-      },
-      metric.title
-    )) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        motion.div,
+        {
+          initial: { opacity: 0, y: 20 },
+          animate: { opacity: 1, y: 0 },
+          transition: { delay: 0 },
+          children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Card,
+            {
+              "data-ocid": "dashboard.total_clientes.card",
+              className: "bg-card border-border hover:border-primary/30 transition-colors shadow-card",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-sm font-medium text-muted-foreground", children: "Total Clientes" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-2 rounded-lg bg-primary/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { className: "h-4 w-4 text-primary" }) })
+                ] }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { children: [
+                  isAdmin ? clientsLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Skeleton,
+                    {
+                      className: "h-8 w-16",
+                      "data-ocid": "dashboard.total_clientes.loading_state"
+                    }
+                  ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-2xl font-display font-bold text-foreground", children: (clients == null ? void 0 : clients.length) ?? 0 }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-2xl font-display font-bold text-muted-foreground", children: "—" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs mt-1 text-muted-foreground", children: isAdmin ? "Total cadastrado" : "Não disponível" })
+                ] })
+              ]
+            }
+          )
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        motion.div,
+        {
+          initial: { opacity: 0, y: 20 },
+          animate: { opacity: 1, y: 0 },
+          transition: { delay: 0.08 },
+          children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Card,
+            {
+              "data-ocid": "dashboard.volume_btc.card",
+              className: "bg-card border-border hover:border-primary/30 transition-colors shadow-card",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-sm font-medium text-muted-foreground", children: "Volume BTC" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-2 rounded-lg bg-primary/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Bitcoin, { className: "h-4 w-4 text-primary" }) })
+                ] }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-2xl font-display font-bold text-muted-foreground", children: "—" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs mt-1 text-muted-foreground", children: "Em breve" })
+                ] })
+              ]
+            }
+          )
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        motion.div,
+        {
+          initial: { opacity: 0, y: 20 },
+          animate: { opacity: 1, y: 0 },
+          transition: { delay: 0.16 },
+          children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Card,
+            {
+              "data-ocid": "dashboard.transacoes_mes.card",
+              className: "bg-card border-border hover:border-primary/30 transition-colors shadow-card",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-sm font-medium text-muted-foreground", children: "Transações/Mês" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-2 rounded-lg bg-primary/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowLeftRight, { className: "h-4 w-4 text-primary" }) })
+                ] }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { children: [
+                  txLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Skeleton,
+                    {
+                      className: "h-8 w-16",
+                      "data-ocid": "dashboard.transacoes_mes.loading_state"
+                    }
+                  ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-2xl font-display font-bold text-foreground", children: txThisMonth.length }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs mt-1 text-muted-foreground", children: "Mês atual" })
+                ] })
+              ]
+            }
+          )
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        motion.div,
+        {
+          initial: { opacity: 0, y: 20 },
+          animate: { opacity: 1, y: 0 },
+          transition: { delay: 0.24 },
+          children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Card,
+            {
+              "data-ocid": "dashboard.receita_liquida.card",
+              className: "bg-card border-border hover:border-primary/30 transition-colors shadow-card",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-sm font-medium text-muted-foreground", children: "Receita Líquida" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-2 rounded-lg bg-primary/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(TrendingUp, { className: "h-4 w-4 text-primary" }) })
+                ] }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-2xl font-display font-bold text-muted-foreground", children: "—" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs mt-1 text-muted-foreground", children: "Em breve" })
+                ] })
+              ]
+            }
+          )
+        }
+      )
+    ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 xl:grid-cols-3 gap-4", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         motion.div,
@@ -74791,7 +74831,31 @@ function DashboardPage() {
         transition: { delay: 0.55 },
         children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-card border-border shadow-card", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-base font-display font-bold text-foreground", children: "Transações Recentes" }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-sm", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: txLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              className: "px-6 py-4 space-y-3",
+              "data-ocid": "dashboard.transactions.loading_state",
+              children: SKELETON_ROWS$1.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-24" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-14" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20 ml-auto" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-24" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" })
+              ] }, key))
+            }
+          ) : recentTransactions.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: "flex flex-col items-center justify-center py-12 text-center",
+              "data-ocid": "dashboard.transactions.empty_state",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowLeftRight, { className: "h-8 w-8 text-muted-foreground/40 mb-3" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: "Nenhuma transação registrada ainda." })
+              ]
+            }
+          ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-sm", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-border", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider", children: "Hash BTC" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider", children: "Tipo" }),
@@ -74800,39 +74864,44 @@ function DashboardPage() {
               /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider", children: "Cliente" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider", children: "Status" })
             ] }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: recentTransactions.map((tx, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "tr",
-              {
-                "data-ocid": `dashboard.transactions.item.${i + 1}`,
-                className: "border-b border-border/50 hover:bg-muted/30 transition-colors",
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "px-6 py-3 font-mono text-xs text-muted-foreground", children: [
-                    "...",
-                    tx.hash
-                  ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    Badge,
-                    {
-                      variant: "outline",
-                      className: tx.tipo === "Entrada" ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30 text-xs" : "bg-red-500/15 text-red-400 border-red-500/30 text-xs",
-                      children: tx.tipo
-                    }
-                  ) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-right font-mono text-xs text-foreground", children: tx.valorBtc }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-right text-xs font-semibold text-foreground", children: tx.valorBrl }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-xs text-muted-foreground", children: tx.cliente }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    Badge,
-                    {
-                      variant: "outline",
-                      className: `text-xs ${statusColors[tx.status]}`,
-                      children: tx.status
-                    }
-                  ) })
-                ]
-              },
-              tx.hash
-            )) })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: recentTransactions.map((tx, i) => {
+              const tipo = tx.transactionType === "income" ? "Entrada" : "Saída";
+              const status = tx.confirmed ? "Confirmada" : "Pendente";
+              const hashDisplay = tx.hash.length > 10 ? `...${tx.hash.slice(-10)}` : `...${tx.hash}`;
+              return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "tr",
+                {
+                  "data-ocid": `dashboard.transactions.item.${i + 1}`,
+                  className: "border-b border-border/50 hover:bg-muted/30 transition-colors",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-6 py-3 font-mono text-xs text-muted-foreground", children: hashDisplay }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      Badge,
+                      {
+                        variant: "outline",
+                        className: tipo === "Entrada" ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30 text-xs" : "bg-red-500/15 text-red-400 border-red-500/30 text-xs",
+                        children: tipo
+                      }
+                    ) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-right font-mono text-xs text-foreground", children: formatBtc(tx.value) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-right text-xs font-semibold text-muted-foreground", children: "R$ —" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "px-4 py-3 text-xs text-muted-foreground", children: [
+                      "Cliente #",
+                      String(tx.clientId)
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      Badge,
+                      {
+                        variant: "outline",
+                        className: `text-xs ${statusColors[status]}`,
+                        children: status
+                      }
+                    ) })
+                  ]
+                },
+                String(tx.id)
+              );
+            }) })
           ] }) }) })
         ] })
       }
@@ -75725,7 +75794,7 @@ function App() {
     ] });
   }
   const pageComponents = {
-    dashboard: /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPage, {}),
+    dashboard: /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPage, { profile }),
     clientes: /* @__PURE__ */ jsxRuntimeExports.jsx(ClientesPage, {}),
     transacoes: /* @__PURE__ */ jsxRuntimeExports.jsx(TransacoesPage, { profile }),
     contabilidade: /* @__PURE__ */ jsxRuntimeExports.jsx(ContabilidadePage, {}),

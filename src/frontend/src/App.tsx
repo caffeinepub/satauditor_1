@@ -92,7 +92,7 @@ export default function App() {
   }
 
   const pageComponents: Record<PageName, React.ReactNode> = {
-    dashboard: <DashboardPage />,
+    dashboard: <DashboardPage profile={profile} />,
     clientes: <ClientesPage />,
     transacoes: <TransacoesPage profile={profile} />,
     contabilidade: <ContabilidadePage />,

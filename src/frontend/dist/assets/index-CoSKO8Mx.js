@@ -45963,6 +45963,42 @@ function InternetIdentityProvider({
     children
   });
 }
+function usePWAInstall() {
+  const [deferredPrompt, setDeferredPrompt] = reactExports.useState(null);
+  const [isInstalled, setIsInstalled] = reactExports.useState(false);
+  reactExports.useEffect(() => {
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+      setIsInstalled(true);
+      return;
+    }
+    const handler = (e3) => {
+      e3.preventDefault();
+      setDeferredPrompt(e3);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    window.addEventListener("appinstalled", () => {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+    });
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+    };
+  }, []);
+  const install = async () => {
+    if (!deferredPrompt) return;
+    await deferredPrompt.prompt();
+    const choice = await deferredPrompt.userChoice;
+    if (choice.outcome === "accepted") {
+      setIsInstalled(true);
+    }
+    setDeferredPrompt(null);
+  };
+  return {
+    canInstall: !!deferredPrompt && !isInstalled,
+    isInstalled,
+    install
+  };
+}
 const ROLE_PERMISSIONS = {
   [BusinessRole$1.admin]: [
     "dashboard",
@@ -46028,6 +46064,7 @@ function AppLayout({
 }) {
   const { clear } = useInternetIdentity();
   const [sidebarOpen, setSidebarOpen] = reactExports.useState(false);
+  const { canInstall, install } = usePWAInstall();
   const role = profile.businessRole ?? BusinessRole$1.client;
   const allowedPages = ROLE_PERMISSIONS[role] ?? ROLE_PERMISSIONS[BusinessRole$1.client];
   const visibleNavItems = NAV_ITEMS.filter(
@@ -46071,6 +46108,18 @@ function AppLayout({
         item.id
       );
     }) }) }),
+    canInstall && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-3 pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        type: "button",
+        onClick: install,
+        className: "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 text-primary border border-primary/30 bg-primary/10 hover:bg-primary/20",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { className: "h-4 w-4 flex-shrink-0" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "flex-1 text-left", children: "Instalar App" })
+        ]
+      }
+    ) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 py-4 border-t border-sidebar-border", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DropdownMenu, { children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(DropdownMenuTrigger, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "button",
@@ -46168,6 +46217,19 @@ function AppLayout({
             "Olá, ",
             profile.name.split(" ")[0]
           ] }),
+          canInstall && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Button,
+            {
+              variant: "outline",
+              size: "sm",
+              onClick: install,
+              className: "border-primary/40 text-primary hover:bg-primary/10 hover:text-primary gap-1.5",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { className: "h-3.5 w-3.5" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hidden xs:inline", children: "Instalar" })
+              ]
+            }
+          ),
           /* @__PURE__ */ jsxRuntimeExports.jsxs(
             Button,
             {
@@ -76944,9 +77006,3 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(InternetIdentityProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) }) })
 );
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch(() => {
-    });
-  });
-}

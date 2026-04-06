@@ -13,6 +13,7 @@ import {
   BookOpen,
   ChevronRight,
   CreditCard,
+  Download,
   FileBarChart,
   LayoutDashboard,
   LogOut,
@@ -29,6 +30,7 @@ import type { PageName } from "../App";
 import { BusinessRole } from "../backend.d";
 import type { UserProfile } from "../backend.d";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import { usePWAInstall } from "../hooks/usePWAInstall";
 import {
   ROLE_BADGE_CLASSES,
   ROLE_LABELS,
@@ -78,6 +80,7 @@ export default function AppLayout({
 }: AppLayoutProps) {
   const { clear } = useInternetIdentity();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { canInstall, install } = usePWAInstall();
 
   const role = profile.businessRole ?? BusinessRole.client;
   const allowedPages =
@@ -148,6 +151,20 @@ export default function AppLayout({
           })}
         </nav>
       </ScrollArea>
+
+      {/* Install PWA button in sidebar (desktop) */}
+      {canInstall && (
+        <div className="px-3 pb-2">
+          <button
+            type="button"
+            onClick={install}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 text-primary border border-primary/30 bg-primary/10 hover:bg-primary/20"
+          >
+            <Download className="h-4 w-4 flex-shrink-0" />
+            <span className="flex-1 text-left">Instalar App</span>
+          </button>
+        </div>
+      )}
 
       {/* User profile at bottom */}
       <div className="px-4 py-4 border-t border-sidebar-border">
@@ -262,6 +279,18 @@ export default function AppLayout({
             <span className="hidden sm:block text-sm text-muted-foreground">
               Olá, {profile.name.split(" ")[0]}
             </span>
+            {/* PWA Install button in header (mobile) */}
+            {canInstall && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={install}
+                className="border-primary/40 text-primary hover:bg-primary/10 hover:text-primary gap-1.5"
+              >
+                <Download className="h-3.5 w-3.5" />
+                <span className="hidden xs:inline">Instalar</span>
+              </Button>
+            )}
             <Button
               data-ocid="nav.logout.button"
               variant="ghost"

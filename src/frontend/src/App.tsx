@@ -7,6 +7,7 @@ import AppLayout from "./components/AppLayout";
 import { useActor } from "./hooks/useActor";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
 import { ROLE_PERMISSIONS } from "./lib/permissions";
+import AprovacoesPage from "./pages/AprovacoesPage";
 import AssinaturasPage from "./pages/AssinaturasPage";
 import AuditoriaPage from "./pages/AuditoriaPage";
 import ClientesPage from "./pages/ClientesPage";
@@ -28,7 +29,8 @@ export type PageName =
   | "relatorios"
   | "auditoria"
   | "assinaturas"
-  | "configuracoes";
+  | "configuracoes"
+  | "aprovacoes";
 
 export default function App() {
   const { identity, isInitializing } = useInternetIdentity();
@@ -157,6 +159,7 @@ export default function App() {
     auditoria: <AuditoriaPage />,
     assinaturas: <AssinaturasPage profile={profile} />,
     configuracoes: <ConfiguracoesPage />,
+    aprovacoes: <AprovacoesPage actor={actor} />,
   };
 
   return (

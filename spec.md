@@ -1,27 +1,38 @@
 # SatAuditor
 
 ## Current State
-O backend (main.mo, 814 linhas) tem módulos completos para: clientes, transações, assinaturas, contabilidade (plano de contas + lançamentos), relatórios financeiros e audit logs. O controle de acesso por roles (admin/accountant/client) está implementado. Qualquer usuário logado pode criar perfil livremente sem aprovação.
+
+O sistema de aprovação de usuários (Etapa A1) já foi implementado no backend com os métodos:
+- `getPendingUsers()` — lista usuários pendentes
+- `approveUser(principal)` — aprova um usuário
+- `rejectUser(principal)` — rejeita um usuário
+
+No frontend:
+- `PendingApprovalPage.tsx` — tela para usuários aguardando aprovação (já existe e funciona)
+- `RejectedPage.tsx` — tela para usuários rejeitados com link WhatsApp (já existe e funciona)
+- `ApprovalPanel` — componente de aprovação está embutido em `ClientesPage.tsx` e exibido no topo dessa página quando o usuário é admin
 
 ## Requested Changes (Diff)
 
 ### Add
-- Tipo `UserApprovalStatus` (`#pending | #approved | #rejected`) no main.mo
-- Mapa estável `userApprovalStatus : Map<Principal, UserApprovalStatus>` no main.mo
-- Função `getUserApprovalStatus() : async UserApprovalStatus` — retorna o status do caller (padrão: #pending se não existir)
-- Função `approveUser(principal: Principal) : async ()` — apenas admin, define #approved
-- Função `rejectUser(principal: Principal) : async ()` — apenas admin, define #rejected
-- Função `getPendingUsers() : async [(Principal, UserProfile)]` — apenas admin, retorna todos os usuários com status #pending que já criaram perfil
-- Ao salvar perfil (`saveCallerUserProfile`): se o usuário ainda não tiver status, definir como #pending automaticamente
+- Nova página `AprovacoesPage.tsx` com a sessão dedicada de gerenciamento de aprovações, contendo o `ApprovalPanel` movido do `ClientesPage`
+- Nova rota/entrada no menu admin do `AppLayout.tsx` com item "Aprovações" (apenas visível para admin)
+- `PageName` type atualizado para incluir `"aprovacoes"`
 
 ### Modify
-- `saveCallerUserProfile`: ao criar perfil pela primeira vez, registrar status #pending
+- `ClientesPage.tsx` — remover o `ApprovalPanel` e o estado `isAdmin` relacionado a ele
+- `AppLayout.tsx` — adicionar item de menu "Aprovações" na navegação do admin; renderizar `AprovacoesPage` quando `currentPage === "aprovacoes"`
+- `App.tsx` — adicionar `aprovacoes` ao `pageComponents` e ao `PageName` type
+- `src/lib/permissions.ts` — garantir que admin tem acesso à página `aprovacoes`
 
 ### Remove
-- Nenhum
+- `ApprovalPanel` component de `ClientesPage.tsx`
+- Estado `isAdmin` de `ClientesPage.tsx` (se usado apenas para o painel de aprovação)
 
 ## Implementation Plan
-1. Adicionar tipo `UserApprovalStatus` após os tipos existentes no main.mo
-2. Adicionar variável `var userApprovalStatus = Map.empty<Principal, UserApprovalStatus>()`
-3. Modificar `saveCallerUserProfile` para registrar #pending se não houver status
-4. Adicionar as 4 novas funções públicas no bloco de audit logs / final do actor
+
+1. Criar `src/pages/AprovacoesPage.tsx` com o `ApprovalPanel` extraído do `ClientesPage`, mantendo a mesma lógica de chamadas backend (`getPendingUsers`, `approveUser`, `rejectUser`)
+2. Atualizar `App.tsx`: adicionar `"aprovacoes"` ao `PageName` union e ao `pageComponents`
+3. Atualizar `AppLayout.tsx`: adicionar "Aprovações" no menu lateral (visível apenas para admin), com ícone `UserCheck`, e passar a prop para renderizar a nova página
+4. Atualizar `ClientesPage.tsx`: remover `ApprovalPanel` component e toda lógica relacionada a ele
+5. Atualizar `lib/permissions.ts`: garantir que a role admin inclui `aprovacoes`

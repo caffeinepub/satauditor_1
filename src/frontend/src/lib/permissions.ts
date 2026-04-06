@@ -11,6 +11,7 @@ export const ROLE_PERMISSIONS: Record<BusinessRole, PageName[]> = {
     "auditoria",
     "assinaturas",
     "configuracoes",
+    "aprovacoes",
   ],
   [BusinessRole.accountant]: [
     "dashboard",

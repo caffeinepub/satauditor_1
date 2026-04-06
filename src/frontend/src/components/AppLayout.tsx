@@ -20,6 +20,7 @@ import {
   Menu,
   Settings,
   Shield,
+  UserCheck,
   Users,
   X,
 } from "lucide-react";
@@ -51,6 +52,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "relatorios", label: "Relatórios", icon: FileBarChart },
   { id: "auditoria", label: "Auditoria", icon: Shield },
   { id: "assinaturas", label: "Assinaturas", icon: CreditCard },
+  { id: "aprovacoes", label: "Aprovações", icon: UserCheck },
   { id: "configuracoes", label: "Configurações", icon: Settings },
 ];
 
@@ -63,6 +65,7 @@ const PAGE_TITLES: Record<PageName, string> = {
   auditoria: "Auditoria",
   assinaturas: "Assinaturas",
   configuracoes: "Configurações",
+  aprovacoes: "Gerenciamento de Aprovações",
 };
 
 interface AppLayoutProps {

@@ -46068,7 +46068,8 @@ const ROLE_PERMISSIONS = {
     "relatorios",
     "auditoria",
     "assinaturas",
-    "configuracoes"
+    "configuracoes",
+    "aprovacoes"
   ],
   [BusinessRole$1.accountant]: [
     "dashboard",
@@ -46104,6 +46105,7 @@ const NAV_ITEMS = [
   { id: "relatorios", label: "Relatórios", icon: FileChartColumnIncreasing },
   { id: "auditoria", label: "Auditoria", icon: Shield },
   { id: "assinaturas", label: "Assinaturas", icon: CreditCard },
+  { id: "aprovacoes", label: "Aprovações", icon: UserCheck },
   { id: "configuracoes", label: "Configurações", icon: Settings }
 ];
 const PAGE_TITLES = {
@@ -46114,7 +46116,8 @@ const PAGE_TITLES = {
   relatorios: "Relatórios Financeiros",
   auditoria: "Auditoria",
   assinaturas: "Assinaturas",
-  configuracoes: "Configurações"
+  configuracoes: "Configurações",
+  aprovacoes: "Gerenciamento de Aprovações"
 };
 function AppLayout({
   children,
@@ -46612,6 +46615,172 @@ function TableCell({ className, ...props }) {
       ...props
     }
   );
+}
+function ApprovalPanel({ actor }) {
+  const queryClient2 = useQueryClient();
+  const { data: pendingUsers = [], isLoading } = useQuery({
+    queryKey: ["pendingUsers"],
+    queryFn: async () => {
+      try {
+        const result = await actor.getPendingUsers();
+        return result.map(([principal, profile]) => ({
+          principal,
+          profile: {
+            name: profile.name,
+            email: profile.email,
+            businessRole: profile.businessRole,
+            clientId: profile.clientId
+          }
+        }));
+      } catch {
+        return [];
+      }
+    },
+    enabled: !!actor
+  });
+  const approveMutation = useMutation({
+    mutationFn: async (principal) => {
+      await actor.approveUser(principal);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["pendingUsers"] });
+      ue.success("Usuário aprovado!");
+    },
+    onError: () => ue.error("Erro ao aprovar usuário.")
+  });
+  const rejectMutation = useMutation({
+    mutationFn: async (principal) => {
+      await actor.rejectUser(principal);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["pendingUsers"] });
+      ue.success("Usuário rejeitado.");
+    },
+    onError: () => ue.error("Erro ao rejeitar usuário.")
+  });
+  const roleLabel = (role) => {
+    if (typeof role === "object") {
+      if ("accountant" in role) return "Contador";
+      if ("client" in role) return "Cliente";
+      if ("admin" in role) return "Administrador";
+    }
+    if (role === BusinessRole$1.accountant) return "Contador";
+    if (role === BusinessRole$1.admin) return "Administrador";
+    return "Cliente";
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Card,
+    {
+      "data-ocid": "aprovacoes.panel",
+      className: "bg-card border-border shadow-card",
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border hover:bg-transparent", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Nome" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "E-mail" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Perfil" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Principal" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground text-right", children: "Ações" })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(TableBody, { children: [
+          isLoading && [1, 2].map((i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            TableRow,
+            {
+              "data-ocid": "aprovacoes.loading_state",
+              className: "border-b border-border/50",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-32" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-40" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-20 rounded-full" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-28" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-7 w-20 ml-auto" }) })
+              ]
+            },
+            i
+          )),
+          !isLoading && pendingUsers.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            TableCell,
+            {
+              "data-ocid": "aprovacoes.empty_state",
+              colSpan: 5,
+              className: "text-center text-muted-foreground py-8 text-sm",
+              children: "Nenhuma aprovação pendente."
+            }
+          ) }),
+          !isLoading && pendingUsers.map((u2, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            motion.tr,
+            {
+              "data-ocid": `aprovacoes.item.${i + 1}`,
+              initial: { opacity: 0 },
+              animate: { opacity: 1 },
+              transition: { delay: i * 0.04 },
+              className: "border-b border-border/50 hover:bg-muted/20 transition-colors",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground text-sm", children: u2.profile.name || "—" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: u2.profile.email || "—" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Badge,
+                  {
+                    variant: "outline",
+                    className: "text-xs bg-blue-500/20 text-blue-400 border-blue-500/30",
+                    children: roleLabel(u2.profile.businessRole)
+                  }
+                ) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "font-mono text-xs text-muted-foreground max-w-[120px] truncate", children: [
+                  u2.principal.toString().slice(0, 16),
+                  "…"
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-end gap-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    Button,
+                    {
+                      size: "sm",
+                      "data-ocid": `aprovacoes.confirm_button.${i + 1}`,
+                      className: "h-7 px-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs",
+                      variant: "outline",
+                      onClick: () => approveMutation.mutate(u2.principal),
+                      disabled: approveMutation.isPending || rejectMutation.isPending,
+                      children: [
+                        approveMutation.isPending ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-3 w-3 animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-3 w-3 mr-1" }),
+                        "Aprovar"
+                      ]
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    Button,
+                    {
+                      size: "sm",
+                      "data-ocid": `aprovacoes.delete_button.${i + 1}`,
+                      className: "h-7 px-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs",
+                      variant: "outline",
+                      onClick: () => rejectMutation.mutate(u2.principal),
+                      disabled: approveMutation.isPending || rejectMutation.isPending,
+                      children: [
+                        rejectMutation.isPending ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-3 w-3 animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(X$1, { className: "h-3 w-3 mr-1" }),
+                        "Rejeitar"
+                      ]
+                    }
+                  )
+                ] }) })
+              ]
+            },
+            u2.principal.toString()
+          ))
+        ] })
+      ] }) }) })
+    }
+  );
+}
+function AprovacoesPage({ actor }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center flex-shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(UserCheck, { className: "h-5 w-5 text-amber-400" }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-lg font-semibold text-foreground leading-tight", children: "Gerenciamento de Aprovações" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: "Aprove ou rejeite solicitações de acesso de novos usuários." })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ApprovalPanel, { actor })
+  ] });
 }
 const planos = [
   {
@@ -49654,174 +49823,6 @@ function TooltipContent({
     }
   ) });
 }
-function ApprovalPanel({ actor }) {
-  const queryClient2 = useQueryClient();
-  const { data: pendingUsers = [], isLoading } = useQuery({
-    queryKey: ["pendingUsers"],
-    queryFn: async () => {
-      try {
-        const result = await actor.getPendingUsers();
-        return result.map(([principal, profile]) => ({
-          principal,
-          profile: {
-            name: profile.name,
-            email: profile.email,
-            businessRole: profile.businessRole,
-            clientId: profile.clientId
-          }
-        }));
-      } catch {
-        return [];
-      }
-    },
-    enabled: !!actor
-  });
-  const approveMutation = useMutation({
-    mutationFn: async (principal) => {
-      await actor.approveUser(principal);
-    },
-    onSuccess: () => {
-      queryClient2.invalidateQueries({ queryKey: ["pendingUsers"] });
-      ue.success("Usuário aprovado!");
-    },
-    onError: () => ue.error("Erro ao aprovar usuário.")
-  });
-  const rejectMutation = useMutation({
-    mutationFn: async (principal) => {
-      await actor.rejectUser(principal);
-    },
-    onSuccess: () => {
-      queryClient2.invalidateQueries({ queryKey: ["pendingUsers"] });
-      ue.success("Usuário rejeitado.");
-    },
-    onError: () => ue.error("Erro ao rejeitar usuário.")
-  });
-  const roleLabel = (role) => {
-    if (typeof role === "object") {
-      if ("accountant" in role) return "Contador";
-      if ("client" in role) return "Cliente";
-      if ("admin" in role) return "Administrador";
-    }
-    if (role === BusinessRole$1.accountant) return "Contador";
-    if (role === BusinessRole$1.admin) return "Administrador";
-    return "Cliente";
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Card,
-    {
-      "data-ocid": "aprovacoes.panel",
-      className: "bg-card border-border shadow-card",
-      children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "p-0", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 px-4 py-3 border-b border-border", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(UserCheck, { className: "h-4 w-4 text-amber-400" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-sm font-semibold text-foreground", children: "Aprovações Pendentes" }),
-          !isLoading && pendingUsers.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Badge,
-            {
-              variant: "outline",
-              className: "text-xs bg-amber-500/20 text-amber-400 border-amber-500/30 ml-auto",
-              children: pendingUsers.length
-            }
-          )
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border hover:bg-transparent", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Nome" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "E-mail" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Perfil" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Principal" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground text-right", children: "Ações" })
-          ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(TableBody, { children: [
-            isLoading && [1, 2].map((i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              TableRow,
-              {
-                "data-ocid": "aprovacoes.loading_state",
-                className: "border-b border-border/50",
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-32" }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-40" }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-20 rounded-full" }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-28" }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-7 w-20 ml-auto" }) })
-                ]
-              },
-              i
-            )),
-            !isLoading && pendingUsers.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-              TableCell,
-              {
-                "data-ocid": "aprovacoes.empty_state",
-                colSpan: 5,
-                className: "text-center text-muted-foreground py-8 text-sm",
-                children: "Nenhuma aprovação pendente."
-              }
-            ) }),
-            !isLoading && pendingUsers.map((u2, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              motion.tr,
-              {
-                "data-ocid": `aprovacoes.item.${i + 1}`,
-                initial: { opacity: 0 },
-                animate: { opacity: 1 },
-                transition: { delay: i * 0.04 },
-                className: "border-b border-border/50 hover:bg-muted/20 transition-colors",
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground text-sm", children: u2.profile.name || "—" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: u2.profile.email || "—" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    Badge,
-                    {
-                      variant: "outline",
-                      className: "text-xs bg-blue-500/20 text-blue-400 border-blue-500/30",
-                      children: roleLabel(u2.profile.businessRole)
-                    }
-                  ) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "font-mono text-xs text-muted-foreground max-w-[120px] truncate", children: [
-                    u2.principal.toString().slice(0, 16),
-                    "…"
-                  ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-end gap-1", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                      Button,
-                      {
-                        size: "sm",
-                        "data-ocid": `aprovacoes.confirm_button.${i + 1}`,
-                        className: "h-7 px-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs",
-                        variant: "outline",
-                        onClick: () => approveMutation.mutate(u2.principal),
-                        disabled: approveMutation.isPending || rejectMutation.isPending,
-                        children: [
-                          approveMutation.isPending ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-3 w-3 animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-3 w-3 mr-1" }),
-                          "Aprovar"
-                        ]
-                      }
-                    ),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                      Button,
-                      {
-                        size: "sm",
-                        "data-ocid": `aprovacoes.delete_button.${i + 1}`,
-                        className: "h-7 px-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs",
-                        variant: "outline",
-                        onClick: () => rejectMutation.mutate(u2.principal),
-                        disabled: approveMutation.isPending || rejectMutation.isPending,
-                        children: [
-                          rejectMutation.isPending ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-3 w-3 animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(X$1, { className: "h-3 w-3 mr-1" }),
-                          "Rejeitar"
-                        ]
-                      }
-                    )
-                  ] }) })
-                ]
-              },
-              u2.principal.toString()
-            ))
-          ] })
-        ] }) })
-      ] })
-    }
-  );
-}
 function planTypeToPortuguese(plan) {
   switch (plan) {
     case PlanType.basic:
@@ -49909,7 +49910,6 @@ function CkBtcBalanceBadge({
 function ClientesPage() {
   const { actor, isFetching: actorLoading } = useActor();
   const queryClient2 = useQueryClient();
-  const [isAdmin, setIsAdmin] = reactExports.useState(false);
   const [search, setSearch] = reactExports.useState("");
   const [dialogOpen, setDialogOpen] = reactExports.useState(false);
   const [editingCliente, setEditingCliente] = reactExports.useState(null);
@@ -49926,16 +49926,6 @@ function ClientesPage() {
   const [manualAddress, setManualAddress] = reactExports.useState("");
   const [generatedAddress, setGeneratedAddress] = reactExports.useState("");
   const [isGenerating, setIsGenerating] = reactExports.useState(false);
-  reactExports.useEffect(() => {
-    if (!actor) return;
-    actor.getCallerUserProfile().then((p2) => {
-      if (!p2) return;
-      const role = p2.businessRole;
-      const isAdminRole = role === BusinessRole$1.admin || typeof role === "object" && "admin" in role;
-      setIsAdmin(isAdminRole);
-    }).catch(() => {
-    });
-  }, [actor]);
   const {
     data: clientes = [],
     isLoading: clientesLoading,
@@ -50138,7 +50128,6 @@ function ClientesPage() {
   const manualAddressValid = manualAddress === "" || isValidBitcoinAddress(manualAddress);
   const isSubmitting = createMutation.isPending || editMutation.isPending;
   return /* @__PURE__ */ jsxRuntimeExports.jsx(TooltipProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", children: [
-    isAdmin && actor && /* @__PURE__ */ jsxRuntimeExports.jsx(ApprovalPanel, { actor }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full sm:w-80", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { className: "absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" }),
@@ -77516,7 +77505,8 @@ function App() {
     relatorios: /* @__PURE__ */ jsxRuntimeExports.jsx(RelatoriosPage, { profile }),
     auditoria: /* @__PURE__ */ jsxRuntimeExports.jsx(AuditoriaPage, {}),
     assinaturas: /* @__PURE__ */ jsxRuntimeExports.jsx(AssinaturasPage, { profile }),
-    configuracoes: /* @__PURE__ */ jsxRuntimeExports.jsx(ConfiguracoesPage, {})
+    configuracoes: /* @__PURE__ */ jsxRuntimeExports.jsx(ConfiguracoesPage, {}),
+    aprovacoes: /* @__PURE__ */ jsxRuntimeExports.jsx(AprovacoesPage, { actor })
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(

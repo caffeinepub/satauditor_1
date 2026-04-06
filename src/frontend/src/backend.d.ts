@@ -136,6 +136,13 @@ export interface AuditLog {
     details: string;
 }
 
+// User Approval types
+export enum UserApprovalStatus {
+    pending = "pending",
+    approved = "approved",
+    rejected = "rejected"
+}
+
 export enum AccountType {
     asset = "asset",
     liability = "liability",
@@ -217,4 +224,9 @@ export interface backendInterface {
     getCashFlow(clientId: ClientId, month: bigint, year: bigint): Promise<CashFlow>;
     // Audit Logs
     getAllAuditLogs(): Promise<Array<AuditLog>>;
+    // User Approval
+    getUserApprovalStatus(): Promise<UserApprovalStatus>;
+    approveUser(user: Principal): Promise<void>;
+    rejectUser(user: Principal): Promise<void>;
+    getPendingUsers(): Promise<Array<[Principal, UserProfile]>>;
 }

@@ -1219,6 +1219,9 @@ video {
 .max-w-5xl {
   max-width: 64rem;
 }
+.max-w-\[120px\] {
+  max-width: 120px;
+}
 .max-w-\[160px\] {
   max-width: 160px;
 }
@@ -1695,6 +1698,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: oklch(var(--accent) / var(--tw-bg-opacity, 1));
 }
+.bg-amber-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(251 191 36 / var(--tw-bg-opacity, 1));
+}
 .bg-amber-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(245 158 11 / var(--tw-bg-opacity, 1));
@@ -1798,6 +1805,10 @@ video {
 }
 .bg-purple-500\/20 {
   background-color: rgb(168 85 247 / 0.2);
+}
+.bg-red-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 113 113 / var(--tw-bg-opacity, 1));
 }
 .bg-red-500 {
   --tw-bg-opacity: 1;
@@ -2728,6 +2739,10 @@ video {
   background-color: oklch(var(--destructive) / 0.9);
 }
 
+.hover\:bg-emerald-500\/30:hover {
+  background-color: rgb(16 185 129 / 0.3);
+}
+
 .hover\:bg-muted:hover {
   --tw-bg-opacity: 1;
   background-color: oklch(var(--muted) / var(--tw-bg-opacity, 1));
@@ -2761,6 +2776,10 @@ video {
   background-color: oklch(var(--primary) / 0.9);
 }
 
+.hover\:bg-red-500\/30:hover {
+  background-color: rgb(239 68 68 / 0.3);
+}
+
 .hover\:bg-secondary\/80:hover {
   background-color: oklch(var(--secondary) / 0.8);
 }
@@ -2785,6 +2804,11 @@ video {
 .hover\:text-destructive:hover {
   --tw-text-opacity: 1;
   color: oklch(var(--destructive) / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-emerald-300:hover {
+  --tw-text-opacity: 1;
+  color: rgb(110 231 183 / var(--tw-text-opacity, 1));
 }
 
 .hover\:text-foreground:hover {

@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/sonner";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { BusinessRole } from "./backend.d";
+import { BusinessRole, UserApprovalStatus } from "./backend.d";
 import AppLayout from "./components/AppLayout";
 import { useActor } from "./hooks/useActor";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
@@ -15,6 +15,8 @@ import ContabilidadePage from "./pages/ContabilidadePage";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import OnboardingPage from "./pages/OnboardingPage";
+import PendingApprovalPage from "./pages/PendingApprovalPage";
+import RejectedPage from "./pages/RejectedPage";
 import RelatoriosPage from "./pages/RelatoriosPage";
 import TransacoesPage from "./pages/TransacoesPage";
 
@@ -44,6 +46,33 @@ export default function App() {
     enabled: isAuthenticated && !!actor && !isFetching,
   });
 
+  const isAdmin = profile?.businessRole === BusinessRole.admin;
+
+  const { data: approvalStatus, isLoading: approvalLoading } = useQuery({
+    queryKey: ["approvalStatus", identity?.getPrincipal().toString()],
+    queryFn: async () => {
+      if (!actor) return null;
+      try {
+        // The actor type may not yet include this method — use any cast
+        const result = await (actor as any).getUserApprovalStatus();
+        if (result === null || result === undefined)
+          return UserApprovalStatus.approved;
+        // Map Motoko variant to enum
+        if (typeof result === "object") {
+          if ("approved" in result) return UserApprovalStatus.approved;
+          if ("pending" in result) return UserApprovalStatus.pending;
+          if ("rejected" in result) return UserApprovalStatus.rejected;
+        }
+        if (typeof result === "string") return result as UserApprovalStatus;
+        return UserApprovalStatus.approved;
+      } catch {
+        // If method doesn't exist yet, default to approved (backward compat)
+        return UserApprovalStatus.approved;
+      }
+    },
+    enabled: isAuthenticated && !!actor && !isFetching && !!profile && !isAdmin,
+  });
+
   // Redirect to dashboard if current page is not allowed for this role
   useEffect(() => {
     if (!profile) return;
@@ -55,7 +84,14 @@ export default function App() {
     }
   }, [profile, currentPage]);
 
-  if (isInitializing || (isAuthenticated && (isFetching || profileLoading))) {
+  const isLoading =
+    isInitializing ||
+    (isAuthenticated &&
+      (isFetching ||
+        profileLoading ||
+        (!isAdmin && !!profile && approvalLoading)));
+
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -89,6 +125,27 @@ export default function App() {
         <Toaster />
       </>
     );
+  }
+
+  // Skip approval check for admin — always has access
+  if (!isAdmin) {
+    if (approvalStatus === UserApprovalStatus.pending) {
+      return (
+        <>
+          <PendingApprovalPage />
+          <Toaster />
+        </>
+      );
+    }
+
+    if (approvalStatus === UserApprovalStatus.rejected) {
+      return (
+        <>
+          <RejectedPage />
+          <Toaster />
+        </>
+      );
+    }
   }
 
   const pageComponents: Record<PageName, React.ReactNode> = {

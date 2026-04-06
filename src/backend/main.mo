@@ -227,6 +227,12 @@ actor {
     #client;
   };
 
+  public type UserApprovalStatus = {
+    #pending;
+    #approved;
+    #rejected;
+  };
+
   public type UserProfile = {
     name : Text;
     email : Text;
@@ -274,6 +280,7 @@ actor {
   var nextAlertId = 1;
 
   var userProfiles = Map.empty<Principal, UserProfile>();
+  var userApprovalStatus = Map.empty<Principal, UserApprovalStatus>();
 
   // ── ACCOUNTING STATE ──────────────────────────────────────────────────────
   var chartAccounts = Map.empty<AccountId, ChartAccount>();
@@ -381,6 +388,11 @@ actor {
   public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can save profiles");
+    };
+    // Register as pending on first save if no status exists yet
+    switch (userApprovalStatus.get(caller)) {
+      case (null) { userApprovalStatus.add(caller, #pending) };
+      case (?_) {};
     };
     userProfiles.add(caller, profile);
   };
@@ -811,4 +823,48 @@ actor {
 
     { inflows; outflows; totalInflows; totalOutflows; netCashFlow = totalInflows - totalOutflows; month; year };
   };
+
+  // ── USER APPROVAL ─────────────────────────────────────────────────────────
+
+  public query ({ caller }) func getUserApprovalStatus() : async UserApprovalStatus {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized");
+    };
+    switch (userApprovalStatus.get(caller)) {
+      case (?status) { status };
+      case (null) { #pending };
+    };
+  };
+
+  public shared ({ caller }) func approveUser(user : Principal) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can approve users");
+    };
+    userApprovalStatus.add(user, #approved);
+  };
+
+  public shared ({ caller }) func rejectUser(user : Principal) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can reject users");
+    };
+    userApprovalStatus.add(user, #rejected);
+  };
+
+  public query ({ caller }) func getPendingUsers() : async [(Principal, UserProfile)] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can view pending users");
+    };
+    let result = userProfiles.entries().filter(func((principal, _profile)) {
+      switch (userApprovalStatus.get(principal)) {
+        case (?#pending) { true };
+        case (null) { true };
+        case (_) { false };
+      };
+    }).map(func((principal, profile)) : (Principal, UserProfile) {
+      (principal, profile);
+    }).toArray();
+    result;
+  };
+
+  // ── END USER APPROVAL ──────────────────────────────────────────────────────
 };

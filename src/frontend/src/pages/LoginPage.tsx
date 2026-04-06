@@ -5,7 +5,6 @@ import {
   BarChart3,
   Bitcoin,
   Check,
-  Crown,
   Loader2,
   MessageCircle,
   Shield,
@@ -15,70 +14,20 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
-interface PlanInfo {
-  id: string;
-  nome: string;
-  descricao: string;
-  destaque: boolean;
-  recursos: string[];
-  whatsappUrl: string;
-}
-
-const planosLanding: PlanInfo[] = [
-  {
-    id: "basico",
-    nome: "Básico",
-    descricao: "Para pequenas empresas começando com Bitcoin",
-    destaque: false,
-    recursos: [
-      "Até 50 transações/mês",
-      "1 endereço Bitcoin",
-      "Relatórios Básicos (DRE, Balanço)",
-      "Dashboard simples",
-      "Suporte por e-mail",
-      "Exportação PDF",
-    ],
-    whatsappUrl:
-      "https://wa.me/5516994410284?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20B%C3%A1sico%20do%20SatAuditor",
-  },
-  {
-    id: "profissional",
-    nome: "Profissional",
-    descricao: "Para empresas em crescimento com múltiplas contas",
-    destaque: true,
-    recursos: [
-      "Até 500 transações/mês",
-      "5 endereços Bitcoin",
-      "Todos os relatórios financeiros",
-      "Auditoria automática",
-      "Dashboard avançado com gráficos",
-      "Plano de Contas personalizável",
-      "API de integração",
-      "Suporte prioritário",
-    ],
-    whatsappUrl:
-      "https://wa.me/5516994410284?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20Profissional%20do%20SatAuditor",
-  },
-  {
-    id: "enterprise",
-    nome: "Enterprise",
-    descricao: "Para grandes empresas com volume alto de transações",
-    destaque: false,
-    recursos: [
-      "Transações ilimitadas",
-      "Endereços Bitcoin ilimitados",
-      "Todos os recursos do Profissional",
-      "Conformidade e compliance avançado",
-      "Auditoria em tempo real",
-      "Relatórios personalizados",
-      "SLA garantido 99.9%",
-      "Suporte dedicado 24/7",
-      "Treinamento e onboarding",
-    ],
-    whatsappUrl:
-      "https://wa.me/5516994410284?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20Enterprise%20do%20SatAuditor",
-  },
+const empresaRecursos = [
+  "Transações ilimitadas",
+  "Endereços Bitcoin ilimitados",
+  "Recursos profissionais blockchain",
+  "Conformidade e compliance avançado",
+  "Auditoria em tempo real",
+  "Relatórios personalizados",
+  "SLA garantido 99.9%",
+  "Suporte dedicado 24/7",
+  "Treinamento e onboarding",
 ];
+
+const empresaWhatsappUrl =
+  "https://wa.me/5516994410284?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20Para%20Empresas%20do%20SatAuditor";
 
 export default function LoginPage() {
   const { login, isLoggingIn } = useInternetIdentity();
@@ -112,8 +61,119 @@ export default function LoginPage() {
     },
   ];
 
+  const featurePills = [
+    "Bitcoin Nativo",
+    "Auditoria On-Chain",
+    "Relatórios Automáticos",
+    "100% Descentralizado",
+  ];
+
   return (
     <div className="min-h-screen bg-background flex flex-col overflow-hidden">
+      {/* ── Hero Section ── */}
+      <section
+        data-ocid="hero.section"
+        className="relative bg-sidebar border-b border-border overflow-hidden"
+      >
+        {/* Dot pattern background */}
+        <div className="absolute inset-0 opacity-[0.05]">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 2px 2px, oklch(0.72 0.19 55) 1px, transparent 0)",
+              backgroundSize: "32px 32px",
+            }}
+          />
+        </div>
+
+        {/* Ambient glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] rounded-full bg-primary/8 blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-1/4 w-64 h-64 rounded-full bg-primary/5 blur-2xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 md:py-28 text-center">
+          {/* Logo / Brand */}
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex items-center justify-center gap-3 mb-8"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-primary/20 border border-primary/40 flex items-center justify-center shadow-btc">
+              <span className="text-primary text-2xl font-bold">₿</span>
+            </div>
+            <span className="font-display text-3xl font-bold text-foreground tracking-tight">
+              SatAuditor
+            </span>
+          </motion.div>
+
+          {/* Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6"
+          >
+            Contabilidade e Auditoria{" "}
+            <span className="text-primary">Descentralizada</span> para Empresas
+            Brasileiras
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-10"
+          >
+            O primeiro sistema contábil 100% on-chain do Brasil. Transforme
+            transações Bitcoin em relatórios contábeis completos, com auditoria
+            em tempo real e compliance automatizado — tudo rodando no Internet
+            Computer.
+          </motion.p>
+
+          {/* Feature pills */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex flex-wrap items-center justify-center gap-3 mb-14"
+          >
+            {featurePills.map((pill) => (
+              <span
+                key={pill}
+                className="inline-flex items-center px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium"
+              >
+                {pill}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* Feature cards row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {features.map((f, i) => (
+              <motion.div
+                key={f.title}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
+                className="p-5 rounded-2xl bg-card/60 border border-border/60 hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-200 text-left"
+              >
+                <div className="w-9 h-9 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center mb-3">
+                  <f.icon className="h-4.5 w-4.5 text-primary" />
+                </div>
+                <h3 className="text-sm font-semibold text-foreground mb-1 leading-snug">
+                  {f.title}
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {f.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Main login split layout ── */}
       <div className="flex flex-1">
         {/* Left panel - Hero */}
@@ -305,7 +365,7 @@ export default function LoginPage() {
         {/* Ambient glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-primary/5 blur-3xl" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
+        <div className="relative z-10 max-w-3xl mx-auto px-6 py-20">
           {/* Section header */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -319,119 +379,89 @@ export default function LoginPage() {
               Planos SatAuditor
             </div>
             <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground leading-tight mb-4">
-              Escolha o Plano Ideal{" "}
-              <span className="text-primary">para sua Empresa</span>
+              O Plano Ideal para{" "}
+              <span className="text-primary">sua Empresa</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
-              Todos os planos são negociados diretamente via WhatsApp. Fale
-              comigo e encontremos a melhor solução para o seu negócio.
+              Negociado diretamente via WhatsApp. Fale comigo e encontremos a
+              melhor solução para o seu negócio.
             </p>
           </motion.div>
 
-          {/* Plan cards */}
-          <div
-            data-ocid="plans.list"
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch"
+          {/* Single "Para Empresas" plan card */}
+          <motion.div
+            data-ocid="plans.empresa.card"
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="relative mx-auto"
           >
-            {planosLanding.map((plano, i) => (
-              <motion.div
-                key={plano.id}
-                data-ocid={`plans.${plano.id}.card`}
-                initial={{ opacity: 0, y: 32 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.12 }}
-                className="relative flex flex-col"
-              >
-                {/* Popular badge above card */}
-                {plano.destaque && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                    <Badge className="bg-primary text-primary-foreground px-4 py-1.5 text-xs font-bold shadow-btc">
-                      <Crown className="h-3 w-3 mr-1.5" />
-                      Mais Popular
-                    </Badge>
+            {/* Glow ring behind card */}
+            <div className="absolute -inset-px rounded-3xl bg-gradient-to-b from-primary/40 via-primary/20 to-primary/5 blur-sm" />
+
+            <Card
+              className="relative flex flex-col bg-card border-primary/50 shadow-btc rounded-3xl overflow-hidden"
+              style={{
+                background:
+                  "linear-gradient(135deg, oklch(0.175 0.012 255) 0%, oklch(0.155 0.008 255) 60%, oklch(0.145 0.018 55 / 0.3) 100%)",
+              }}
+            >
+              {/* Top accent bar */}
+              <div className="h-1 w-full bg-gradient-to-r from-primary/60 via-primary to-primary/60" />
+
+              <CardHeader className="px-10 pt-10 pb-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-11 h-11 rounded-xl bg-primary/20 border border-primary/40 flex items-center justify-center shadow-btc">
+                    <span className="text-primary text-xl font-bold">₿</span>
                   </div>
-                )}
+                  <Badge className="bg-primary/20 text-primary border border-primary/40 px-3 py-1 text-xs font-semibold">
+                    Plano Completo
+                  </Badge>
+                </div>
+                <CardTitle className="font-display text-3xl font-bold text-primary mb-2">
+                  Para Empresas
+                </CardTitle>
+                <p className="text-muted-foreground text-base leading-relaxed">
+                  Solução completa para empresas que operam com Bitcoin
+                </p>
+                <div className="mt-6 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+              </CardHeader>
 
-                <Card
-                  className={`flex flex-col h-full transition-all duration-300 hover:-translate-y-1 ${
-                    plano.destaque
-                      ? "bg-card border-primary/60 shadow-btc hover:shadow-btc"
-                      : "bg-card/70 border-border hover:border-primary/30"
-                  }`}
+              <CardContent className="px-10 pb-10 flex flex-col gap-8">
+                {/* Features list — 2 columns on wider screens */}
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+                  {empresaRecursos.map((recurso) => (
+                    <li key={recurso} className="flex items-start gap-3">
+                      <div className="mt-0.5 h-5 w-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center flex-shrink-0">
+                        <Check className="h-3 w-3 text-primary" />
+                      </div>
+                      <span className="text-sm text-foreground/90 leading-snug font-medium">
+                        {recurso}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA Button */}
+                <a
+                  href={empresaWhatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-ocid="plans.empresa.button"
+                  className="block"
                 >
-                  <CardHeader className="pb-4">
-                    <div className="mb-1">
-                      <CardTitle
-                        className={`font-display text-2xl font-bold ${
-                          plano.destaque ? "text-primary" : "text-foreground"
-                        }`}
-                      >
-                        {plano.nome}
-                      </CardTitle>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      {plano.descricao}
-                    </p>
-                    {/* Divider */}
-                    <div
-                      className={`mt-4 h-px ${
-                        plano.destaque ? "bg-primary/30" : "bg-border"
-                      }`}
-                    />
-                  </CardHeader>
-
-                  <CardContent className="flex flex-col flex-1 gap-6">
-                    {/* Features list */}
-                    <ul className="space-y-2.5 flex-1">
-                      {plano.recursos.map((r) => (
-                        <li key={r} className="flex items-start gap-2.5">
-                          <div
-                            className={`mt-0.5 h-4 w-4 rounded-full flex items-center justify-center flex-shrink-0 ${
-                              plano.destaque
-                                ? "bg-primary/20"
-                                : "bg-emerald-500/15"
-                            }`}
-                          >
-                            <Check
-                              className={`h-2.5 w-2.5 ${
-                                plano.destaque
-                                  ? "text-primary"
-                                  : "text-emerald-400"
-                              }`}
-                            />
-                          </div>
-                          <span className="text-sm text-muted-foreground leading-snug">
-                            {r}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* CTA Button */}
-                    <a
-                      href={plano.whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-ocid={`plans.${plano.id}.button`}
-                    >
-                      <Button
-                        className={`w-full h-11 font-semibold rounded-xl transition-all ${
-                          plano.destaque
-                            ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-btc"
-                            : "bg-transparent border border-border hover:border-primary/50 text-foreground hover:text-primary"
-                        }`}
-                        variant={plano.destaque ? "default" : "outline"}
-                      >
-                        <MessageCircle className="h-4 w-4 mr-2" />
-                        Falar no WhatsApp
-                      </Button>
-                    </a>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+                  <Button
+                    className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base rounded-2xl shadow-btc transition-all hover:scale-[1.01] hover:shadow-[0_0_30px_oklch(0.72_0.19_55/40%)]"
+                    size="lg"
+                  >
+                    <MessageCircle className="h-5 w-5 mr-2" />
+                    Falar no WhatsApp
+                  </Button>
+                </a>
+              </CardContent>
+            </Card>
+          </motion.div>
 
           {/* Bottom note */}
           <motion.div
@@ -439,7 +469,7 @@ export default function LoginPage() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            className="text-center mt-12"
+            className="text-center mt-10"
           >
             <p className="text-muted-foreground text-sm">
               Tem dúvidas?{" "}

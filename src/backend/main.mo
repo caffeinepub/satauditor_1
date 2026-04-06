@@ -10,7 +10,6 @@ import Int "mo:core/Int";
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
 
-
 actor {
   type PlanType = {
     #basic;
@@ -182,13 +181,30 @@ actor {
     updatedAt : Time.Time;
   };
 
-  type AuditLog = {
+  // ── AUDIT LOG TYPES ───────────────────────────────────────────────────────
+
+  // Internal stable storage type — kept identical to the original persisted shape
+  // so Motoko upgrade compatibility is maintained.
+  type AuditLogStored = {
     timestamp : Time.Time;
     user : Principal;
     action : Text;
-    previousData : ?Text;
-    newData : ?Text;
+    previousData : ?Text;  // legacy field (unused going forward)
+    newData : ?Text;       // repurposed: stores the "details" text
   };
+
+  public type AuditLogId = Nat;
+
+  // Public-facing type with cleaner fields
+  public type AuditLog = {
+    id : AuditLogId;
+    timestamp : Time.Time;
+    user : Principal;
+    action : Text;
+    details : Text;
+  };
+
+  // ── END AUDIT LOG TYPES ────────────────────────────────────────────────────
 
   type ComplianceAlert = {
     timestamp : Time.Time;
@@ -249,7 +265,9 @@ actor {
   var subscriptions = Map.empty<SubscriptionId, Subscription>();
   var nextSubscriptionId = 1;
 
-  var auditLogs = Map.empty<Nat, AuditLog>();
+  // Stable map using the original AuditLogStored shape — fully compatible with persisted data.
+  // newData field stores the "details" text for new entries.
+  var auditLogs = Map.empty<Nat, AuditLogStored>();
   var nextAuditLogId = 1;
 
   var complianceAlerts = Map.empty<Nat, ComplianceAlert>();
@@ -315,6 +333,35 @@ actor {
     };
     (month, year);
   };
+
+  // ── AUDIT LOG HELPER ──────────────────────────────────────────────────────
+  // Writes using the stable AuditLogStored shape; details go into newData.
+  private func logAction(user : Principal, action : Text, details : Text) {
+    let entry : AuditLogStored = {
+      timestamp = Time.now();
+      user;
+      action;
+      previousData = null;
+      newData = ?details;
+    };
+    auditLogs.add(nextAuditLogId, entry);
+    nextAuditLogId += 1;
+  };
+
+  // Converts stored entry to the public AuditLog shape.
+  private func storedToAuditLog(id : Nat, stored : AuditLogStored) : AuditLog {
+    {
+      id;
+      timestamp = stored.timestamp;
+      user = stored.user;
+      action = stored.action;
+      details = switch (stored.newData) {
+        case (?d) { d };
+        case (null) { "" };
+      };
+    };
+  };
+  // ── END AUDIT LOG HELPER ──────────────────────────────────────────────────
 
   // User profile management
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
@@ -512,8 +559,10 @@ actor {
     };
     let txWithId = { newTx with id = nextTransactionId; createdAt = Time.now() };
     transactions.add(nextTransactionId, txWithId);
+    let txId = nextTransactionId;
     nextTransactionId += 1;
-    txWithId.id;
+    logAction(caller, "Adicionar Transação", "ID: " # debug_show(txId) # " | Descrição: " # newTx.description # " | Cliente: " # debug_show(newTx.clientId));
+    txId;
   };
 
   // ── SUBSCRIPTIONS ─────────────────────────────────────────────────────────
@@ -603,8 +652,10 @@ actor {
     };
     let withId = { entry with id = nextJournalEntryId; createdBy = caller; createdAt = Time.now() };
     journalEntries.add(nextJournalEntryId, withId);
+    let entryId = nextJournalEntryId;
     nextJournalEntryId += 1;
-    withId.id;
+    logAction(caller, "Adicionar Lançamento Contábil", "ID: " # debug_show(entryId) # " | Descrição: " # entry.description # " | Cliente: " # debug_show(entry.clientId) # " | Débito: " # entry.debitAccountCode # " | Crédito: " # entry.creditAccountCode);
+    entryId;
   };
 
   public query ({ caller }) func getAllJournalEntries() : async [JournalEntry] {
@@ -624,6 +675,19 @@ actor {
     journalEntries.values().filter(func(e) { e.clientId == clientId }).toArray();
   };
 
+  // ── AUDIT LOGS ────────────────────────────────────────────────────────────
+
+  public query ({ caller }) func getAllAuditLogs() : async [AuditLog] {
+    if (not isAdminOrAccountant(caller)) {
+      Runtime.trap("Unauthorized: Only admins and accountants can view audit logs");
+    };
+    auditLogs.entries().map(func((k, stored) : (Nat, AuditLogStored)) : AuditLog {
+      storedToAuditLog(k, stored);
+    }).toArray();
+  };
+
+  // ── END AUDIT LOGS ────────────────────────────────────────────────────────
+
   // ── FINANCIAL REPORTS ─────────────────────────────────────────────────────
 
   public query ({ caller }) func getBalanceSheet(clientId : ClientId, month : Nat, year : Nat) : async BalanceSheet {
@@ -639,7 +703,6 @@ actor {
       e.clientId == clientId and m <= month and y <= year;
     }).toArray();
 
-    // Collect active accounts by type, compute totals from journal entries
     let activeAccounts = chartAccounts.values().filter(func(a) { a.active }).toArray();
 
     let assetLines = activeAccounts.filter(func(a) { a.accountType == #asset }).map(func(acc) {

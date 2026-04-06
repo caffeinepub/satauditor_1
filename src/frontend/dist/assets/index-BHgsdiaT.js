@@ -23284,16 +23284,10 @@ const Circle = createLucideIcon("circle", __iconNode$t);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$s = [
-  ["rect", { x: "2", y: "6", width: "20", height: "8", rx: "1", key: "1estib" }],
-  ["path", { d: "M17 14v7", key: "7m2elx" }],
-  ["path", { d: "M7 14v7", key: "1cm7wv" }],
-  ["path", { d: "M17 3v3", key: "1v4jwn" }],
-  ["path", { d: "M7 3v3", key: "7o6guu" }],
-  ["path", { d: "M10 14 2.3 6.3", key: "1023jk" }],
-  ["path", { d: "m14 6 7.7 7.7", key: "1s8pl2" }],
-  ["path", { d: "m8 6 8 8", key: "hl96qh" }]
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
 ];
-const Construction = createLucideIcon("construction", __iconNode$s);
+const Copy = createLucideIcon("copy", __iconNode$s);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23301,10 +23295,10 @@ const Construction = createLucideIcon("construction", __iconNode$s);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$r = [
-  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
+  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$r);
+const CreditCard = createLucideIcon("credit-card", __iconNode$r);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23312,17 +23306,6 @@ const Copy = createLucideIcon("copy", __iconNode$r);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$q = [
-  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
-  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
-];
-const CreditCard = createLucideIcon("credit-card", __iconNode$q);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$p = [
   [
     "path",
     {
@@ -23332,7 +23315,19 @@ const __iconNode$p = [
   ],
   ["path", { d: "M5 21h14", key: "11awu3" }]
 ];
-const Crown = createLucideIcon("crown", __iconNode$p);
+const Crown = createLucideIcon("crown", __iconNode$q);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$p = [
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+];
+const Download = createLucideIcon("download", __iconNode$p);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23340,11 +23335,13 @@ const Crown = createLucideIcon("crown", __iconNode$p);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$o = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M8 18v-2", key: "qcmpov" }],
+  ["path", { d: "M12 18v-4", key: "q1q25u" }],
+  ["path", { d: "M16 18v-6", key: "15y0np" }]
 ];
-const Download = createLucideIcon("download", __iconNode$o);
+const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$o);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23354,11 +23351,11 @@ const Download = createLucideIcon("download", __iconNode$o);
 const __iconNode$n = [
   ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
   ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M8 18v-2", key: "qcmpov" }],
-  ["path", { d: "M12 18v-4", key: "q1q25u" }],
-  ["path", { d: "M16 18v-6", key: "15y0np" }]
+  ["path", { d: "M10 9H8", key: "b1mrlr" }],
+  ["path", { d: "M16 13H8", key: "t4e002" }],
+  ["path", { d: "M16 17H8", key: "z1uh3a" }]
 ];
-const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$n);
+const FileText = createLucideIcon("file-text", __iconNode$n);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23366,13 +23363,16 @@ const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$m = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M10 9H8", key: "b1mrlr" }],
-  ["path", { d: "M16 13H8", key: "t4e002" }],
-  ["path", { d: "M16 17H8", key: "z1uh3a" }]
+  ["polyline", { points: "22 12 16 12 14 15 10 15 8 12 2 12", key: "o97t9d" }],
+  [
+    "path",
+    {
+      d: "M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z",
+      key: "oot6mr"
+    }
+  ]
 ];
-const FileText = createLucideIcon("file-text", __iconNode$m);
+const Inbox = createLucideIcon("inbox", __iconNode$m);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46858,7 +46858,34 @@ function AssinaturasPage({ profile }) {
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(AdminView, {});
 }
+function formatTimestamp(ts) {
+  const ms = Number(ts / 1000000n);
+  return new Date(ms).toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+function shortenPrincipal(p2) {
+  const s2 = p2.toString();
+  if (s2.length <= 16) return s2;
+  return `${s2.slice(0, 8)}...${s2.slice(-5)}`;
+}
+const SKELETON_KEYS = ["sk-1", "sk-2", "sk-3", "sk-4", "sk-5"];
 function AuditoriaPage() {
+  const { actor, isFetching } = useActor();
+  const { data: logs = [], isLoading } = useQuery({
+    queryKey: ["auditLogs"],
+    queryFn: async () => {
+      if (!actor) return [];
+      const result = await actor.getAllAuditLogs();
+      return [...result].sort((a2, b2) => Number(b2.timestamp - a2.timestamp));
+    },
+    enabled: !!actor && !isFetching
+  });
+  const loading = isLoading || isFetching;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-muted-foreground mb-2", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "h-5 w-5" }),
@@ -46869,13 +46896,32 @@ function AuditoriaPage() {
       {
         initial: { opacity: 0, y: 10 },
         animate: { opacity: 1, y: 0 },
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "flex flex-col items-center justify-center py-20 gap-4", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-full bg-muted/40 p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Construction, { className: "h-8 w-8 text-muted-foreground" }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-base font-semibold text-foreground mb-1", children: "Nenhum dado disponível" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground max-w-sm", children: "O Log de Auditoria está em desenvolvimento. Os registros de ações e eventos aparecerão aqui assim que o módulo for implementado no backend." })
-          ] })
-        ] }) })
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-card border-border shadow-card", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardTitle, { className: "text-base font-semibold flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "h-4 w-4 text-primary" }),
+            "Log de Auditoria"
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { children: loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: SKELETON_KEYS.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-10 w-full rounded-md" }, key)) }) : logs.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center py-16 gap-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-full bg-muted/40 p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Inbox, { className: "h-8 w-8 text-muted-foreground" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-base font-semibold text-foreground mb-1", children: "Nenhum registro encontrado" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground max-w-sm", children: "Os logs de auditoria aparecerão aqui conforme ações financeiras forem registradas no sistema." })
+            ] })
+          ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "w-44", children: "Data" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { children: "Usuário" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { children: "Ação" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { children: "Detalhes" })
+            ] }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: logs.map((log2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground whitespace-nowrap", children: formatTimestamp(log2.timestamp) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm font-mono", children: shortenPrincipal(log2.user) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-primary/10 text-primary", children: log2.action }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground max-w-xs truncate", children: log2.details })
+            ] }, String(log2.id))) })
+          ] }) }) })
+        ] })
       }
     )
   ] });

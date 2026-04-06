@@ -126,6 +126,16 @@ export interface CashFlow {
     year: bigint;
 }
 
+// Audit Log types
+export type AuditLogId = bigint;
+export interface AuditLog {
+    id: AuditLogId;
+    timestamp: Time;
+    user: Principal;
+    action: string;
+    details: string;
+}
+
 export enum AccountType {
     asset = "asset",
     liability = "liability",
@@ -205,4 +215,6 @@ export interface backendInterface {
     getBalanceSheet(clientId: ClientId, month: bigint, year: bigint): Promise<BalanceSheet>;
     getIncomeStatement(clientId: ClientId, month: bigint, year: bigint): Promise<IncomeStatement>;
     getCashFlow(clientId: ClientId, month: bigint, year: bigint): Promise<CashFlow>;
+    // Audit Logs
+    getAllAuditLogs(): Promise<Array<AuditLog>>;
 }

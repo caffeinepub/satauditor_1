@@ -23143,20 +23143,20 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$F = [
+const __iconNode$G = [
   ["path", { d: "M8 3 4 7l4 4", key: "9rb6wj" }],
   ["path", { d: "M4 7h16", key: "6tx8e3" }],
   ["path", { d: "m16 21 4-4-4-4", key: "siv7j2" }],
   ["path", { d: "M20 17H4", key: "h6l3hr" }]
 ];
-const ArrowLeftRight = createLucideIcon("arrow-left-right", __iconNode$F);
+const ArrowLeftRight = createLucideIcon("arrow-left-right", __iconNode$G);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$E = [
+const __iconNode$F = [
   ["path", { d: "M10.268 21a2 2 0 0 0 3.464 0", key: "vwvbt9" }],
   [
     "path",
@@ -23166,14 +23166,14 @@ const __iconNode$E = [
     }
   ]
 ];
-const Bell = createLucideIcon("bell", __iconNode$E);
+const Bell = createLucideIcon("bell", __iconNode$F);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$D = [
+const __iconNode$E = [
   [
     "path",
     {
@@ -23182,14 +23182,14 @@ const __iconNode$D = [
     }
   ]
 ];
-const Bitcoin = createLucideIcon("bitcoin", __iconNode$D);
+const Bitcoin = createLucideIcon("bitcoin", __iconNode$E);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$C = [
+const __iconNode$D = [
   ["path", { d: "M12 7v14", key: "1akyts" }],
   [
     "path",
@@ -23199,52 +23199,64 @@ const __iconNode$C = [
     }
   ]
 ];
-const BookOpen = createLucideIcon("book-open", __iconNode$C);
+const BookOpen = createLucideIcon("book-open", __iconNode$D);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$B = [
+const __iconNode$C = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$B);
+const ChartColumn = createLucideIcon("chart-column", __iconNode$C);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$A = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$A);
+const __iconNode$B = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$B);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$z = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$z);
+const __iconNode$A = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$A);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$y = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$y);
+const __iconNode$z = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$z);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$x = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$x);
+const __iconNode$y = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$y);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$x = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M8 12h8", key: "1wcyev" }],
+  ["path", { d: "M12 8v8", key: "napkw2" }]
+];
+const CirclePlus = createLucideIcon("circle-plus", __iconNode$x);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23252,31 +23264,30 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$x);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$w = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M8 12h8", key: "1wcyev" }],
-  ["path", { d: "M12 8v8", key: "napkw2" }]
-];
-const CirclePlus = createLucideIcon("circle-plus", __iconNode$w);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$v = [
   ["path", { d: "M18 20a6 6 0 0 0-12 0", key: "1qehca" }],
   ["circle", { cx: "12", cy: "10", r: "4", key: "1h16sb" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const CircleUserRound = createLucideIcon("circle-user-round", __iconNode$v);
+const CircleUserRound = createLucideIcon("circle-user-round", __iconNode$w);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$u = [["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]];
-const Circle = createLucideIcon("circle", __iconNode$u);
+const __iconNode$v = [["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]];
+const Circle = createLucideIcon("circle", __iconNode$v);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$u = [
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+];
+const Copy = createLucideIcon("copy", __iconNode$u);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23284,10 +23295,10 @@ const Circle = createLucideIcon("circle", __iconNode$u);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$t = [
-  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
+  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$t);
+const CreditCard = createLucideIcon("credit-card", __iconNode$t);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23295,17 +23306,6 @@ const Copy = createLucideIcon("copy", __iconNode$t);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$s = [
-  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
-  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
-];
-const CreditCard = createLucideIcon("credit-card", __iconNode$s);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$r = [
   [
     "path",
     {
@@ -23315,7 +23315,19 @@ const __iconNode$r = [
   ],
   ["path", { d: "M5 21h14", key: "11awu3" }]
 ];
-const Crown = createLucideIcon("crown", __iconNode$r);
+const Crown = createLucideIcon("crown", __iconNode$s);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$r = [
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+];
+const Download = createLucideIcon("download", __iconNode$r);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23323,11 +23335,13 @@ const Crown = createLucideIcon("crown", __iconNode$r);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$q = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M8 18v-2", key: "qcmpov" }],
+  ["path", { d: "M12 18v-4", key: "q1q25u" }],
+  ["path", { d: "M16 18v-6", key: "15y0np" }]
 ];
-const Download = createLucideIcon("download", __iconNode$q);
+const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$q);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23337,11 +23351,11 @@ const Download = createLucideIcon("download", __iconNode$q);
 const __iconNode$p = [
   ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
   ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M8 18v-2", key: "qcmpov" }],
-  ["path", { d: "M12 18v-4", key: "q1q25u" }],
-  ["path", { d: "M16 18v-6", key: "15y0np" }]
+  ["path", { d: "M10 9H8", key: "b1mrlr" }],
+  ["path", { d: "M16 13H8", key: "t4e002" }],
+  ["path", { d: "M16 17H8", key: "z1uh3a" }]
 ];
-const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$p);
+const FileText = createLucideIcon("file-text", __iconNode$p);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23349,20 +23363,6 @@ const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$o = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M10 9H8", key: "b1mrlr" }],
-  ["path", { d: "M16 13H8", key: "t4e002" }],
-  ["path", { d: "M16 17H8", key: "z1uh3a" }]
-];
-const FileText = createLucideIcon("file-text", __iconNode$o);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$n = [
   ["polyline", { points: "22 12 16 12 14 15 10 15 8 12 2 12", key: "o97t9d" }],
   [
     "path",
@@ -23372,7 +23372,19 @@ const __iconNode$n = [
     }
   ]
 ];
-const Inbox = createLucideIcon("inbox", __iconNode$n);
+const Inbox = createLucideIcon("inbox", __iconNode$o);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$n = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 16v-4", key: "1dtifu" }],
+  ["path", { d: "M12 8h.01", key: "e9boi3" }]
+];
+const Info = createLucideIcon("info", __iconNode$n);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23380,18 +23392,6 @@ const Inbox = createLucideIcon("inbox", __iconNode$n);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$m = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 16v-4", key: "1dtifu" }],
-  ["path", { d: "M12 8h.01", key: "e9boi3" }]
-];
-const Info = createLucideIcon("info", __iconNode$m);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$l = [
   [
     "path",
     {
@@ -23401,28 +23401,40 @@ const __iconNode$l = [
   ],
   ["circle", { cx: "16.5", cy: "7.5", r: ".5", fill: "currentColor", key: "w0ekpg" }]
 ];
-const KeyRound = createLucideIcon("key-round", __iconNode$l);
+const KeyRound = createLucideIcon("key-round", __iconNode$m);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$k = [
+const __iconNode$l = [
   ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
   ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
   ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
   ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
 ];
-const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$k);
+const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$l);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$j = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$j);
+const __iconNode$k = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$k);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$j = [
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+];
+const LogOut = createLucideIcon("log-out", __iconNode$j);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23430,11 +23442,11 @@ const LoaderCircle = createLucideIcon("loader-circle", __iconNode$j);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$i = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$i);
+const Menu = createLucideIcon("menu", __iconNode$i);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23442,11 +23454,9 @@ const LogOut = createLucideIcon("log-out", __iconNode$i);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$h = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
+  ["path", { d: "M7.9 20A9 9 0 1 0 4 16.1L2 22Z", key: "vv11sd" }]
 ];
-const Menu = createLucideIcon("menu", __iconNode$h);
+const MessageCircle = createLucideIcon("message-circle", __iconNode$h);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -46750,123 +46760,77 @@ function AdminView() {
   for (const c2 of clients) {
     clientMap.set(c2.id.toString(), c2.name);
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-8", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: planos.map((plano, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      motion.div,
-      {
-        "data-ocid": `assinaturas.${plano.id}.card`,
-        initial: { opacity: 0, y: 20 },
-        animate: { opacity: 1, y: 0 },
-        transition: { delay: i * 0.1 },
-        className: "relative",
-        children: [
-          plano.destaque && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute -top-3 left-1/2 -translate-x-1/2 z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { className: "bg-primary text-primary-foreground px-3 py-1 text-xs font-bold", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Crown, { className: "h-3 w-3 mr-1" }),
-            "Mais Popular"
-          ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            Card,
-            {
-              className: `bg-card border h-full ${plano.destaque ? "border-primary/60 shadow-btc" : "border-border"}`,
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-between", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "font-display text-xl", children: plano.nome }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: plano.descricao })
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "space-y-4", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "space-y-2", children: plano.recursos.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-start gap-2", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-muted-foreground", children: r2 })
-                  ] }, r2)) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    Button,
-                    {
-                      "data-ocid": `assinaturas.${plano.id}.button`,
-                      variant: plano.destaque ? "default" : "outline",
-                      className: `w-full mt-4 ${plano.destaque ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-btc" : "border-border hover:border-primary/50"}`,
-                      children: "Consultar Valores"
-                    }
-                  )
-                ] })
-              ]
-            }
-          )
-        ]
-      },
-      plano.id
-    )) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-lg font-bold text-foreground mb-4", children: "Assinaturas dos Clientes" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border hover:bg-transparent", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Cliente" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Plano" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Início" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Renovação" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Status" })
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: isLoading ? SKELETON_TABLE_ROWS.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-6 space-y-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-lg font-bold text-foreground mb-4", children: "Assinaturas dos Clientes" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border hover:bg-transparent", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Cliente" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Plano" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Início" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Renovação" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Status" })
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: isLoading ? SKELETON_TABLE_ROWS.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        TableRow,
+        {
+          "data-ocid": "assinaturas.loading_state",
+          className: "border-border/50",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-36" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-20" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-16" }) })
+          ]
+        },
+        key
+      )) : subscriptions.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        TableCell,
+        {
+          colSpan: 5,
+          className: "text-center py-8 text-muted-foreground",
+          "data-ocid": "assinaturas.empty_state",
+          children: "Nenhuma assinatura encontrada."
+        }
+      ) }) : subscriptions.map((sub, i) => {
+        const planKey = Object.keys(sub.plan)[0];
+        const planNome = planTypeToNome[planKey] ?? planKey;
+        const statusKey = Object.keys(sub.status)[0];
+        const statusLabel = statusToLabel[statusKey] ?? statusKey;
+        const statusClass = statusToColors[statusKey] ?? statusToColors.inactive;
+        const clientName = clientMap.get(sub.clientId.toString()) ?? `Cliente ${sub.clientId.toString()}`;
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs(
           TableRow,
           {
-            "data-ocid": "assinaturas.loading_state",
-            className: "border-border/50",
+            "data-ocid": `assinaturas.item.${i + 1}`,
+            className: "border-border/50 hover:bg-muted/20 transition-colors",
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-36" }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-20" }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-16" }) })
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground", children: clientName }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Badge,
+                {
+                  variant: "outline",
+                  className: `text-xs ${planColors$1[planNome]}`,
+                  children: planNome
+                }
+              ) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: formatDate$2(sub.startDate) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: addOneYear(sub.startDate) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Badge,
+                {
+                  variant: "outline",
+                  className: `text-xs ${statusClass}`,
+                  children: statusLabel
+                }
+              ) })
             ]
           },
-          key
-        )) : subscriptions.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          TableCell,
-          {
-            colSpan: 5,
-            className: "text-center py-8 text-muted-foreground",
-            "data-ocid": "assinaturas.empty_state",
-            children: "Nenhuma assinatura encontrada."
-          }
-        ) }) : subscriptions.map((sub, i) => {
-          const planKey = Object.keys(sub.plan)[0];
-          const planNome = planTypeToNome[planKey] ?? planKey;
-          const statusKey = Object.keys(sub.status)[0];
-          const statusLabel = statusToLabel[statusKey] ?? statusKey;
-          const statusClass = statusToColors[statusKey] ?? statusToColors.inactive;
-          const clientName = clientMap.get(sub.clientId.toString()) ?? `Cliente ${sub.clientId.toString()}`;
-          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            TableRow,
-            {
-              "data-ocid": `assinaturas.item.${i + 1}`,
-              className: "border-border/50 hover:bg-muted/20 transition-colors",
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground", children: clientName }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Badge,
-                  {
-                    variant: "outline",
-                    className: `text-xs ${planColors$1[planNome]}`,
-                    children: planNome
-                  }
-                ) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: formatDate$2(sub.startDate) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: addOneYear(sub.startDate) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Badge,
-                  {
-                    variant: "outline",
-                    className: `text-xs ${statusClass}`,
-                    children: statusLabel
-                  }
-                ) })
-              ]
-            },
-            sub.id.toString()
-          );
-        }) })
-      ] }) }) }) })
-    ] })
-  ] });
+          sub.id.toString()
+        );
+      }) })
+    ] }) }) }) })
+  ] }) });
 }
 function AssinaturasPage({ profile }) {
   const isClient2 = profile.businessRole === BusinessRole$1.client;
@@ -75561,6 +75525,58 @@ function DashboardPage({ profile }) {
     )
   ] });
 }
+const planosLanding = [
+  {
+    id: "basico",
+    nome: "Básico",
+    descricao: "Para pequenas empresas começando com Bitcoin",
+    destaque: false,
+    recursos: [
+      "Até 50 transações/mês",
+      "1 endereço Bitcoin",
+      "Relatórios Básicos (DRE, Balanço)",
+      "Dashboard simples",
+      "Suporte por e-mail",
+      "Exportação PDF"
+    ],
+    whatsappUrl: "https://wa.me/5516994410284?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20B%C3%A1sico%20do%20SatAuditor"
+  },
+  {
+    id: "profissional",
+    nome: "Profissional",
+    descricao: "Para empresas em crescimento com múltiplas contas",
+    destaque: true,
+    recursos: [
+      "Até 500 transações/mês",
+      "5 endereços Bitcoin",
+      "Todos os relatórios financeiros",
+      "Auditoria automática",
+      "Dashboard avançado com gráficos",
+      "Plano de Contas personalizável",
+      "API de integração",
+      "Suporte prioritário"
+    ],
+    whatsappUrl: "https://wa.me/5516994410284?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20Profissional%20do%20SatAuditor"
+  },
+  {
+    id: "enterprise",
+    nome: "Enterprise",
+    descricao: "Para grandes empresas com volume alto de transações",
+    destaque: false,
+    recursos: [
+      "Transações ilimitadas",
+      "Endereços Bitcoin ilimitados",
+      "Todos os recursos do Profissional",
+      "Conformidade e compliance avançado",
+      "Auditoria em tempo real",
+      "Relatórios personalizados",
+      "SLA garantido 99.9%",
+      "Suporte dedicado 24/7",
+      "Treinamento e onboarding"
+    ],
+    whatsappUrl: "https://wa.me/5516994410284?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20plano%20Enterprise%20do%20SatAuditor"
+  }
+];
 function LoginPage() {
   const { login, isLoggingIn } = useInternetIdentity();
   const [clicked, setClicked] = reactExports.useState(false);
@@ -75590,150 +75606,310 @@ function LoginPage() {
       desc: "Relatórios financeiros instantâneos e compliance automatizado."
     }
   ];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-background flex overflow-hidden", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 bg-sidebar border-r border-border", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 opacity-5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "div",
-        {
-          className: "absolute inset-0",
-          style: {
-            backgroundImage: "radial-gradient(circle at 2px 2px, oklch(0.72 0.19 55) 1px, transparent 0)",
-            backgroundSize: "32px 32px"
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-background flex flex-col overflow-hidden", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 bg-sidebar border-r border-border", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 opacity-5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: "absolute inset-0",
+            style: {
+              backgroundImage: "radial-gradient(circle at 2px 2px, oklch(0.72 0.19 55) 1px, transparent 0)",
+              backgroundSize: "32px 32px"
+            }
           }
-        }
-      ) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-primary/10 blur-3xl" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-primary/10 blur-3xl" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          motion.div,
+          {
+            initial: { opacity: 0, y: -20 },
+            animate: { opacity: 1, y: 0 },
+            transition: { duration: 0.6 },
+            className: "relative z-10",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 rounded-xl bg-primary/20 border border-primary/40 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-primary text-xl font-bold", children: "₿" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-display text-2xl font-bold text-foreground", children: "SatAuditor" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm", children: "Contabilidade e Auditoria Descentralizada" })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          motion.div,
+          {
+            initial: { opacity: 0, y: 20 },
+            animate: { opacity: 1, y: 0 },
+            transition: { duration: 0.6, delay: 0.2 },
+            className: "relative z-10 space-y-8",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "font-display text-4xl font-bold text-foreground leading-tight mb-4", children: [
+                  "O primeiro sistema contábil",
+                  " ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-primary", children: "descentralizado" }),
+                  " do Brasil"
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-lg leading-relaxed", children: "Transforme transações Bitcoin em relatórios contábeis completos, automaticamente, em segundos." })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 gap-4", children: features.map((f2, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                motion.div,
+                {
+                  initial: { opacity: 0, y: 20 },
+                  animate: { opacity: 1, y: 0 },
+                  transition: { delay: 0.4 + i * 0.1 },
+                  className: "p-4 rounded-xl bg-card/50 border border-border/60 hover:border-primary/40 transition-colors",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(f2.icon, { className: "h-5 w-5 text-primary mb-2" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-semibold text-foreground mb-1", children: f2.title }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: f2.desc })
+                  ]
+                },
+                f2.title
+              )) })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          motion.div,
+          {
+            initial: { opacity: 0 },
+            animate: { opacity: 1 },
+            transition: { delay: 0.8 },
+            className: "relative z-10 flex items-center gap-4",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex -space-x-2", children: ["M", "A", "R", "C"].map((l2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "div",
+                {
+                  className: "w-8 h-8 rounded-full bg-card border-2 border-sidebar flex items-center justify-center text-xs font-bold text-primary",
+                  children: l2
+                },
+                l2
+              )) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-foreground font-medium", children: "+200 empresas já utilizam" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Em fase beta fechada" })
+              ] })
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 flex items-center justify-center p-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
         motion.div,
         {
-          initial: { opacity: 0, y: -20 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.6 },
-          className: "relative z-10",
+          initial: { opacity: 0, scale: 0.95 },
+          animate: { opacity: 1, scale: 1 },
+          transition: { duration: 0.5 },
+          className: "w-full max-w-md",
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:hidden flex items-center gap-3 mb-8 justify-center", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 rounded-xl bg-primary/20 border border-primary/40 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-primary text-xl font-bold", children: "₿" }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-display text-2xl font-bold text-foreground", children: "SatAuditor" })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm", children: "Contabilidade e Auditoria Descentralizada" })
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        motion.div,
-        {
-          initial: { opacity: 0, y: 20 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.6, delay: 0.2 },
-          className: "relative z-10 space-y-8",
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "font-display text-4xl font-bold text-foreground leading-tight mb-4", children: [
-                "O primeiro sistema contábil",
-                " ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-primary", children: "descentralizado" }),
-                " do Brasil"
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-lg leading-relaxed", children: "Transforme transações Bitcoin em relatórios contábeis completos, automaticamente, em segundos." })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border border-border rounded-2xl p-8 shadow-card", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-2xl font-bold text-foreground mb-2", children: "Bem-vindo de volta" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mb-8", children: "Acesse sua conta com Internet Identity para continuar." }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Button,
+                {
+                  "data-ocid": "login.primary_button",
+                  onClick: handleLogin,
+                  disabled: isLoggingIn || clicked,
+                  className: "w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-base rounded-xl shadow-btc transition-all",
+                  size: "lg",
+                  children: isLoggingIn || clicked ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "mr-2 h-5 w-5 animate-spin" }),
+                    "Autenticando..."
+                  ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { className: "mr-2 h-5 w-5" }),
+                    "Entrar com Internet Identity"
+                  ] })
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 p-4 rounded-xl bg-muted/50 border border-border/60", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground text-center leading-relaxed", children: "A Internet Identity garante autenticação segura e descentralizada, sem senhas. Seus dados financeiros são protegidos pela arquitetura do Internet Computer." }) })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 gap-4", children: features.map((f2, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              motion.div,
-              {
-                initial: { opacity: 0, y: 20 },
-                animate: { opacity: 1, y: 0 },
-                transition: { delay: 0.4 + i * 0.1 },
-                className: "p-4 rounded-xl bg-card/50 border border-border/60 hover:border-primary/40 transition-colors",
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(f2.icon, { className: "h-5 w-5 text-primary mb-2" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-semibold text-foreground mb-1", children: f2.title }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: f2.desc })
-                ]
-              },
-              f2.title
-            )) })
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        motion.div,
-        {
-          initial: { opacity: 0 },
-          animate: { opacity: 1 },
-          transition: { delay: 0.8 },
-          className: "relative z-10 flex items-center gap-4",
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex -space-x-2", children: ["M", "A", "R", "C"].map((l2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "div",
-              {
-                className: "w-8 h-8 rounded-full bg-card border-2 border-sidebar flex items-center justify-center text-xs font-bold text-primary",
-                children: l2
-              },
-              l2
-            )) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-foreground font-medium", children: "+200 empresas já utilizam" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Em fase beta fechada" })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-center text-xs text-muted-foreground mt-6", children: [
+              "© ",
+              (/* @__PURE__ */ new Date()).getFullYear(),
+              " SatAuditor. Construído com",
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-primary", children: "♥" }),
+              " usando",
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "a",
+                {
+                  href: `https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`,
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  className: "text-primary hover:underline",
+                  children: "caffeine.ai"
+                }
+              )
             ] })
           ]
         }
-      )
+      ) })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 flex items-center justify-center p-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      motion.div,
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "section",
       {
-        initial: { opacity: 0, scale: 0.95 },
-        animate: { opacity: 1, scale: 1 },
-        transition: { duration: 0.5 },
-        className: "w-full max-w-md",
+        "data-ocid": "plans.section",
+        className: "relative border-t border-border bg-sidebar overflow-hidden",
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:hidden flex items-center gap-3 mb-8 justify-center", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 rounded-xl bg-primary/20 border border-primary/40 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-primary text-xl font-bold", children: "₿" }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-display text-2xl font-bold text-foreground", children: "SatAuditor" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border border-border rounded-2xl p-8 shadow-card", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-2xl font-bold text-foreground mb-2", children: "Bem-vindo de volta" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mb-8", children: "Acesse sua conta com Internet Identity para continuar." }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Button,
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 opacity-[0.03]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              className: "absolute inset-0",
+              style: {
+                backgroundImage: "radial-gradient(circle at 2px 2px, oklch(0.72 0.19 55) 1px, transparent 0)",
+                backgroundSize: "40px 40px"
+              }
+            }
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-primary/5 blur-3xl" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 max-w-6xl mx-auto px-6 py-20", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              motion.div,
               {
-                "data-ocid": "login.primary_button",
-                onClick: handleLogin,
-                disabled: isLoggingIn || clicked,
-                className: "w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-base rounded-xl shadow-btc transition-all",
-                size: "lg",
-                children: isLoggingIn || clicked ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "mr-2 h-5 w-5 animate-spin" }),
-                  "Autenticando..."
-                ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { className: "mr-2 h-5 w-5" }),
-                  "Entrar com Internet Identity"
-                ] })
+                initial: { opacity: 0, y: 24 },
+                whileInView: { opacity: 1, y: 0 },
+                viewport: { once: true },
+                transition: { duration: 0.6 },
+                className: "text-center mb-14",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-6", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-primary text-base", children: "₿" }),
+                    "Planos SatAuditor"
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "font-display text-4xl md:text-5xl font-bold text-foreground leading-tight mb-4", children: [
+                    "Escolha o Plano Ideal",
+                    " ",
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-primary", children: "para sua Empresa" })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed", children: "Todos os planos são negociados diretamente via WhatsApp. Fale comigo e encontremos a melhor solução para o seu negócio." })
+                ]
               }
             ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 p-4 rounded-xl bg-muted/50 border border-border/60", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground text-center leading-relaxed", children: "A Internet Identity garante autenticação segura e descentralizada, sem senhas. Seus dados financeiros são protegidos pela arquitetura do Internet Computer." }) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-center text-xs text-muted-foreground mt-6", children: [
-            "© ",
-            (/* @__PURE__ */ new Date()).getFullYear(),
-            " SatAuditor. Construído com",
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-primary", children: "♥" }),
-            " usando",
-            " ",
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "a",
+              "div",
               {
-                href: `https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`,
-                target: "_blank",
-                rel: "noopener noreferrer",
-                className: "text-primary hover:underline",
-                children: "caffeine.ai"
+                "data-ocid": "plans.list",
+                className: "grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch",
+                children: planosLanding.map((plano, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  motion.div,
+                  {
+                    "data-ocid": `plans.${plano.id}.card`,
+                    initial: { opacity: 0, y: 32 },
+                    whileInView: { opacity: 1, y: 0 },
+                    viewport: { once: true },
+                    transition: { duration: 0.5, delay: i * 0.12 },
+                    className: "relative flex flex-col",
+                    children: [
+                      plano.destaque && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute -top-4 left-1/2 -translate-x-1/2 z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { className: "bg-primary text-primary-foreground px-4 py-1.5 text-xs font-bold shadow-btc", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Crown, { className: "h-3 w-3 mr-1.5" }),
+                        "Mais Popular"
+                      ] }) }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        Card,
+                        {
+                          className: `flex flex-col h-full transition-all duration-300 hover:-translate-y-1 ${plano.destaque ? "bg-card border-primary/60 shadow-btc hover:shadow-btc" : "bg-card/70 border-border hover:border-primary/30"}`,
+                          children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { className: "pb-4", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                CardTitle,
+                                {
+                                  className: `font-display text-2xl font-bold ${plano.destaque ? "text-primary" : "text-foreground"}`,
+                                  children: plano.nome
+                                }
+                              ) }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground", children: plano.descricao }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "div",
+                                {
+                                  className: `mt-4 h-px ${plano.destaque ? "bg-primary/30" : "bg-border"}`
+                                }
+                              )
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "flex flex-col flex-1 gap-6", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "space-y-2.5 flex-1", children: plano.recursos.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-start gap-2.5", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "div",
+                                  {
+                                    className: `mt-0.5 h-4 w-4 rounded-full flex items-center justify-center flex-shrink-0 ${plano.destaque ? "bg-primary/20" : "bg-emerald-500/15"}`,
+                                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                      Check,
+                                      {
+                                        className: `h-2.5 w-2.5 ${plano.destaque ? "text-primary" : "text-emerald-400"}`
+                                      }
+                                    )
+                                  }
+                                ),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-muted-foreground leading-snug", children: r2 })
+                              ] }, r2)) }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "a",
+                                {
+                                  href: plano.whatsappUrl,
+                                  target: "_blank",
+                                  rel: "noopener noreferrer",
+                                  "data-ocid": `plans.${plano.id}.button`,
+                                  children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                                    Button,
+                                    {
+                                      className: `w-full h-11 font-semibold rounded-xl transition-all ${plano.destaque ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-btc" : "bg-transparent border border-border hover:border-primary/50 text-foreground hover:text-primary"}`,
+                                      variant: plano.destaque ? "default" : "outline",
+                                      children: [
+                                        /* @__PURE__ */ jsxRuntimeExports.jsx(MessageCircle, { className: "h-4 w-4 mr-2" }),
+                                        "Falar no WhatsApp"
+                                      ]
+                                    }
+                                  )
+                                }
+                              )
+                            ] })
+                          ]
+                        }
+                      )
+                    ]
+                  },
+                  plano.id
+                ))
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              motion.div,
+              {
+                initial: { opacity: 0 },
+                whileInView: { opacity: 1 },
+                viewport: { once: true },
+                transition: { delay: 0.5, duration: 0.5 },
+                className: "text-center mt-12",
+                children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-sm", children: [
+                  "Tem dúvidas?",
+                  " ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "a",
+                    {
+                      href: "https://wa.me/5516994410284?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20SatAuditor",
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                      className: "text-primary hover:underline font-medium inline-flex items-center gap-1",
+                      "data-ocid": "plans.contact.link",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(MessageCircle, { className: "h-3.5 w-3.5" }),
+                        "Fale diretamente comigo no WhatsApp"
+                      ]
+                    }
+                  )
+                ] })
               }
             )
           ] })
         ]
       }
-    ) })
+    )
   ] });
 }
 function OnboardingPage() {

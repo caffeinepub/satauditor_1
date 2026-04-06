@@ -356,68 +356,6 @@ function AdminView() {
 
   return (
     <div className="p-6 space-y-8">
-      {/* Plan cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {planos.map((plano, i) => (
-          <motion.div
-            key={plano.id}
-            data-ocid={`assinaturas.${plano.id}.card`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="relative"
-          >
-            {plano.destaque && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                <Badge className="bg-primary text-primary-foreground px-3 py-1 text-xs font-bold">
-                  <Crown className="h-3 w-3 mr-1" />
-                  Mais Popular
-                </Badge>
-              </div>
-            )}
-            <Card
-              className={`bg-card border h-full ${
-                plano.destaque
-                  ? "border-primary/60 shadow-btc"
-                  : "border-border"
-              }`}
-            >
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="font-display text-xl">
-                    {plano.nome}
-                  </CardTitle>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {plano.descricao}
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="space-y-2">
-                  {plano.recursos.map((r) => (
-                    <li key={r} className="flex items-start gap-2">
-                      <Check className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-muted-foreground">{r}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  data-ocid={`assinaturas.${plano.id}.button`}
-                  variant={plano.destaque ? "default" : "outline"}
-                  className={`w-full mt-4 ${
-                    plano.destaque
-                      ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-btc"
-                      : "border-border hover:border-primary/50"
-                  }`}
-                >
-                  Consultar Valores
-                </Button>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
-      </div>
-
       {/* Subscriptions table */}
       <div>
         <h2 className="font-display text-lg font-bold text-foreground mb-4">

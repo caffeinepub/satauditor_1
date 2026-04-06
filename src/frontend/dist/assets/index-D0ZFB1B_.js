@@ -50301,6 +50301,10 @@ function ClientesPage() {
     ] }) }) }) })
   ] }) });
 }
+const ADMIN_PRINCIPAL = "ltcnc-xbaww-jullu-ivf52-3kkoy-tdmlp-ifofh-u5nag-pz4pn-yyxkx-tqe";
+function isAdminPrincipal(principal) {
+  return principal === ADMIN_PRINCIPAL;
+}
 const roleLabels = {
   [BusinessRole$1.client]: "Cliente — Empresa usando o serviço",
   [BusinessRole$1.accountant]: "Contador — Profissional contábil",
@@ -50310,6 +50314,8 @@ function ConfiguracoesPage() {
   const { actor } = useActor();
   const { identity: identity3 } = useInternetIdentity();
   const queryClient2 = useQueryClient();
+  const principal = identity3 == null ? void 0 : identity3.getPrincipal().toString();
+  const isAdmin = isAdminPrincipal(principal);
   const [name, setName] = reactExports.useState("");
   const [email, setEmail] = reactExports.useState("");
   const [role, setRole] = reactExports.useState(BusinessRole$1.client);
@@ -50336,12 +50342,13 @@ function ConfiguracoesPage() {
   const handleSave = async (e3) => {
     e3.preventDefault();
     if (!actor) return;
+    const finalRole = isAdmin ? BusinessRole$1.admin : role === BusinessRole$1.admin ? BusinessRole$1.client : role;
     setSaving(true);
     try {
       await actor.saveCallerUserProfile({
         name: name.trim(),
         email: email.trim(),
-        businessRole: role
+        businessRole: finalRole
       });
       ue.success("Perfil atualizado com sucesso!");
       queryClient2.invalidateQueries({
@@ -50354,7 +50361,6 @@ function ConfiguracoesPage() {
       setSaving(false);
     }
   };
-  const principal = identity3 == null ? void 0 : identity3.getPrincipal().toString();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6 max-w-3xl", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       motion.div,
@@ -50427,7 +50433,10 @@ function ConfiguracoesPage() {
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { className: "text-foreground font-medium", children: "Perfil" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              isAdmin ? (
+                // Para o admin, exibe campo somente leitura
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 bg-muted/30 border border-border rounded-md px-3 flex items-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-foreground", children: "Administrador — Gestor da plataforma" }) })
+              ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
                 Select,
                 {
                   value: role,
@@ -50441,7 +50450,10 @@ function ConfiguracoesPage() {
                         children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectValue, {})
                       }
                     ),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(SelectContent, { children: Object.values(BusinessRole$1).map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: r2, children: roleLabels[r2] }, r2)) })
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(SelectContent, { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.client, children: roleLabels[BusinessRole$1.client] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.accountant, children: roleLabels[BusinessRole$1.accountant] })
+                    ] })
                   ]
                 }
               )
@@ -75553,22 +75565,32 @@ function OnboardingPage() {
   const { identity: identity3 } = useInternetIdentity();
   const { actor } = useActor();
   const queryClient2 = useQueryClient();
+  const principal = identity3 == null ? void 0 : identity3.getPrincipal().toString();
+  const isAdmin = isAdminPrincipal(principal);
   const [name, setName] = reactExports.useState("");
   const [email, setEmail] = reactExports.useState("");
-  const [role, setRole] = reactExports.useState(BusinessRole$1.client);
+  const [role, setRole] = reactExports.useState(
+    isAdmin ? BusinessRole$1.admin : BusinessRole$1.client
+  );
   const [saving, setSaving] = reactExports.useState(false);
+  reactExports.useEffect(() => {
+    if (isAdmin) {
+      setRole(BusinessRole$1.admin);
+    }
+  }, [isAdmin]);
   const handleSubmit = async (e3) => {
     e3.preventDefault();
     if (!actor || !name.trim() || !email.trim()) {
       ue.error("Preencha todos os campos obrigatórios.");
       return;
     }
+    const finalRole = isAdmin ? BusinessRole$1.admin : role === BusinessRole$1.admin ? BusinessRole$1.client : role;
     setSaving(true);
     try {
       await actor.saveCallerUserProfile({
         name: name.trim(),
         email: email.trim(),
-        businessRole: role
+        businessRole: finalRole
       });
       ue.success("Perfil criado com sucesso!");
       queryClient2.invalidateQueries({
@@ -75644,7 +75666,10 @@ function OnboardingPage() {
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { className: "text-foreground font-medium", children: "Perfil *" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              isAdmin ? (
+                // Para o admin, exibe campo somente leitura
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-11 bg-input/50 border border-border rounded-md px-3 flex items-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-foreground", children: "Administrador — Gestor da plataforma" }) })
+              ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
                 Select,
                 {
                   value: role,
@@ -75660,8 +75685,7 @@ function OnboardingPage() {
                     ),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs(SelectContent, { children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.client, children: "Cliente — Empresa usando o serviço" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.accountant, children: "Contador — Profissional contábil" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.admin, children: "Administrador — Gestor da plataforma" })
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.accountant, children: "Contador — Profissional contábil" })
                     ] })
                   ]
                 }

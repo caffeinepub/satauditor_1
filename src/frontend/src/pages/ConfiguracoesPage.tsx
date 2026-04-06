@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { BusinessRole } from "../backend.d";
 import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import { isAdminPrincipal } from "../lib/admin";
 
 const roleLabels: Record<BusinessRole, string> = {
   [BusinessRole.client]: "Cliente — Empresa usando o serviço",
@@ -29,6 +30,9 @@ export default function ConfiguracoesPage() {
   const { actor } = useActor();
   const { identity } = useInternetIdentity();
   const queryClient = useQueryClient();
+
+  const principal = identity?.getPrincipal().toString();
+  const isAdmin = isAdminPrincipal(principal);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -62,12 +66,20 @@ export default function ConfiguracoesPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!actor) return;
+
+    // Segurança: não-admins não podem salvar o papel de admin
+    const finalRole = isAdmin
+      ? BusinessRole.admin
+      : role === BusinessRole.admin
+        ? BusinessRole.client
+        : role;
+
     setSaving(true);
     try {
       await actor.saveCallerUserProfile({
         name: name.trim(),
         email: email.trim(),
-        businessRole: role,
+        businessRole: finalRole,
       });
       toast.success("Perfil atualizado com sucesso!");
       queryClient.invalidateQueries({
@@ -80,8 +92,6 @@ export default function ConfiguracoesPage() {
       setSaving(false);
     }
   };
-
-  const principal = identity?.getPrincipal().toString();
 
   return (
     <div className="p-6 space-y-6 max-w-3xl">
@@ -151,24 +161,35 @@ export default function ConfiguracoesPage() {
 
                 <div className="space-y-2">
                   <Label className="text-foreground font-medium">Perfil</Label>
-                  <Select
-                    value={role}
-                    onValueChange={(v) => setRole(v as BusinessRole)}
-                  >
-                    <SelectTrigger
-                      data-ocid="configuracoes.select"
-                      className="bg-muted/30 border-border h-10"
+                  {isAdmin ? (
+                    // Para o admin, exibe campo somente leitura
+                    <div className="h-10 bg-muted/30 border border-border rounded-md px-3 flex items-center">
+                      <span className="text-sm text-foreground">
+                        Administrador — Gestor da plataforma
+                      </span>
+                    </div>
+                  ) : (
+                    <Select
+                      value={role}
+                      onValueChange={(v) => setRole(v as BusinessRole)}
                     >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.values(BusinessRole).map((r) => (
-                        <SelectItem key={r} value={r}>
-                          {roleLabels[r]}
+                      <SelectTrigger
+                        data-ocid="configuracoes.select"
+                        className="bg-muted/30 border-border h-10"
+                      >
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value={BusinessRole.client}>
+                          {roleLabels[BusinessRole.client]}
                         </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                        <SelectItem value={BusinessRole.accountant}>
+                          {roleLabels[BusinessRole.accountant]}
+                        </SelectItem>
+                        {/* Opção Admin não disponível para usuários comuns */}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </div>
 
                 <Button

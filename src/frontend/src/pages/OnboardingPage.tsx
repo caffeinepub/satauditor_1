@@ -12,21 +12,35 @@ import { Toaster } from "@/components/ui/sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { Loader2, UserCircle2 } from "lucide-react";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { BusinessRole } from "../backend.d";
 import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import { isAdminPrincipal } from "../lib/admin";
 
 export default function OnboardingPage() {
   const { identity } = useInternetIdentity();
   const { actor } = useActor();
   const queryClient = useQueryClient();
 
+  const principal = identity?.getPrincipal().toString();
+  const isAdmin = isAdminPrincipal(principal);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState<BusinessRole>(BusinessRole.client);
+  // Se for o principal admin, já inicia com role admin
+  const [role, setRole] = useState<BusinessRole>(
+    isAdmin ? BusinessRole.admin : BusinessRole.client,
+  );
   const [saving, setSaving] = useState(false);
+
+  // Garante que o admin sempre tenha o papel correto mesmo se o estado mudar
+  useEffect(() => {
+    if (isAdmin) {
+      setRole(BusinessRole.admin);
+    }
+  }, [isAdmin]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,12 +49,19 @@ export default function OnboardingPage() {
       return;
     }
 
+    // Segurança: garante que o papel salvo seja admin só para o principal correto
+    const finalRole = isAdmin
+      ? BusinessRole.admin
+      : role === BusinessRole.admin
+        ? BusinessRole.client
+        : role;
+
     setSaving(true);
     try {
       await actor.saveCallerUserProfile({
         name: name.trim(),
         email: email.trim(),
-        businessRole: role,
+        businessRole: finalRole,
       });
       toast.success("Perfil criado com sucesso!");
       queryClient.invalidateQueries({
@@ -117,28 +138,35 @@ export default function OnboardingPage() {
 
             <div className="space-y-2">
               <Label className="text-foreground font-medium">Perfil *</Label>
-              <Select
-                value={role}
-                onValueChange={(v) => setRole(v as BusinessRole)}
-              >
-                <SelectTrigger
-                  data-ocid="onboarding.select"
-                  className="h-11 bg-input/50 border-border"
-                >
-                  <SelectValue placeholder="Selecione seu perfil" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={BusinessRole.client}>
-                    Cliente — Empresa usando o serviço
-                  </SelectItem>
-                  <SelectItem value={BusinessRole.accountant}>
-                    Contador — Profissional contábil
-                  </SelectItem>
-                  <SelectItem value={BusinessRole.admin}>
+              {isAdmin ? (
+                // Para o admin, exibe campo somente leitura
+                <div className="h-11 bg-input/50 border border-border rounded-md px-3 flex items-center">
+                  <span className="text-sm text-foreground">
                     Administrador — Gestor da plataforma
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+                  </span>
+                </div>
+              ) : (
+                <Select
+                  value={role}
+                  onValueChange={(v) => setRole(v as BusinessRole)}
+                >
+                  <SelectTrigger
+                    data-ocid="onboarding.select"
+                    className="h-11 bg-input/50 border-border"
+                  >
+                    <SelectValue placeholder="Selecione seu perfil" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={BusinessRole.client}>
+                      Cliente — Empresa usando o serviço
+                    </SelectItem>
+                    <SelectItem value={BusinessRole.accountant}>
+                      Contador — Profissional contábil
+                    </SelectItem>
+                    {/* Opção Admin removida para usuários não-administradores */}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
 
             <Button

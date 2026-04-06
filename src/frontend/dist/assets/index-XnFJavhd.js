@@ -23143,20 +23143,20 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$E = [
+const __iconNode$F = [
   ["path", { d: "M8 3 4 7l4 4", key: "9rb6wj" }],
   ["path", { d: "M4 7h16", key: "6tx8e3" }],
   ["path", { d: "m16 21 4-4-4-4", key: "siv7j2" }],
   ["path", { d: "M20 17H4", key: "h6l3hr" }]
 ];
-const ArrowLeftRight = createLucideIcon("arrow-left-right", __iconNode$E);
+const ArrowLeftRight = createLucideIcon("arrow-left-right", __iconNode$F);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$D = [
+const __iconNode$E = [
   ["path", { d: "M10.268 21a2 2 0 0 0 3.464 0", key: "vwvbt9" }],
   [
     "path",
@@ -23166,14 +23166,14 @@ const __iconNode$D = [
     }
   ]
 ];
-const Bell = createLucideIcon("bell", __iconNode$D);
+const Bell = createLucideIcon("bell", __iconNode$E);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$C = [
+const __iconNode$D = [
   [
     "path",
     {
@@ -23182,14 +23182,14 @@ const __iconNode$C = [
     }
   ]
 ];
-const Bitcoin = createLucideIcon("bitcoin", __iconNode$C);
+const Bitcoin = createLucideIcon("bitcoin", __iconNode$D);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$B = [
+const __iconNode$C = [
   ["path", { d: "M12 7v14", key: "1akyts" }],
   [
     "path",
@@ -23199,52 +23199,64 @@ const __iconNode$B = [
     }
   ]
 ];
-const BookOpen = createLucideIcon("book-open", __iconNode$B);
+const BookOpen = createLucideIcon("book-open", __iconNode$C);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$A = [
+const __iconNode$B = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$A);
+const ChartColumn = createLucideIcon("chart-column", __iconNode$B);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$z = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$z);
+const __iconNode$A = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$A);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$y = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$y);
+const __iconNode$z = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$z);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$x = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$x);
+const __iconNode$y = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$y);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$w = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$w);
+const __iconNode$x = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$x);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$w = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M8 12h8", key: "1wcyev" }],
+  ["path", { d: "M12 8v8", key: "napkw2" }]
+];
+const CirclePlus = createLucideIcon("circle-plus", __iconNode$w);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23252,31 +23264,30 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$w);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$v = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M8 12h8", key: "1wcyev" }],
-  ["path", { d: "M12 8v8", key: "napkw2" }]
-];
-const CirclePlus = createLucideIcon("circle-plus", __iconNode$v);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$u = [
   ["path", { d: "M18 20a6 6 0 0 0-12 0", key: "1qehca" }],
   ["circle", { cx: "12", cy: "10", r: "4", key: "1h16sb" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const CircleUserRound = createLucideIcon("circle-user-round", __iconNode$u);
+const CircleUserRound = createLucideIcon("circle-user-round", __iconNode$v);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$t = [["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]];
-const Circle = createLucideIcon("circle", __iconNode$t);
+const __iconNode$u = [["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]];
+const Circle = createLucideIcon("circle", __iconNode$u);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$t = [
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+];
+const Copy = createLucideIcon("copy", __iconNode$t);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23284,10 +23295,10 @@ const Circle = createLucideIcon("circle", __iconNode$t);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$s = [
-  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
+  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$s);
+const CreditCard = createLucideIcon("credit-card", __iconNode$s);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23295,17 +23306,6 @@ const Copy = createLucideIcon("copy", __iconNode$s);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$r = [
-  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
-  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
-];
-const CreditCard = createLucideIcon("credit-card", __iconNode$r);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$q = [
   [
     "path",
     {
@@ -23315,7 +23315,19 @@ const __iconNode$q = [
   ],
   ["path", { d: "M5 21h14", key: "11awu3" }]
 ];
-const Crown = createLucideIcon("crown", __iconNode$q);
+const Crown = createLucideIcon("crown", __iconNode$r);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$q = [
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+];
+const Download = createLucideIcon("download", __iconNode$q);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23323,11 +23335,13 @@ const Crown = createLucideIcon("crown", __iconNode$q);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$p = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M8 18v-2", key: "qcmpov" }],
+  ["path", { d: "M12 18v-4", key: "q1q25u" }],
+  ["path", { d: "M16 18v-6", key: "15y0np" }]
 ];
-const Download = createLucideIcon("download", __iconNode$p);
+const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$p);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23337,11 +23351,11 @@ const Download = createLucideIcon("download", __iconNode$p);
 const __iconNode$o = [
   ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
   ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M8 18v-2", key: "qcmpov" }],
-  ["path", { d: "M12 18v-4", key: "q1q25u" }],
-  ["path", { d: "M16 18v-6", key: "15y0np" }]
+  ["path", { d: "M10 9H8", key: "b1mrlr" }],
+  ["path", { d: "M16 13H8", key: "t4e002" }],
+  ["path", { d: "M16 17H8", key: "z1uh3a" }]
 ];
-const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$o);
+const FileText = createLucideIcon("file-text", __iconNode$o);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23349,20 +23363,6 @@ const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$n = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M10 9H8", key: "b1mrlr" }],
-  ["path", { d: "M16 13H8", key: "t4e002" }],
-  ["path", { d: "M16 17H8", key: "z1uh3a" }]
-];
-const FileText = createLucideIcon("file-text", __iconNode$n);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$m = [
   ["polyline", { points: "22 12 16 12 14 15 10 15 8 12 2 12", key: "o97t9d" }],
   [
     "path",
@@ -23372,7 +23372,19 @@ const __iconNode$m = [
     }
   ]
 ];
-const Inbox = createLucideIcon("inbox", __iconNode$m);
+const Inbox = createLucideIcon("inbox", __iconNode$n);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$m = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 16v-4", key: "1dtifu" }],
+  ["path", { d: "M12 8h.01", key: "e9boi3" }]
+];
+const Info = createLucideIcon("info", __iconNode$m);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23380,11 +23392,16 @@ const Inbox = createLucideIcon("inbox", __iconNode$m);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$l = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 16v-4", key: "1dtifu" }],
-  ["path", { d: "M12 8h.01", key: "e9boi3" }]
+  [
+    "path",
+    {
+      d: "M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z",
+      key: "1s6t7t"
+    }
+  ],
+  ["circle", { cx: "16.5", cy: "7.5", r: ".5", fill: "currentColor", key: "w0ekpg" }]
 ];
-const Info = createLucideIcon("info", __iconNode$l);
+const KeyRound = createLucideIcon("key-round", __iconNode$l);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -50347,9 +50364,9 @@ function ClientesPage() {
     ] }) }) }) })
   ] }) });
 }
-const ADMIN_PRINCIPAL = "ltcnc-xbaww-jullu-ivf52-3kkoy-tdmlp-ifofh-u5nag-pz4pn-yyxkx-tqe";
-function isAdminPrincipal(principal) {
-  return principal === ADMIN_PRINCIPAL;
+const ADMIN_PASSWORD = "2891";
+function checkAdminPassword(input) {
+  return input === ADMIN_PASSWORD;
 }
 const roleLabels = {
   [BusinessRole$1.client]: "Cliente — Empresa usando o serviço",
@@ -50361,12 +50378,15 @@ function ConfiguracoesPage() {
   const { identity: identity3 } = useInternetIdentity();
   const queryClient2 = useQueryClient();
   const principal = identity3 == null ? void 0 : identity3.getPrincipal().toString();
-  const isAdmin = isAdminPrincipal(principal);
   const [name, setName] = reactExports.useState("");
   const [email, setEmail] = reactExports.useState("");
   const [role, setRole] = reactExports.useState(BusinessRole$1.client);
   const [loading, setLoading] = reactExports.useState(true);
   const [saving, setSaving] = reactExports.useState(false);
+  const [showAdminModal, setShowAdminModal] = reactExports.useState(false);
+  const [adminPasswordInput, setAdminPasswordInput] = reactExports.useState("");
+  const [adminUnlocked, setAdminUnlocked] = reactExports.useState(false);
+  const [passwordError, setPasswordError] = reactExports.useState(false);
   reactExports.useEffect(() => {
     if (!actor) return;
     let cancelled = false;
@@ -50375,6 +50395,9 @@ function ConfiguracoesPage() {
       setName(profile.name);
       setEmail(profile.email);
       setRole(profile.businessRole);
+      if (profile.businessRole === BusinessRole$1.admin) {
+        setAdminUnlocked(true);
+      }
     }).catch((err) => {
       console.error(err);
       ue.error("Erro ao carregar perfil.");
@@ -50385,10 +50408,23 @@ function ConfiguracoesPage() {
       cancelled = true;
     };
   }, [actor]);
+  const handleAdminPasswordSubmit = () => {
+    if (checkAdminPassword(adminPasswordInput)) {
+      setAdminUnlocked(true);
+      setRole(BusinessRole$1.admin);
+      setShowAdminModal(false);
+      setPasswordError(false);
+      setAdminPasswordInput("");
+      ue.success("Acesso administrativo liberado!");
+    } else {
+      setPasswordError(true);
+      setAdminPasswordInput("");
+    }
+  };
   const handleSave = async (e3) => {
     e3.preventDefault();
     if (!actor) return;
-    const finalRole = isAdmin ? BusinessRole$1.admin : role === BusinessRole$1.admin ? BusinessRole$1.client : role;
+    const finalRole = adminUnlocked ? BusinessRole$1.admin : role === BusinessRole$1.admin ? BusinessRole$1.client : role;
     setSaving(true);
     try {
       await actor.saveCallerUserProfile({
@@ -50479,30 +50515,45 @@ function ConfiguracoesPage() {
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { className: "text-foreground font-medium", children: "Perfil" }),
-              isAdmin ? (
-                // Para o admin, exibe campo somente leitura
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 bg-muted/30 border border-border rounded-md px-3 flex items-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-foreground", children: "Administrador — Gestor da plataforma" }) })
-              ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                Select,
-                {
-                  value: role,
-                  onValueChange: (v2) => setRole(v2),
-                  children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      SelectTrigger,
-                      {
-                        "data-ocid": "configuracoes.select",
-                        className: "bg-muted/30 border-border h-10",
-                        children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectValue, {})
-                      }
-                    ),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs(SelectContent, { children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.client, children: roleLabels[BusinessRole$1.client] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.accountant, children: roleLabels[BusinessRole$1.accountant] })
-                    ] })
-                  ]
-                }
-              )
+              adminUnlocked ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "h-10 bg-amber-500/10 border border-amber-500/40 rounded-md px-3 flex items-center gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(KeyRound, { className: "h-4 w-4 text-amber-400" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-amber-300 font-medium", children: roleLabels[BusinessRole$1.admin] })
+              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  Select,
+                  {
+                    value: role,
+                    onValueChange: (v2) => setRole(v2),
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        SelectTrigger,
+                        {
+                          "data-ocid": "configuracoes.select",
+                          className: "bg-muted/30 border-border h-10",
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectValue, {})
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs(SelectContent, { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.client, children: roleLabels[BusinessRole$1.client] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: BusinessRole$1.accountant, children: roleLabels[BusinessRole$1.accountant] })
+                      ] })
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => {
+                      setPasswordError(false);
+                      setAdminPasswordInput("");
+                      setShowAdminModal(true);
+                    },
+                    className: "text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors underline underline-offset-2 mt-1",
+                    children: "Administração"
+                  }
+                )
+              ] })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               Button,
@@ -50630,7 +50681,85 @@ function ConfiguracoesPage() {
           ] })
         ] })
       }
-    )
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: showAdminModal && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      motion.div,
+      {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0 },
+        className: "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4",
+        onClick: (e3) => {
+          if (e3.target === e3.currentTarget) setShowAdminModal(false);
+        },
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          motion.div,
+          {
+            initial: { scale: 0.9, opacity: 0 },
+            animate: { scale: 1, opacity: 1 },
+            exit: { scale: 0.9, opacity: 0 },
+            transition: { type: "spring", stiffness: 300, damping: 25 },
+            className: "bg-card border border-border rounded-2xl p-6 w-full max-w-sm shadow-2xl",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-5", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-2 rounded-lg bg-amber-500/10 border border-amber-500/20", children: /* @__PURE__ */ jsxRuntimeExports.jsx(KeyRound, { className: "h-5 w-5 text-amber-400" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-base font-semibold text-foreground", children: "Acesso Administrativo" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Digite a senha de 4 dígitos" })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Input,
+                  {
+                    type: "password",
+                    maxLength: 4,
+                    inputMode: "numeric",
+                    pattern: "[0-9]*",
+                    placeholder: "••••",
+                    value: adminPasswordInput,
+                    onChange: (e3) => {
+                      setPasswordError(false);
+                      setAdminPasswordInput(
+                        e3.target.value.replace(/\D/g, "").slice(0, 4)
+                      );
+                    },
+                    onKeyDown: (e3) => {
+                      if (e3.key === "Enter") handleAdminPasswordSubmit();
+                    },
+                    autoFocus: true,
+                    className: `h-12 text-center text-2xl tracking-[0.5em] bg-input/50 border-border ${passwordError ? "border-red-500/60 bg-red-500/5" : ""}`
+                  }
+                ),
+                passwordError && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-red-400 text-center", children: "Senha incorreta. Tente novamente." }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      type: "button",
+                      variant: "outline",
+                      onClick: () => setShowAdminModal(false),
+                      className: "flex-1 border-border text-muted-foreground hover:text-foreground",
+                      children: "Cancelar"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      type: "button",
+                      onClick: handleAdminPasswordSubmit,
+                      disabled: adminPasswordInput.length !== 4,
+                      className: "flex-1 bg-amber-500 hover:bg-amber-400 text-black font-semibold",
+                      children: "Confirmar"
+                    }
+                  )
+                ] })
+              ] })
+            ]
+          }
+        )
+      }
+    ) })
   ] });
 }
 var SWITCH_NAME = "Switch";
@@ -75611,26 +75740,38 @@ function OnboardingPage() {
   const { identity: identity3 } = useInternetIdentity();
   const { actor } = useActor();
   const queryClient2 = useQueryClient();
-  const principal = identity3 == null ? void 0 : identity3.getPrincipal().toString();
-  const isAdmin = isAdminPrincipal(principal);
   const [name, setName] = reactExports.useState("");
   const [email, setEmail] = reactExports.useState("");
-  const [role, setRole] = reactExports.useState(
-    isAdmin ? BusinessRole$1.admin : BusinessRole$1.client
-  );
+  const [role, setRole] = reactExports.useState(BusinessRole$1.client);
   const [saving, setSaving] = reactExports.useState(false);
+  const [showAdminModal, setShowAdminModal] = reactExports.useState(false);
+  const [adminPasswordInput, setAdminPasswordInput] = reactExports.useState("");
+  const [adminUnlocked, setAdminUnlocked] = reactExports.useState(false);
+  const [passwordError, setPasswordError] = reactExports.useState(false);
   reactExports.useEffect(() => {
-    if (isAdmin) {
+    if (adminUnlocked) {
       setRole(BusinessRole$1.admin);
     }
-  }, [isAdmin]);
+  }, [adminUnlocked]);
+  const handleAdminPasswordSubmit = () => {
+    if (checkAdminPassword(adminPasswordInput)) {
+      setAdminUnlocked(true);
+      setShowAdminModal(false);
+      setPasswordError(false);
+      setAdminPasswordInput("");
+      ue.success("Acesso administrativo liberado!");
+    } else {
+      setPasswordError(true);
+      setAdminPasswordInput("");
+    }
+  };
   const handleSubmit = async (e3) => {
     e3.preventDefault();
     if (!actor || !name.trim() || !email.trim()) {
       ue.error("Preencha todos os campos obrigatórios.");
       return;
     }
-    const finalRole = isAdmin ? BusinessRole$1.admin : role === BusinessRole$1.admin ? BusinessRole$1.client : role;
+    const finalRole = adminUnlocked ? BusinessRole$1.admin : role === BusinessRole$1.admin ? BusinessRole$1.client : role;
     setSaving(true);
     try {
       await actor.saveCallerUserProfile({
@@ -75712,10 +75853,10 @@ function OnboardingPage() {
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { className: "text-foreground font-medium", children: "Perfil *" }),
-              isAdmin ? (
-                // Para o admin, exibe campo somente leitura
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-11 bg-input/50 border border-border rounded-md px-3 flex items-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-foreground", children: "Administrador — Gestor da plataforma" }) })
-              ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              adminUnlocked ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "h-11 bg-amber-500/10 border border-amber-500/40 rounded-md px-3 flex items-center gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(KeyRound, { className: "h-4 w-4 text-amber-400" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-amber-300 font-medium", children: "Administrador — Gestor da plataforma" })
+              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
                 Select,
                 {
                   value: role,
@@ -75735,6 +75876,19 @@ function OnboardingPage() {
                     ] })
                   ]
                 }
+              ),
+              !adminUnlocked && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  onClick: () => {
+                    setPasswordError(false);
+                    setAdminPasswordInput("");
+                    setShowAdminModal(true);
+                  },
+                  className: "text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors underline underline-offset-2 mt-1",
+                  children: "Administração"
+                }
               )
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -75750,10 +75904,89 @@ function OnboardingPage() {
                 ] }) : "Começar a usar o SatAuditor"
               }
             )
-          ] }) })
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-center text-xs text-muted-foreground/40 mt-4", children: "Seus dados são armazenados exclusivamente on-chain no Internet Computer." })
         ]
       }
-    )
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: showAdminModal && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      motion.div,
+      {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0 },
+        className: "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4",
+        onClick: (e3) => {
+          if (e3.target === e3.currentTarget) setShowAdminModal(false);
+        },
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          motion.div,
+          {
+            initial: { scale: 0.9, opacity: 0 },
+            animate: { scale: 1, opacity: 1 },
+            exit: { scale: 0.9, opacity: 0 },
+            transition: { type: "spring", stiffness: 300, damping: 25 },
+            className: "bg-card border border-border rounded-2xl p-6 w-full max-w-sm shadow-2xl",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-5", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-2 rounded-lg bg-amber-500/10 border border-amber-500/20", children: /* @__PURE__ */ jsxRuntimeExports.jsx(KeyRound, { className: "h-5 w-5 text-amber-400" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-base font-semibold text-foreground", children: "Acesso Administrativo" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Digite a senha de 4 dígitos" })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Input,
+                  {
+                    type: "password",
+                    maxLength: 4,
+                    inputMode: "numeric",
+                    pattern: "[0-9]*",
+                    placeholder: "••••",
+                    value: adminPasswordInput,
+                    onChange: (e3) => {
+                      setPasswordError(false);
+                      setAdminPasswordInput(
+                        e3.target.value.replace(/\D/g, "").slice(0, 4)
+                      );
+                    },
+                    onKeyDown: (e3) => {
+                      if (e3.key === "Enter") handleAdminPasswordSubmit();
+                    },
+                    autoFocus: true,
+                    className: `h-12 text-center text-2xl tracking-[0.5em] bg-input/50 border-border ${passwordError ? "border-red-500/60 bg-red-500/5" : ""}`
+                  }
+                ),
+                passwordError && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-red-400 text-center", children: "Senha incorreta. Tente novamente." }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      type: "button",
+                      variant: "outline",
+                      onClick: () => setShowAdminModal(false),
+                      className: "flex-1 border-border text-muted-foreground hover:text-foreground",
+                      children: "Cancelar"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      type: "button",
+                      onClick: handleAdminPasswordSubmit,
+                      disabled: adminPasswordInput.length !== 4,
+                      className: "flex-1 bg-amber-500 hover:bg-amber-400 text-black font-semibold",
+                      children: "Confirmar"
+                    }
+                  )
+                ] })
+              ] })
+            ]
+          }
+        )
+      }
+    ) })
   ] });
 }
 const MESES = [

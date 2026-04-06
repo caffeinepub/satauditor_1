@@ -10,37 +10,50 @@ import {
 } from "@/components/ui/select";
 import { Toaster } from "@/components/ui/sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader2, UserCircle2 } from "lucide-react";
-import { motion } from "motion/react";
+import { KeyRound, Loader2, UserCircle2 } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { BusinessRole } from "../backend.d";
 import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
-import { isAdminPrincipal } from "../lib/admin";
+import { checkAdminPassword } from "../lib/adminPassword";
 
 export default function OnboardingPage() {
   const { identity } = useInternetIdentity();
   const { actor } = useActor();
   const queryClient = useQueryClient();
 
-  const principal = identity?.getPrincipal().toString();
-  const isAdmin = isAdminPrincipal(principal);
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  // Se for o principal admin, já inicia com role admin
-  const [role, setRole] = useState<BusinessRole>(
-    isAdmin ? BusinessRole.admin : BusinessRole.client,
-  );
+  const [role, setRole] = useState<BusinessRole>(BusinessRole.client);
   const [saving, setSaving] = useState(false);
 
-  // Garante que o admin sempre tenha o papel correto mesmo se o estado mudar
+  // Admin password modal state
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [adminPasswordInput, setAdminPasswordInput] = useState("");
+  const [adminUnlocked, setAdminUnlocked] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
+  // Se já desbloqueou admin, mantém o role como admin
   useEffect(() => {
-    if (isAdmin) {
+    if (adminUnlocked) {
       setRole(BusinessRole.admin);
     }
-  }, [isAdmin]);
+  }, [adminUnlocked]);
+
+  const handleAdminPasswordSubmit = () => {
+    if (checkAdminPassword(adminPasswordInput)) {
+      setAdminUnlocked(true);
+      setShowAdminModal(false);
+      setPasswordError(false);
+      setAdminPasswordInput("");
+      toast.success("Acesso administrativo liberado!");
+    } else {
+      setPasswordError(true);
+      setAdminPasswordInput("");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,8 +62,8 @@ export default function OnboardingPage() {
       return;
     }
 
-    // Segurança: garante que o papel salvo seja admin só para o principal correto
-    const finalRole = isAdmin
+    // Garante que somente quem desbloqueou via senha recebe o papel de admin
+    const finalRole = adminUnlocked
       ? BusinessRole.admin
       : role === BusinessRole.admin
         ? BusinessRole.client
@@ -138,11 +151,11 @@ export default function OnboardingPage() {
 
             <div className="space-y-2">
               <Label className="text-foreground font-medium">Perfil *</Label>
-              {isAdmin ? (
-                // Para o admin, exibe campo somente leitura
-                <div className="h-11 bg-input/50 border border-border rounded-md px-3 flex items-center">
-                  <span className="text-sm text-foreground">
-                    Administrador — Gestor da plataforma
+              {adminUnlocked ? (
+                <div className="h-11 bg-amber-500/10 border border-amber-500/40 rounded-md px-3 flex items-center gap-2">
+                  <KeyRound className="h-4 w-4 text-amber-400" />
+                  <span className="text-sm text-amber-300 font-medium">
+                    Administrador &mdash; Gestor da plataforma
                   </span>
                 </div>
               ) : (
@@ -158,14 +171,27 @@ export default function OnboardingPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value={BusinessRole.client}>
-                      Cliente — Empresa usando o serviço
+                      Cliente &mdash; Empresa usando o serviço
                     </SelectItem>
                     <SelectItem value={BusinessRole.accountant}>
-                      Contador — Profissional contábil
+                      Contador &mdash; Profissional contábil
                     </SelectItem>
-                    {/* Opção Admin removida para usuários não-administradores */}
                   </SelectContent>
                 </Select>
+              )}
+              {/* Link discreto para acesso administrativo */}
+              {!adminUnlocked && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPasswordError(false);
+                    setAdminPasswordInput("");
+                    setShowAdminModal(true);
+                  }}
+                  className="text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors underline underline-offset-2 mt-1"
+                >
+                  Administração
+                </button>
               )}
             </div>
 
@@ -186,7 +212,98 @@ export default function OnboardingPage() {
             </Button>
           </form>
         </div>
+
+        {/* Footer hint */}
+        <p className="text-center text-xs text-muted-foreground/40 mt-4">
+          Seus dados são armazenados exclusivamente on-chain no Internet
+          Computer.
+        </p>
       </motion.div>
+
+      {/* Admin Password Modal */}
+      <AnimatePresence>
+        {showAdminModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setShowAdminModal(false);
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="bg-card border border-border rounded-2xl p-6 w-full max-w-sm shadow-2xl"
+            >
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                  <KeyRound className="h-5 w-5 text-amber-400" />
+                </div>
+                <div>
+                  <h2 className="font-display text-base font-semibold text-foreground">
+                    Acesso Administrativo
+                  </h2>
+                  <p className="text-xs text-muted-foreground">
+                    Digite a senha de 4 dígitos
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <Input
+                  type="password"
+                  maxLength={4}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="••••"
+                  value={adminPasswordInput}
+                  onChange={(e) => {
+                    setPasswordError(false);
+                    setAdminPasswordInput(
+                      e.target.value.replace(/\D/g, "").slice(0, 4),
+                    );
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleAdminPasswordSubmit();
+                  }}
+                  autoFocus
+                  className={`h-12 text-center text-2xl tracking-[0.5em] bg-input/50 border-border ${
+                    passwordError ? "border-red-500/60 bg-red-500/5" : ""
+                  }`}
+                />
+                {passwordError && (
+                  <p className="text-xs text-red-400 text-center">
+                    Senha incorreta. Tente novamente.
+                  </p>
+                )}
+
+                <div className="flex gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setShowAdminModal(false)}
+                    className="flex-1 border-border text-muted-foreground hover:text-foreground"
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleAdminPasswordSubmit}
+                    disabled={adminPasswordInput.length !== 4}
+                    className="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-semibold"
+                  >
+                    Confirmar
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

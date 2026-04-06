@@ -17559,6 +17559,11 @@ var BusinessRole$1 = /* @__PURE__ */ ((BusinessRole2) => {
   BusinessRole2["admin"] = "admin";
   return BusinessRole2;
 })(BusinessRole$1 || {});
+var TransactionType$1 = /* @__PURE__ */ ((TransactionType2) => {
+  TransactionType2["expense"] = "expense";
+  TransactionType2["income"] = "income";
+  return TransactionType2;
+})(TransactionType$1 || {});
 function createContext2(rootComponentName, defaultContext) {
   const Context = reactExports.createContext(defaultContext);
   const Provider2 = (props) => {
@@ -46463,7 +46468,7 @@ const SKELETON_CARD_FIELDS = [
 ];
 const SKELETON_RECURSOS = ["r1", "r2", "r3", "r4"];
 const SKELETON_TABLE_ROWS = ["sk1", "sk2", "sk3", "sk4", "sk5"];
-function formatDate(ns) {
+function formatDate$1(ns) {
   const ms = Number(ns / 1000000n);
   return new Date(ms).toLocaleDateString("pt-BR");
 }
@@ -46588,7 +46593,7 @@ function ClientView({ profile }) {
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Início" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground mt-1", children: formatDate(subscription.startDate) })
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground mt-1", children: formatDate$1(subscription.startDate) })
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Plano" }),
@@ -46746,7 +46751,7 @@ function AdminView() {
                     children: planNome
                   }
                 ) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: formatDate(sub.startDate) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: formatDate$1(sub.startDate) }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: addOneYear(sub.startDate) }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                   Badge,
@@ -74509,7 +74514,7 @@ const metrics = [
     positive: true
   }
 ];
-const statusColors$1 = {
+const statusColors = {
   Confirmada: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
   Pendente: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   Falha: "bg-red-500/20 text-red-400 border-red-500/30"
@@ -74820,7 +74825,7 @@ function DashboardPage() {
                     Badge,
                     {
                       variant: "outline",
-                      className: `text-xs ${statusColors$1[tx.status]}`,
+                      className: `text-xs ${statusColors[tx.status]}`,
                       children: tx.status
                     }
                   ) })
@@ -75425,204 +75430,69 @@ function RelatoriosPage() {
     ] })
   ] });
 }
-const transacoes = [
-  {
-    id: 1,
-    hash: "3a8f2c1d9e4b7f6a",
-    tipo: "Entrada",
-    valorBtc: 0.2847,
-    valorBrl: 86400,
-    data: "04/04/2026",
-    categoria: "Receita de Serviço",
-    cliente: "TechFin Brasil",
-    status: "Confirmada"
-  },
-  {
-    id: 2,
-    hash: "7b3e1f5a0c2d9e8b",
-    tipo: "Saída",
-    valorBtc: 0.0512,
-    valorBrl: 15540,
-    data: "04/04/2026",
-    categoria: "Taxa de Operação",
-    cliente: "Mercado Digital",
-    status: "Confirmada"
-  },
-  {
-    id: 3,
-    hash: "9d2c4b8e1f3a7c5d",
-    tipo: "Entrada",
-    valorBtc: 0.1203,
-    valorBrl: 36511,
-    data: "03/04/2026",
-    categoria: "Assinatura Mensal",
-    cliente: "CriptoVault",
-    status: "Confirmada"
-  },
-  {
-    id: 4,
-    hash: "2e9a7f3c5d1b4e8f",
-    tipo: "Saída",
-    valorBtc: 81e-4,
-    valorBrl: 2460,
-    data: "03/04/2026",
-    categoria: "Reembolso",
-    cliente: "StartupPay",
-    status: "Pendente"
-  },
-  {
-    id: 5,
-    hash: "6c1b4d8f2a9e3c7d",
-    tipo: "Entrada",
-    valorBtc: 0.3922,
-    valorBrl: 119118,
-    data: "02/04/2026",
-    categoria: "Receita de Serviço",
-    cliente: "Holding Nacional",
-    status: "Confirmada"
-  },
-  {
-    id: 6,
-    hash: "8f5a2e7d4c1b9e3a",
-    tipo: "Entrada",
-    valorBtc: 0.0444,
-    valorBrl: 13482,
-    data: "02/04/2026",
-    categoria: "Consultoria",
-    cliente: "FintechRedes Brasil",
-    status: "Confirmada"
-  },
-  {
-    id: 7,
-    hash: "4d7c1f9b2e5a8f3c",
-    tipo: "Saída",
-    valorBtc: 0.11,
-    valorBrl: 33408,
-    data: "01/04/2026",
-    categoria: "Pagamento Fornecedor",
-    cliente: "TechFin Brasil",
-    status: "Confirmada"
-  },
-  {
-    id: 8,
-    hash: "1a5e8c3d7f2b4e9a",
-    tipo: "Entrada",
-    valorBtc: 0.089,
-    valorBrl: 27030,
-    data: "01/04/2026",
-    categoria: "Assinatura Mensal",
-    cliente: "Mercado Digital",
-    status: "Confirmada"
-  },
-  {
-    id: 9,
-    hash: "5b9d3e1c8f4a7d2b",
-    tipo: "Entrada",
-    valorBtc: 0.2155,
-    valorBrl: 65461,
-    data: "31/03/2026",
-    categoria: "Receita de Serviço",
-    cliente: "CriptoVault",
-    status: "Confirmada"
-  },
-  {
-    id: 10,
-    hash: "0c4f7a2e9d1b5c8f",
-    tipo: "Saída",
-    valorBtc: 0.032,
-    valorBrl: 9720,
-    data: "31/03/2026",
-    categoria: "Taxa de Operação",
-    cliente: "StartupPay",
-    status: "Falha"
-  },
-  {
-    id: 11,
-    hash: "3e8b1d5c9f2a6e4d",
-    tipo: "Entrada",
-    valorBtc: 0.167,
-    valorBrl: 50728,
-    data: "30/03/2026",
-    categoria: "Consultoria",
-    cliente: "Holding Nacional",
-    status: "Confirmada"
-  },
-  {
-    id: 12,
-    hash: "7a2f5d0e4c8b1f9d",
-    tipo: "Saída",
-    valorBtc: 0.025,
-    valorBrl: 7595,
-    data: "30/03/2026",
-    categoria: "Reembolso",
-    cliente: "FintechRedes Brasil",
-    status: "Confirmada"
-  },
-  {
-    id: 13,
-    hash: "9e4d2b6f1c7a3e8b",
-    tipo: "Entrada",
-    valorBtc: 0.45,
-    valorBrl: 136710,
-    data: "29/03/2026",
-    categoria: "Assinatura Mensal",
-    cliente: "TechFin Brasil",
-    status: "Confirmada"
-  },
-  {
-    id: 14,
-    hash: "2c7a9f4e1d5b8c3a",
-    tipo: "Saída",
-    valorBtc: 0.014,
-    valorBrl: 4252,
-    data: "28/03/2026",
-    categoria: "Pagamento Fornecedor",
-    cliente: "Mercado Digital",
-    status: "Pendente"
-  },
-  {
-    id: 15,
-    hash: "6f1e8b5a3d9c2f7e",
-    tipo: "Entrada",
-    valorBtc: 0.098,
-    valorBrl: 29772,
-    data: "28/03/2026",
-    categoria: "Receita de Serviço",
-    cliente: "CriptoVault",
-    status: "Confirmada"
-  }
-];
-const CLIENT_MOCK_TRANSACTIONS = [1, 3, 5, 9, 11];
-const categorias = [...new Set(transacoes.map((t2) => t2.categoria))];
-const categoriaColors = {
-  "Receita de Serviço": "bg-amber-500/15 text-amber-400 border-amber-500/30",
-  "Taxa de Operação": "bg-purple-500/15 text-purple-400 border-purple-500/30",
-  "Assinatura Mensal": "bg-blue-500/15 text-blue-400 border-blue-500/30",
-  Reembolso: "bg-red-500/15 text-red-400 border-red-500/30",
-  Consultoria: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-  "Pagamento Fornecedor": "bg-orange-500/15 text-orange-400 border-orange-500/30"
-};
-const statusColors = {
-  Confirmada: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  Pendente: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  Falha: "bg-red-500/20 text-red-400 border-red-500/30"
+function formatDate(ns) {
+  const ms = Number(ns / 1000000n);
+  return new Date(ms).toLocaleDateString("pt-BR");
+}
+function satoshisToFloat(sats) {
+  return Number(sats) / 1e8;
+}
+function getTransactionTypeLabel(tx) {
+  return tx.transactionType === TransactionType$1.income ? "Entrada" : "Saída";
+}
+function getCategoryLabel(tx) {
+  const map2 = {
+    revenue: "Receita",
+    expense: "Despesa",
+    asset: "Ativo",
+    liability: "Passivo",
+    equity: "Patrimônio"
+  };
+  return map2[tx.category] ?? tx.category;
+}
+const SKELETON_ROWS = ["sk1", "sk2", "sk3", "sk4", "sk5"];
+const categoryColors = {
+  Receita: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+  Despesa: "bg-red-500/15 text-red-400 border-red-500/30",
+  Ativo: "bg-blue-500/15 text-blue-400 border-blue-500/30",
+  Passivo: "bg-purple-500/15 text-purple-400 border-purple-500/30",
+  Patrimônio: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
 };
 function TransacoesPage({ profile }) {
+  const { actor, isFetching } = useActor();
+  const isClient2 = profile.businessRole === BusinessRole$1.client;
   const [search, setSearch] = reactExports.useState("");
   const [filterTipo, setFilterTipo] = reactExports.useState("todos");
   const [filterCategoria, setFilterCategoria] = reactExports.useState("todas");
-  const [filterPeriodo, setFilterPeriodo] = reactExports.useState("todos");
-  const isClient2 = profile.businessRole === BusinessRole$1.client;
-  const baseTransacoes = isClient2 ? transacoes.filter((t2) => CLIENT_MOCK_TRANSACTIONS.includes(t2.id)) : transacoes;
-  const filtered = baseTransacoes.filter((t2) => {
-    const matchSearch = isClient2 ? t2.hash.includes(search.toLowerCase()) : t2.hash.includes(search.toLowerCase()) || t2.cliente.toLowerCase().includes(search.toLowerCase());
-    const matchTipo = filterTipo === "todos" || filterTipo === "entrada" && t2.tipo === "Entrada" || filterTipo === "saida" && t2.tipo === "Saída";
-    const matchCat = filterCategoria === "todas" || t2.categoria === filterCategoria;
-    return matchSearch && matchTipo && matchCat;
+  const clientId = profile.clientId;
+  const { data: transactions = [], isLoading } = useQuery({
+    queryKey: isClient2 ? ["transactions", "client", clientId == null ? void 0 : clientId.toString()] : ["transactions"],
+    queryFn: async () => {
+      if (!actor) return [];
+      if (isClient2 && clientId !== void 0) {
+        return actor.getTransactionsByClientId(clientId);
+      }
+      return actor.getAllTransactions();
+    },
+    enabled: !!actor && !isFetching
   });
-  const totalEntradas = filtered.filter((t2) => t2.tipo === "Entrada").reduce((acc, t2) => acc + t2.valorBrl, 0);
-  const totalSaidas = filtered.filter((t2) => t2.tipo === "Saída").reduce((acc, t2) => acc + t2.valorBrl, 0);
-  const colSpan = isClient2 ? 7 : 8;
+  const categorias = reactExports.useMemo(() => {
+    const set = new Set(transactions.map(getCategoryLabel));
+    return Array.from(set);
+  }, [transactions]);
+  const filtered = reactExports.useMemo(() => {
+    return transactions.filter((t2) => {
+      const tipo = getTransactionTypeLabel(t2);
+      const categoria = getCategoryLabel(t2);
+      const matchSearch = t2.hash.toLowerCase().includes(search.toLowerCase()) || !isClient2 && t2.description.toLowerCase().includes(search.toLowerCase());
+      const matchTipo = filterTipo === "todos" || filterTipo === "entrada" && tipo === "Entrada" || filterTipo === "saida" && tipo === "Saída";
+      const matchCat = filterCategoria === "todas" || categoria === filterCategoria;
+      return matchSearch && matchTipo && matchCat;
+    });
+  }, [transactions, search, filterTipo, filterCategoria, isClient2]);
+  const totalEntradas = filtered.filter((t2) => t2.transactionType === TransactionType$1.income).reduce((acc, t2) => acc + Number(t2.value), 0);
+  const totalSaidas = filtered.filter((t2) => t2.transactionType === TransactionType$1.expense).reduce((acc, t2) => acc + Number(t2.value), 0);
+  const colSpan = isClient2 ? 6 : 7;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", children: [
     isClient2 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",
@@ -75639,15 +75509,15 @@ function TransacoesPage({ profile }) {
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border border-border rounded-lg p-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground mb-1", children: "Total Entradas" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-lg font-display font-bold text-emerald-400", children: [
-          "R$ ",
-          totalEntradas.toLocaleString("pt-BR")
+          satoshisToFloat(BigInt(totalEntradas)).toFixed(6),
+          " BTC"
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border border-border rounded-lg p-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground mb-1", children: "Total Saídas" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-lg font-display font-bold text-red-400", children: [
-          "R$ ",
-          totalSaidas.toLocaleString("pt-BR")
+          satoshisToFloat(BigInt(totalSaidas)).toFixed(6),
+          " BTC"
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border border-border rounded-lg p-4", children: [
@@ -75657,8 +75527,11 @@ function TransacoesPage({ profile }) {
           {
             className: `text-lg font-display font-bold ${totalEntradas - totalSaidas >= 0 ? "text-emerald-400" : "text-red-400"}`,
             children: [
-              "R$ ",
-              (totalEntradas - totalSaidas).toLocaleString("pt-BR")
+              satoshisToFloat(
+                BigInt(Math.abs(totalEntradas - totalSaidas))
+              ).toFixed(6),
+              " ",
+              "BTC"
             ]
           }
         )
@@ -75671,7 +75544,7 @@ function TransacoesPage({ profile }) {
           Input,
           {
             "data-ocid": "transacoes.search_input",
-            placeholder: isClient2 ? "Buscar por hash..." : "Buscar hash ou cliente...",
+            placeholder: isClient2 ? "Buscar por hash..." : "Buscar hash ou descrição...",
             value: search,
             onChange: (e3) => setSearch(e3.target.value),
             className: "pl-9 bg-card border-border"
@@ -75707,22 +75580,6 @@ function TransacoesPage({ profile }) {
           categorias.map((c2) => /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: c2, children: c2 }, c2))
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(Select, { value: filterPeriodo, onValueChange: setFilterPeriodo, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          SelectTrigger,
-          {
-            "data-ocid": "transacoes.select",
-            className: "w-36 bg-card border-border",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectValue, { placeholder: "Período" })
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(SelectContent, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: "todos", children: "Todo período" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: "hoje", children: "Hoje" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: "semana", children: "Esta semana" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: "mes", children: "Este mês" })
-        ] })
-      ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         Button,
         {
@@ -75741,23 +75598,39 @@ function TransacoesPage({ profile }) {
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Hash BTC" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Tipo" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-right text-muted-foreground", children: "Valor BTC" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-right text-muted-foreground", children: "Valor BRL" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Data" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Categoria" }),
-        !isClient2 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Cliente" }),
+        !isClient2 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Descrição" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Status" })
       ] }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(TableBody, { children: [
-        filtered.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          TableCell,
-          {
-            "data-ocid": "transacoes.empty_state",
-            colSpan,
-            className: "text-center text-muted-foreground py-12",
-            children: "Nenhuma transação encontrada."
-          }
-        ) }),
-        filtered.map((t2, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: isLoading ? SKELETON_ROWS.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        TableRow,
+        {
+          "data-ocid": "transacoes.loading_state",
+          className: "border-border/50",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-28" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-16" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-24" }) }),
+            !isClient2 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-32" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-20" }) })
+          ]
+        },
+        key
+      )) : filtered.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        TableCell,
+        {
+          "data-ocid": "transacoes.empty_state",
+          colSpan,
+          className: "text-center text-muted-foreground py-12",
+          children: "Nenhuma transação encontrada."
+        }
+      ) }) : filtered.map((t2, i) => {
+        const tipo = getTransactionTypeLabel(t2);
+        const categoria = getCategoryLabel(t2);
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs(
           motion.tr,
           {
             "data-ocid": `transacoes.item.${i + 1}`,
@@ -75766,50 +75639,42 @@ function TransacoesPage({ profile }) {
             transition: { delay: i * 0.025 },
             className: "border-b border-border/50 hover:bg-muted/20 transition-colors",
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "font-mono text-xs text-muted-foreground", children: [
-                t2.hash.slice(0, 8),
-                "...",
-                t2.hash.slice(-4)
-              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-mono text-xs text-muted-foreground", children: t2.hash.length > 12 ? `${t2.hash.slice(0, 8)}...${t2.hash.slice(-4)}` : t2.hash }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Badge,
                 {
                   variant: "outline",
-                  className: `text-xs ${t2.tipo === "Entrada" ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : "bg-red-500/15 text-red-400 border-red-500/30"}`,
-                  children: t2.tipo
+                  className: `text-xs ${tipo === "Entrada" ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : "bg-red-500/15 text-red-400 border-red-500/30"}`,
+                  children: tipo
                 }
               ) }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "text-right font-mono text-xs text-foreground", children: [
-                t2.valorBtc.toFixed(4),
+                satoshisToFloat(t2.value).toFixed(6),
                 " BTC"
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "text-right text-sm font-semibold text-foreground", children: [
-                "R$ ",
-                t2.valorBrl.toLocaleString("pt-BR")
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: t2.data }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: formatDate(t2.date) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Badge,
                 {
                   variant: "outline",
-                  className: `text-xs ${categoriaColors[t2.categoria] || "bg-muted/30 text-muted-foreground border-border"}`,
-                  children: t2.categoria
+                  className: `text-xs ${categoryColors[categoria] ?? "bg-muted/30 text-muted-foreground border-border"}`,
+                  children: categoria
                 }
               ) }),
-              !isClient2 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: t2.cliente }),
+              !isClient2 && /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground max-w-[180px] truncate", children: t2.description || "—" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Badge,
                 {
                   variant: "outline",
-                  className: `text-xs ${statusColors[t2.status]}`,
-                  children: t2.status
+                  className: `text-xs ${t2.confirmed ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" : "bg-amber-500/20 text-amber-400 border-amber-500/30"}`,
+                  children: t2.confirmed ? "Confirmada" : "Pendente"
                 }
               ) })
             ]
           },
-          t2.id
-        ))
-      ] })
+          t2.id.toString()
+        );
+      }) })
     ] }) }) }) })
   ] });
 }

@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -17,254 +18,117 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useQuery } from "@tanstack/react-query";
 import { Download, Info, Search } from "lucide-react";
 import { motion } from "motion/react";
-import { useState } from "react";
-import { BusinessRole } from "../backend.d";
-import type { UserProfile } from "../backend.d";
+import { useMemo, useState } from "react";
+import {
+  BusinessRole,
+  TransactionCategory,
+  TransactionType,
+} from "../backend.d";
+import type { Transaction, UserProfile } from "../backend.d";
+import { useActor } from "../hooks/useActor";
 
-interface Transacao {
-  id: number;
-  hash: string;
-  tipo: "Entrada" | "Saída";
-  valorBtc: number;
-  valorBrl: number;
-  data: string;
-  categoria: string;
-  cliente: string;
-  status: "Confirmada" | "Pendente" | "Falha";
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatDate(ns: bigint): string {
+  const ms = Number(ns / 1_000_000n);
+  return new Date(ms).toLocaleDateString("pt-BR");
 }
 
-const transacoes: Transacao[] = [
-  {
-    id: 1,
-    hash: "3a8f2c1d9e4b7f6a",
-    tipo: "Entrada",
-    valorBtc: 0.2847,
-    valorBrl: 86400,
-    data: "04/04/2026",
-    categoria: "Receita de Serviço",
-    cliente: "TechFin Brasil",
-    status: "Confirmada",
-  },
-  {
-    id: 2,
-    hash: "7b3e1f5a0c2d9e8b",
-    tipo: "Saída",
-    valorBtc: 0.0512,
-    valorBrl: 15540,
-    data: "04/04/2026",
-    categoria: "Taxa de Operação",
-    cliente: "Mercado Digital",
-    status: "Confirmada",
-  },
-  {
-    id: 3,
-    hash: "9d2c4b8e1f3a7c5d",
-    tipo: "Entrada",
-    valorBtc: 0.1203,
-    valorBrl: 36511,
-    data: "03/04/2026",
-    categoria: "Assinatura Mensal",
-    cliente: "CriptoVault",
-    status: "Confirmada",
-  },
-  {
-    id: 4,
-    hash: "2e9a7f3c5d1b4e8f",
-    tipo: "Saída",
-    valorBtc: 0.0081,
-    valorBrl: 2460,
-    data: "03/04/2026",
-    categoria: "Reembolso",
-    cliente: "StartupPay",
-    status: "Pendente",
-  },
-  {
-    id: 5,
-    hash: "6c1b4d8f2a9e3c7d",
-    tipo: "Entrada",
-    valorBtc: 0.3922,
-    valorBrl: 119118,
-    data: "02/04/2026",
-    categoria: "Receita de Serviço",
-    cliente: "Holding Nacional",
-    status: "Confirmada",
-  },
-  {
-    id: 6,
-    hash: "8f5a2e7d4c1b9e3a",
-    tipo: "Entrada",
-    valorBtc: 0.0444,
-    valorBrl: 13482,
-    data: "02/04/2026",
-    categoria: "Consultoria",
-    cliente: "FintechRedes Brasil",
-    status: "Confirmada",
-  },
-  {
-    id: 7,
-    hash: "4d7c1f9b2e5a8f3c",
-    tipo: "Saída",
-    valorBtc: 0.11,
-    valorBrl: 33408,
-    data: "01/04/2026",
-    categoria: "Pagamento Fornecedor",
-    cliente: "TechFin Brasil",
-    status: "Confirmada",
-  },
-  {
-    id: 8,
-    hash: "1a5e8c3d7f2b4e9a",
-    tipo: "Entrada",
-    valorBtc: 0.089,
-    valorBrl: 27030,
-    data: "01/04/2026",
-    categoria: "Assinatura Mensal",
-    cliente: "Mercado Digital",
-    status: "Confirmada",
-  },
-  {
-    id: 9,
-    hash: "5b9d3e1c8f4a7d2b",
-    tipo: "Entrada",
-    valorBtc: 0.2155,
-    valorBrl: 65461,
-    data: "31/03/2026",
-    categoria: "Receita de Serviço",
-    cliente: "CriptoVault",
-    status: "Confirmada",
-  },
-  {
-    id: 10,
-    hash: "0c4f7a2e9d1b5c8f",
-    tipo: "Saída",
-    valorBtc: 0.032,
-    valorBrl: 9720,
-    data: "31/03/2026",
-    categoria: "Taxa de Operação",
-    cliente: "StartupPay",
-    status: "Falha",
-  },
-  {
-    id: 11,
-    hash: "3e8b1d5c9f2a6e4d",
-    tipo: "Entrada",
-    valorBtc: 0.167,
-    valorBrl: 50728,
-    data: "30/03/2026",
-    categoria: "Consultoria",
-    cliente: "Holding Nacional",
-    status: "Confirmada",
-  },
-  {
-    id: 12,
-    hash: "7a2f5d0e4c8b1f9d",
-    tipo: "Saída",
-    valorBtc: 0.025,
-    valorBrl: 7595,
-    data: "30/03/2026",
-    categoria: "Reembolso",
-    cliente: "FintechRedes Brasil",
-    status: "Confirmada",
-  },
-  {
-    id: 13,
-    hash: "9e4d2b6f1c7a3e8b",
-    tipo: "Entrada",
-    valorBtc: 0.45,
-    valorBrl: 136710,
-    data: "29/03/2026",
-    categoria: "Assinatura Mensal",
-    cliente: "TechFin Brasil",
-    status: "Confirmada",
-  },
-  {
-    id: 14,
-    hash: "2c7a9f4e1d5b8c3a",
-    tipo: "Saída",
-    valorBtc: 0.014,
-    valorBrl: 4252,
-    data: "28/03/2026",
-    categoria: "Pagamento Fornecedor",
-    cliente: "Mercado Digital",
-    status: "Pendente",
-  },
-  {
-    id: 15,
-    hash: "6f1e8b5a3d9c2f7e",
-    tipo: "Entrada",
-    valorBtc: 0.098,
-    valorBrl: 29772,
-    data: "28/03/2026",
-    categoria: "Receita de Serviço",
-    cliente: "CriptoVault",
-    status: "Confirmada",
-  },
-];
+function satoshisToFloat(sats: bigint): number {
+  return Number(sats) / 1e8;
+}
 
-// Mock client name mapping for demo — first 3 transactions assigned to
-// the "client" persona so the filtered view is non-empty
-const CLIENT_MOCK_TRANSACTIONS = [1, 3, 5, 9, 11];
+function getTransactionTypeLabel(tx: Transaction): "Entrada" | "Saída" {
+  return tx.transactionType === TransactionType.income ? "Entrada" : "Saída";
+}
 
-const categorias = [...new Set(transacoes.map((t) => t.categoria))];
+function getCategoryLabel(tx: Transaction): string {
+  const map: Record<string, string> = {
+    revenue: "Receita",
+    expense: "Despesa",
+    asset: "Ativo",
+    liability: "Passivo",
+    equity: "Patrimônio",
+  };
+  return map[tx.category] ?? tx.category;
+}
 
-const categoriaColors: Record<string, string> = {
-  "Receita de Serviço": "bg-amber-500/15 text-amber-400 border-amber-500/30",
-  "Taxa de Operação": "bg-purple-500/15 text-purple-400 border-purple-500/30",
-  "Assinatura Mensal": "bg-blue-500/15 text-blue-400 border-blue-500/30",
-  Reembolso: "bg-red-500/15 text-red-400 border-red-500/30",
-  Consultoria: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-  "Pagamento Fornecedor":
-    "bg-orange-500/15 text-orange-400 border-orange-500/30",
+const SKELETON_ROWS = ["sk1", "sk2", "sk3", "sk4", "sk5"] as const;
+
+const categoryColors: Record<string, string> = {
+  Receita: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+  Despesa: "bg-red-500/15 text-red-400 border-red-500/30",
+  Ativo: "bg-blue-500/15 text-blue-400 border-blue-500/30",
+  Passivo: "bg-purple-500/15 text-purple-400 border-purple-500/30",
+  Patrimônio: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
 };
 
-const statusColors: Record<string, string> = {
-  Confirmada: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  Pendente: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  Falha: "bg-red-500/20 text-red-400 border-red-500/30",
-};
+// ─── Page ────────────────────────────────────────────────────────────────────
 
 interface TransacoesPageProps {
   profile: UserProfile;
 }
 
 export default function TransacoesPage({ profile }: TransacoesPageProps) {
+  const { actor, isFetching } = useActor();
+  const isClient = profile.businessRole === BusinessRole.client;
+
   const [search, setSearch] = useState("");
   const [filterTipo, setFilterTipo] = useState("todos");
   const [filterCategoria, setFilterCategoria] = useState("todas");
-  const [filterPeriodo, setFilterPeriodo] = useState("todos");
 
-  const isClient = profile.businessRole === BusinessRole.client;
+  const clientId = profile.clientId;
 
-  // For client role: show only mock transactions assigned to this client persona
-  const baseTransacoes = isClient
-    ? transacoes.filter((t) => CLIENT_MOCK_TRANSACTIONS.includes(t.id))
-    : transacoes;
-
-  const filtered = baseTransacoes.filter((t) => {
-    const matchSearch = isClient
-      ? t.hash.includes(search.toLowerCase())
-      : t.hash.includes(search.toLowerCase()) ||
-        t.cliente.toLowerCase().includes(search.toLowerCase());
-    const matchTipo =
-      filterTipo === "todos" ||
-      (filterTipo === "entrada" && t.tipo === "Entrada") ||
-      (filterTipo === "saida" && t.tipo === "Saída");
-    const matchCat =
-      filterCategoria === "todas" || t.categoria === filterCategoria;
-    return matchSearch && matchTipo && matchCat;
+  const { data: transactions = [], isLoading } = useQuery<Transaction[]>({
+    queryKey: isClient
+      ? ["transactions", "client", clientId?.toString()]
+      : ["transactions"],
+    queryFn: async () => {
+      if (!actor) return [];
+      if (isClient && clientId !== undefined) {
+        return actor.getTransactionsByClientId(clientId);
+      }
+      return actor.getAllTransactions();
+    },
+    enabled: !!actor && !isFetching,
   });
 
-  const totalEntradas = filtered
-    .filter((t) => t.tipo === "Entrada")
-    .reduce((acc, t) => acc + t.valorBrl, 0);
-  const totalSaidas = filtered
-    .filter((t) => t.tipo === "Saída")
-    .reduce((acc, t) => acc + t.valorBrl, 0);
+  // Derive unique categories from real data
+  const categorias = useMemo(() => {
+    const set = new Set(transactions.map(getCategoryLabel));
+    return Array.from(set);
+  }, [transactions]);
 
-  // Number of visible columns depends on role
-  const colSpan = isClient ? 7 : 8;
+  const filtered = useMemo(() => {
+    return transactions.filter((t) => {
+      const tipo = getTransactionTypeLabel(t);
+      const categoria = getCategoryLabel(t);
+      const matchSearch =
+        t.hash.toLowerCase().includes(search.toLowerCase()) ||
+        (!isClient &&
+          t.description.toLowerCase().includes(search.toLowerCase()));
+      const matchTipo =
+        filterTipo === "todos" ||
+        (filterTipo === "entrada" && tipo === "Entrada") ||
+        (filterTipo === "saida" && tipo === "Saída");
+      const matchCat =
+        filterCategoria === "todas" || categoria === filterCategoria;
+      return matchSearch && matchTipo && matchCat;
+    });
+  }, [transactions, search, filterTipo, filterCategoria, isClient]);
+
+  // BTC value (satoshis stored as bigint)
+  const totalEntradas = filtered
+    .filter((t) => t.transactionType === TransactionType.income)
+    .reduce((acc, t) => acc + Number(t.value), 0);
+  const totalSaidas = filtered
+    .filter((t) => t.transactionType === TransactionType.expense)
+    .reduce((acc, t) => acc + Number(t.value), 0);
+
+  const colSpan = isClient ? 6 : 7;
 
   return (
     <div className="p-6 space-y-6">
@@ -284,13 +148,13 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
         <div className="bg-card border border-border rounded-lg p-4">
           <p className="text-xs text-muted-foreground mb-1">Total Entradas</p>
           <p className="text-lg font-display font-bold text-emerald-400">
-            R$ {totalEntradas.toLocaleString("pt-BR")}
+            {satoshisToFloat(BigInt(totalEntradas)).toFixed(6)} BTC
           </p>
         </div>
         <div className="bg-card border border-border rounded-lg p-4">
           <p className="text-xs text-muted-foreground mb-1">Total Saídas</p>
           <p className="text-lg font-display font-bold text-red-400">
-            R$ {totalSaidas.toLocaleString("pt-BR")}
+            {satoshisToFloat(BigInt(totalSaidas)).toFixed(6)} BTC
           </p>
         </div>
         <div className="bg-card border border-border rounded-lg p-4">
@@ -302,7 +166,10 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
                 : "text-red-400"
             }`}
           >
-            R$ {(totalEntradas - totalSaidas).toLocaleString("pt-BR")}
+            {satoshisToFloat(
+              BigInt(Math.abs(totalEntradas - totalSaidas)),
+            ).toFixed(6)}{" "}
+            BTC
           </p>
         </div>
       </div>
@@ -314,7 +181,7 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
           <Input
             data-ocid="transacoes.search_input"
             placeholder={
-              isClient ? "Buscar por hash..." : "Buscar hash ou cliente..."
+              isClient ? "Buscar por hash..." : "Buscar hash ou descrição..."
             }
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -350,20 +217,6 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
             ))}
           </SelectContent>
         </Select>
-        <Select value={filterPeriodo} onValueChange={setFilterPeriodo}>
-          <SelectTrigger
-            data-ocid="transacoes.select"
-            className="w-36 bg-card border-border"
-          >
-            <SelectValue placeholder="Período" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="todos">Todo período</SelectItem>
-            <SelectItem value="hoje">Hoje</SelectItem>
-            <SelectItem value="semana">Esta semana</SelectItem>
-            <SelectItem value="mes">Este mês</SelectItem>
-          </SelectContent>
-        </Select>
         <Button
           data-ocid="transacoes.secondary_button"
           variant="outline"
@@ -388,16 +241,13 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
                   <TableHead className="text-right text-muted-foreground">
                     Valor BTC
                   </TableHead>
-                  <TableHead className="text-right text-muted-foreground">
-                    Valor BRL
-                  </TableHead>
                   <TableHead className="text-muted-foreground">Data</TableHead>
                   <TableHead className="text-muted-foreground">
                     Categoria
                   </TableHead>
                   {!isClient && (
                     <TableHead className="text-muted-foreground">
-                      Cliente
+                      Descrição
                     </TableHead>
                   )}
                   <TableHead className="text-muted-foreground">
@@ -406,7 +256,39 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered.length === 0 && (
+                {isLoading ? (
+                  SKELETON_ROWS.map((key) => (
+                    <TableRow
+                      key={key}
+                      data-ocid="transacoes.loading_state"
+                      className="border-border/50"
+                    >
+                      <TableCell>
+                        <Skeleton className="h-4 w-28" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-5 w-16" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-4 w-20" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-4 w-20" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-5 w-24" />
+                      </TableCell>
+                      {!isClient && (
+                        <TableCell>
+                          <Skeleton className="h-4 w-32" />
+                        </TableCell>
+                      )}
+                      <TableCell>
+                        <Skeleton className="h-5 w-20" />
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : filtered.length === 0 ? (
                   <TableRow>
                     <TableCell
                       data-ocid="transacoes.empty_state"
@@ -416,63 +298,74 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
                       Nenhuma transação encontrada.
                     </TableCell>
                   </TableRow>
+                ) : (
+                  filtered.map((t, i) => {
+                    const tipo = getTransactionTypeLabel(t);
+                    const categoria = getCategoryLabel(t);
+                    return (
+                      <motion.tr
+                        key={t.id.toString()}
+                        data-ocid={`transacoes.item.${i + 1}`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: i * 0.025 }}
+                        className="border-b border-border/50 hover:bg-muted/20 transition-colors"
+                      >
+                        <TableCell className="font-mono text-xs text-muted-foreground">
+                          {t.hash.length > 12
+                            ? `${t.hash.slice(0, 8)}...${t.hash.slice(-4)}`
+                            : t.hash}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant="outline"
+                            className={`text-xs ${
+                              tipo === "Entrada"
+                                ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
+                                : "bg-red-500/15 text-red-400 border-red-500/30"
+                            }`}
+                          >
+                            {tipo}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right font-mono text-xs text-foreground">
+                          {satoshisToFloat(t.value).toFixed(6)} BTC
+                        </TableCell>
+                        <TableCell className="text-sm text-muted-foreground">
+                          {formatDate(t.date)}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant="outline"
+                            className={`text-xs ${
+                              categoryColors[categoria] ??
+                              "bg-muted/30 text-muted-foreground border-border"
+                            }`}
+                          >
+                            {categoria}
+                          </Badge>
+                        </TableCell>
+                        {!isClient && (
+                          <TableCell className="text-sm text-muted-foreground max-w-[180px] truncate">
+                            {t.description || "—"}
+                          </TableCell>
+                        )}
+                        <TableCell>
+                          <Badge
+                            variant="outline"
+                            className={`text-xs ${
+                              t.confirmed
+                                ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
+                                : "bg-amber-500/20 text-amber-400 border-amber-500/30"
+                            }`}
+                          >
+                            {t.confirmed ? "Confirmada" : "Pendente"}
+                          </Badge>
+                        </TableCell>
+                      </motion.tr>
+                    );
+                  })
                 )}
-                {filtered.map((t, i) => (
-                  <motion.tr
-                    key={t.id}
-                    data-ocid={`transacoes.item.${i + 1}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: i * 0.025 }}
-                    className="border-b border-border/50 hover:bg-muted/20 transition-colors"
-                  >
-                    <TableCell className="font-mono text-xs text-muted-foreground">
-                      {t.hash.slice(0, 8)}...{t.hash.slice(-4)}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="outline"
-                        className={`text-xs ${
-                          t.tipo === "Entrada"
-                            ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
-                            : "bg-red-500/15 text-red-400 border-red-500/30"
-                        }`}
-                      >
-                        {t.tipo}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right font-mono text-xs text-foreground">
-                      {t.valorBtc.toFixed(4)} BTC
-                    </TableCell>
-                    <TableCell className="text-right text-sm font-semibold text-foreground">
-                      R$ {t.valorBrl.toLocaleString("pt-BR")}
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {t.data}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="outline"
-                        className={`text-xs ${categoriaColors[t.categoria] || "bg-muted/30 text-muted-foreground border-border"}`}
-                      >
-                        {t.categoria}
-                      </Badge>
-                    </TableCell>
-                    {!isClient && (
-                      <TableCell className="text-sm text-muted-foreground">
-                        {t.cliente}
-                      </TableCell>
-                    )}
-                    <TableCell>
-                      <Badge
-                        variant="outline"
-                        className={`text-xs ${statusColors[t.status]}`}
-                      >
-                        {t.status}
-                      </Badge>
-                    </TableCell>
-                  </motion.tr>
-                ))}
               </TableBody>
             </Table>
           </div>

@@ -17553,6 +17553,14 @@ const Toaster = ({ ...props }) => {
     }
   );
 };
+var AccountType = /* @__PURE__ */ ((AccountType2) => {
+  AccountType2["asset"] = "asset";
+  AccountType2["liability"] = "liability";
+  AccountType2["revenue"] = "revenue";
+  AccountType2["expense"] = "expense";
+  AccountType2["equity"] = "equity";
+  return AccountType2;
+})(AccountType || {});
 var BusinessRole$1 = /* @__PURE__ */ ((BusinessRole2) => {
   BusinessRole2["accountant"] = "accountant";
   BusinessRole2["client"] = "client";
@@ -17986,14 +17994,14 @@ function useImageLoadingStatus(src, { referrerPolicy, crossOrigin }) {
   }, [image, crossOrigin, referrerPolicy]);
   return loadingStatus;
 }
-var Root$7 = Avatar$1;
+var Root$8 = Avatar$1;
 var Fallback = AvatarFallback$1;
 function Avatar({
   className,
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root$7,
+    Root$8,
     {
       "data-slot": "avatar",
       className: cn(
@@ -20584,7 +20592,7 @@ var Arrow$1 = reactExports.forwardRef((props, forwardedRef) => {
   );
 });
 Arrow$1.displayName = NAME$3;
-var Root$6 = Arrow$1;
+var Root$7 = Arrow$1;
 function useSize(element) {
   const [size2, setSize] = reactExports.useState(void 0);
   useLayoutEffect2(() => {
@@ -20831,7 +20839,7 @@ var PopperArrow = reactExports.forwardRef(function PopperArrow2(props, forwarded
           visibility: contentContext.shouldHideArrow ? "hidden" : void 0
         },
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Root$6,
+          Root$7,
           {
             ...arrowProps,
             ref: forwardedRef,
@@ -21230,7 +21238,7 @@ function focusFirst$1(candidates, preventScroll = false) {
 function wrapArray$2(array2, startIndex) {
   return array2.map((_2, index2) => array2[(startIndex + index2) % array2.length]);
 }
-var Root$5 = RovingFocusGroup;
+var Root$6 = RovingFocusGroup;
 var Item$1 = RovingFocusGroupItem;
 var getDefaultParent = function(originalTarget) {
   if (typeof document === "undefined") {
@@ -22257,7 +22265,7 @@ var MenuContentImpl = reactExports.forwardRef(
                 onInteractOutside,
                 onDismiss,
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Root$5,
+                  Root$6,
                   {
                     asChild: true,
                     ...rovingFocusGroupScope,
@@ -23135,20 +23143,20 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$B = [
+const __iconNode$E = [
   ["path", { d: "M8 3 4 7l4 4", key: "9rb6wj" }],
   ["path", { d: "M4 7h16", key: "6tx8e3" }],
   ["path", { d: "m16 21 4-4-4-4", key: "siv7j2" }],
   ["path", { d: "M20 17H4", key: "h6l3hr" }]
 ];
-const ArrowLeftRight = createLucideIcon("arrow-left-right", __iconNode$B);
+const ArrowLeftRight = createLucideIcon("arrow-left-right", __iconNode$E);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$A = [
+const __iconNode$D = [
   ["path", { d: "M10.268 21a2 2 0 0 0 3.464 0", key: "vwvbt9" }],
   [
     "path",
@@ -23158,14 +23166,14 @@ const __iconNode$A = [
     }
   ]
 ];
-const Bell = createLucideIcon("bell", __iconNode$A);
+const Bell = createLucideIcon("bell", __iconNode$D);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$z = [
+const __iconNode$C = [
   [
     "path",
     {
@@ -23174,14 +23182,14 @@ const __iconNode$z = [
     }
   ]
 ];
-const Bitcoin = createLucideIcon("bitcoin", __iconNode$z);
+const Bitcoin = createLucideIcon("bitcoin", __iconNode$C);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$y = [
+const __iconNode$B = [
   ["path", { d: "M12 7v14", key: "1akyts" }],
   [
     "path",
@@ -23191,52 +23199,84 @@ const __iconNode$y = [
     }
   ]
 ];
-const BookOpen = createLucideIcon("book-open", __iconNode$y);
+const BookOpen = createLucideIcon("book-open", __iconNode$B);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$x = [
+const __iconNode$A = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$x);
+const ChartColumn = createLucideIcon("chart-column", __iconNode$A);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$w = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$w);
+const __iconNode$z = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$z);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$v = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$v);
+const __iconNode$y = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$y);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$u = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$u);
+const __iconNode$x = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$x);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$t = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$t);
+const __iconNode$w = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$w);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$v = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M8 12h8", key: "1wcyev" }],
+  ["path", { d: "M12 8v8", key: "napkw2" }]
+];
+const CirclePlus = createLucideIcon("circle-plus", __iconNode$v);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$u = [
+  ["path", { d: "M18 20a6 6 0 0 0-12 0", key: "1qehca" }],
+  ["circle", { cx: "12", cy: "10", r: "4", key: "1h16sb" }],
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+];
+const CircleUserRound = createLucideIcon("circle-user-round", __iconNode$u);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$t = [["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]];
+const Circle = createLucideIcon("circle", __iconNode$t);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23244,26 +23284,6 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$t);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$s = [
-  ["path", { d: "M18 20a6 6 0 0 0-12 0", key: "1qehca" }],
-  ["circle", { cx: "12", cy: "10", r: "4", key: "1h16sb" }],
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
-];
-const CircleUserRound = createLucideIcon("circle-user-round", __iconNode$s);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$r = [["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]];
-const Circle = createLucideIcon("circle", __iconNode$r);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$q = [
   ["rect", { x: "2", y: "6", width: "20", height: "8", rx: "1", key: "1estib" }],
   ["path", { d: "M17 14v7", key: "7m2elx" }],
   ["path", { d: "M7 14v7", key: "1cm7wv" }],
@@ -23273,7 +23293,29 @@ const __iconNode$q = [
   ["path", { d: "m14 6 7.7 7.7", key: "1s8pl2" }],
   ["path", { d: "m8 6 8 8", key: "hl96qh" }]
 ];
-const Construction = createLucideIcon("construction", __iconNode$q);
+const Construction = createLucideIcon("construction", __iconNode$s);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$r = [
+  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
+  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+];
+const Copy = createLucideIcon("copy", __iconNode$r);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$q = [
+  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
+  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
+];
+const CreditCard = createLucideIcon("credit-card", __iconNode$q);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23281,28 +23323,6 @@ const Construction = createLucideIcon("construction", __iconNode$q);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$p = [
-  ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-  ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
-];
-const Copy = createLucideIcon("copy", __iconNode$p);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$o = [
-  ["rect", { width: "20", height: "14", x: "2", y: "5", rx: "2", key: "ynyp8z" }],
-  ["line", { x1: "2", x2: "22", y1: "10", y2: "10", key: "1b3vmo" }]
-];
-const CreditCard = createLucideIcon("credit-card", __iconNode$o);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$n = [
   [
     "path",
     {
@@ -23312,7 +23332,33 @@ const __iconNode$n = [
   ],
   ["path", { d: "M5 21h14", key: "11awu3" }]
 ];
-const Crown = createLucideIcon("crown", __iconNode$n);
+const Crown = createLucideIcon("crown", __iconNode$p);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$o = [
+  ["path", { d: "M12 15V3", key: "m9g1x1" }],
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+];
+const Download = createLucideIcon("download", __iconNode$o);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$n = [
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M8 18v-2", key: "qcmpov" }],
+  ["path", { d: "M12 18v-4", key: "q1q25u" }],
+  ["path", { d: "M16 18v-6", key: "15y0np" }]
+];
+const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$n);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23320,11 +23366,13 @@ const Crown = createLucideIcon("crown", __iconNode$n);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$m = [
-  ["path", { d: "M12 15V3", key: "m9g1x1" }],
-  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-  ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  ["path", { d: "M10 9H8", key: "b1mrlr" }],
+  ["path", { d: "M16 13H8", key: "t4e002" }],
+  ["path", { d: "M16 17H8", key: "z1uh3a" }]
 ];
-const Download = createLucideIcon("download", __iconNode$m);
+const FileText = createLucideIcon("file-text", __iconNode$m);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23332,13 +23380,11 @@ const Download = createLucideIcon("download", __iconNode$m);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$l = [
-  ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-  ["path", { d: "M8 18v-2", key: "qcmpov" }],
-  ["path", { d: "M12 18v-4", key: "q1q25u" }],
-  ["path", { d: "M16 18v-6", key: "15y0np" }]
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 16v-4", key: "1dtifu" }],
+  ["path", { d: "M12 8h.01", key: "e9boi3" }]
 ];
-const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing", __iconNode$l);
+const Info = createLucideIcon("info", __iconNode$l);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23346,32 +23392,32 @@ const FileChartColumnIncreasing = createLucideIcon("file-chart-column-increasing
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$k = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 16v-4", key: "1dtifu" }],
-  ["path", { d: "M12 8h.01", key: "e9boi3" }]
-];
-const Info = createLucideIcon("info", __iconNode$k);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$j = [
   ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
   ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
   ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
   ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
 ];
-const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$j);
+const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$k);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$i = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$i);
+const __iconNode$j = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$j);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$i = [
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+];
+const LogOut = createLucideIcon("log-out", __iconNode$i);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23379,11 +23425,11 @@ const LoaderCircle = createLucideIcon("loader-circle", __iconNode$i);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$h = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$h);
+const Menu = createLucideIcon("menu", __iconNode$h);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23391,18 +23437,6 @@ const LogOut = createLucideIcon("log-out", __iconNode$h);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$g = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
-];
-const Menu = createLucideIcon("menu", __iconNode$g);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$f = [
   [
     "path",
     {
@@ -23415,14 +23449,14 @@ const __iconNode$f = [
   ["circle", { cx: "6.5", cy: "12.5", r: ".5", fill: "currentColor", key: "qy21gx" }],
   ["circle", { cx: "8.5", cy: "7.5", r: ".5", fill: "currentColor", key: "fotxhn" }]
 ];
-const Palette = createLucideIcon("palette", __iconNode$f);
+const Palette = createLucideIcon("palette", __iconNode$g);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$e = [
+const __iconNode$f = [
   [
     "path",
     {
@@ -23432,7 +23466,18 @@ const __iconNode$e = [
   ],
   ["path", { d: "m15 5 4 4", key: "1mk7zo" }]
 ];
-const Pencil = createLucideIcon("pencil", __iconNode$e);
+const Pencil = createLucideIcon("pencil", __iconNode$f);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$e = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "M12 5v14", key: "s699le" }]
+];
+const Plus = createLucideIcon("plus", __iconNode$e);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23440,17 +23485,6 @@ const Pencil = createLucideIcon("pencil", __iconNode$e);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$d = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "M12 5v14", key: "s699le" }]
-];
-const Plus = createLucideIcon("plus", __iconNode$d);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$c = [
   [
     "path",
     {
@@ -23461,7 +23495,18 @@ const __iconNode$c = [
   ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
   ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
 ];
-const Save = createLucideIcon("save", __iconNode$c);
+const Save = createLucideIcon("save", __iconNode$d);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$c = [
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+];
+const Search = createLucideIcon("search", __iconNode$c);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23469,10 +23514,16 @@ const Save = createLucideIcon("save", __iconNode$c);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$b = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+  [
+    "path",
+    {
+      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
+      key: "1qme2f"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ];
-const Search = createLucideIcon("search", __iconNode$b);
+const Settings = createLucideIcon("settings", __iconNode$b);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23483,13 +23534,13 @@ const __iconNode$a = [
   [
     "path",
     {
-      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
-      key: "1qme2f"
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
     }
   ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const Settings = createLucideIcon("settings", __iconNode$a);
+const ShieldCheck = createLucideIcon("shield-check", __iconNode$a);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23503,10 +23554,9 @@ const __iconNode$9 = [
       d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
       key: "oel41y"
     }
-  ],
-  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+  ]
 ];
-const ShieldCheck = createLucideIcon("shield-check", __iconNode$9);
+const Shield = createLucideIcon("shield", __iconNode$9);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23517,12 +23567,12 @@ const __iconNode$8 = [
   [
     "path",
     {
-      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-      key: "oel41y"
+      d: "M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z",
+      key: "r04s7s"
     }
   ]
 ];
-const Shield = createLucideIcon("shield", __iconNode$8);
+const Star = createLucideIcon("star", __iconNode$8);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23530,15 +23580,13 @@ const Shield = createLucideIcon("shield", __iconNode$8);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$7 = [
-  [
-    "path",
-    {
-      d: "M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z",
-      key: "r04s7s"
-    }
-  ]
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
+  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
+  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
 ];
-const Star = createLucideIcon("star", __iconNode$7);
+const Trash2 = createLucideIcon("trash-2", __iconNode$7);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -23546,13 +23594,10 @@ const Star = createLucideIcon("star", __iconNode$7);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$6 = [
-  ["path", { d: "M3 6h18", key: "d0wm0j" }],
-  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
-  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
-  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
-  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
+  ["path", { d: "M16 17h6v-6", key: "t6n2it" }],
+  ["path", { d: "m22 17-8.5-8.5-5 5L2 7", key: "x473p" }]
 ];
-const Trash2 = createLucideIcon("trash-2", __iconNode$6);
+const TrendingDown = createLucideIcon("trending-down", __iconNode$6);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -24196,19 +24241,19 @@ var ScrollAreaScrollbarImpl = reactExports.forwardRef((props, forwardedRef) => {
     }
   );
 });
-var THUMB_NAME = "ScrollAreaThumb";
+var THUMB_NAME$1 = "ScrollAreaThumb";
 var ScrollAreaThumb = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { forceMount, ...thumbProps } = props;
-    const scrollbarContext = useScrollbarContext(THUMB_NAME, props.__scopeScrollArea);
+    const scrollbarContext = useScrollbarContext(THUMB_NAME$1, props.__scopeScrollArea);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || scrollbarContext.hasThumb, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollAreaThumbImpl, { ref: forwardedRef, ...thumbProps }) });
   }
 );
 var ScrollAreaThumbImpl = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeScrollArea, style: style2, ...thumbProps } = props;
-    const scrollAreaContext = useScrollAreaContext(THUMB_NAME, __scopeScrollArea);
-    const scrollbarContext = useScrollbarContext(THUMB_NAME, __scopeScrollArea);
+    const scrollAreaContext = useScrollAreaContext(THUMB_NAME$1, __scopeScrollArea);
+    const scrollbarContext = useScrollbarContext(THUMB_NAME$1, __scopeScrollArea);
     const { onThumbPositionChange } = scrollbarContext;
     const composedRef = useComposedRefs$1(
       forwardedRef,
@@ -24260,7 +24305,7 @@ var ScrollAreaThumbImpl = reactExports.forwardRef(
     );
   }
 );
-ScrollAreaThumb.displayName = THUMB_NAME;
+ScrollAreaThumb.displayName = THUMB_NAME$1;
 var CORNER_NAME = "ScrollAreaCorner";
 var ScrollAreaCorner = reactExports.forwardRef(
   (props, forwardedRef) => {
@@ -24392,7 +24437,7 @@ function useResizeObserver(element, onResize) {
     }
   }, [element, handleResize]);
 }
-var Root$4 = ScrollArea$1;
+var Root$5 = ScrollArea$1;
 var Viewport$1 = ScrollAreaViewport;
 var Corner = ScrollAreaCorner;
 function ScrollArea({
@@ -24401,7 +24446,7 @@ function ScrollArea({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Root$4,
+    Root$5,
     {
       "data-slot": "scroll-area",
       className: cn("relative", className),
@@ -46367,6 +46412,19 @@ function TableBody({ className, ...props }) {
     }
   );
 }
+function TableFooter({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "tfoot",
+    {
+      "data-slot": "table-footer",
+      className: cn(
+        "bg-muted/50 border-t font-medium [&>tr]:last:border-b-0",
+        className
+      ),
+      ...props
+    }
+  );
+}
 function TableRow({ className, ...props }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "tr",
@@ -46491,7 +46549,7 @@ const SKELETON_CARD_FIELDS = [
 ];
 const SKELETON_RECURSOS = ["r1", "r2", "r3", "r4"];
 const SKELETON_TABLE_ROWS = ["sk1", "sk2", "sk3", "sk4", "sk5"];
-function formatDate$1(ns) {
+function formatDate$2(ns) {
   const ms = Number(ns / 1000000n);
   return new Date(ms).toLocaleDateString("pt-BR");
 }
@@ -46616,7 +46674,7 @@ function ClientView({ profile }) {
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Início" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground mt-1", children: formatDate$1(subscription.startDate) })
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium text-foreground mt-1", children: formatDate$2(subscription.startDate) })
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground", children: "Plano" }),
@@ -46774,7 +46832,7 @@ function AdminView() {
                     children: planNome
                   }
                 ) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: formatDate$1(sub.startDate) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: formatDate$2(sub.startDate) }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: addOneYear(sub.startDate) }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                   Badge,
@@ -46873,7 +46931,7 @@ var DialogTrigger$1 = reactExports.forwardRef(
         "aria-haspopup": "dialog",
         "aria-expanded": context.open,
         "aria-controls": context.contentId,
-        "data-state": getState$1(context.open),
+        "data-state": getState$2(context.open),
         ...triggerProps,
         ref: composedTriggerRef,
         onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
@@ -46913,7 +46971,7 @@ var DialogOverlayImpl = reactExports.forwardRef(
       /* @__PURE__ */ jsxRuntimeExports.jsx(ReactRemoveScroll, { as: Slot$1, allowPinchZoom: true, shards: [context.contentRef], children: /* @__PURE__ */ jsxRuntimeExports.jsx(
         Primitive.div,
         {
-          "data-state": getState$1(context.open),
+          "data-state": getState$2(context.open),
           ...overlayProps,
           ref: forwardedRef,
           style: { pointerEvents: "auto", ...overlayProps.style }
@@ -47032,7 +47090,7 @@ var DialogContentImpl = reactExports.forwardRef(
               id: context.contentId,
               "aria-describedby": context.descriptionId,
               "aria-labelledby": context.titleId,
-              "data-state": getState$1(context.open),
+              "data-state": getState$2(context.open),
               ...contentProps,
               ref: composedRefs,
               onDismiss: () => context.onOpenChange(false)
@@ -47082,7 +47140,7 @@ var DialogClose = reactExports.forwardRef(
   }
 );
 DialogClose.displayName = CLOSE_NAME;
-function getState$1(open) {
+function getState$2(open) {
   return open ? "open" : "closed";
 }
 var TITLE_WARNING_NAME = "DialogTitleWarning";
@@ -47120,7 +47178,7 @@ var DescriptionWarning = ({ contentRef, descriptionId }) => {
   }, [MESSAGE, contentRef, descriptionId]);
   return null;
 };
-var Root$3 = Dialog$1;
+var Root$4 = Dialog$1;
 var Trigger$3 = DialogTrigger$1;
 var Portal$2 = DialogPortal$1;
 var Overlay = DialogOverlay$1;
@@ -47130,7 +47188,7 @@ var Close = DialogClose;
 function Dialog({
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$3, { "data-slot": "dialog", ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$4, { "data-slot": "dialog", ...props });
 }
 function DialogTrigger({
   ...props
@@ -47203,6 +47261,19 @@ function DialogHeader({ className, ...props }) {
     }
   );
 }
+function DialogFooter({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      "data-slot": "dialog-footer",
+      className: cn(
+        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        className
+      ),
+      ...props
+    }
+  );
+}
 function DialogTitle({
   className,
   ...props
@@ -47250,13 +47321,13 @@ var Label$2 = reactExports.forwardRef((props, forwardedRef) => {
   );
 });
 Label$2.displayName = NAME$2;
-var Root$2 = Label$2;
+var Root$3 = Label$2;
 function Label$1({
   className,
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root$2,
+    Root$3,
     {
       "data-slot": "label",
       className: cn(
@@ -47304,7 +47375,7 @@ var Radio = reactExports.forwardRef(
           type: "button",
           role: "radio",
           "aria-checked": checked,
-          "data-state": getState(checked),
+          "data-state": getState$1(checked),
           "data-disabled": disabled ? "" : void 0,
           disabled,
           value,
@@ -47345,7 +47416,7 @@ var RadioIndicator = reactExports.forwardRef(
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.checked, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       Primitive.span,
       {
-        "data-state": getState(context.checked),
+        "data-state": getState$1(context.checked),
         "data-disabled": context.disabled ? "" : void 0,
         ...indicatorProps,
         ref: forwardedRef
@@ -47354,7 +47425,7 @@ var RadioIndicator = reactExports.forwardRef(
   }
 );
 RadioIndicator.displayName = INDICATOR_NAME;
-var BUBBLE_INPUT_NAME$1 = "RadioBubbleInput";
+var BUBBLE_INPUT_NAME$2 = "RadioBubbleInput";
 var RadioBubbleInput = reactExports.forwardRef(
   ({
     __scopeRadio,
@@ -47403,8 +47474,8 @@ var RadioBubbleInput = reactExports.forwardRef(
     );
   }
 );
-RadioBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
-function getState(checked) {
+RadioBubbleInput.displayName = BUBBLE_INPUT_NAME$2;
+function getState$1(checked) {
   return checked ? "checked" : "unchecked";
 }
 var ARROW_KEYS = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
@@ -47449,7 +47520,7 @@ var RadioGroup$1 = reactExports.forwardRef(
         value,
         onValueChange: setValue,
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Root$5,
+          Root$6,
           {
             asChild: true,
             ...rovingFocusGroupScope,
@@ -47609,7 +47680,7 @@ var VisuallyHidden = reactExports.forwardRef(
   }
 );
 VisuallyHidden.displayName = NAME$1;
-var Root$1 = VisuallyHidden;
+var Root$2 = VisuallyHidden;
 var OPEN_KEYS = [" ", "Enter", "ArrowUp", "ArrowDown"];
 var SELECTION_KEYS = [" ", "Enter"];
 var SELECT_NAME = "Select";
@@ -48661,7 +48732,7 @@ var SelectArrow = reactExports.forwardRef(
   }
 );
 SelectArrow.displayName = ARROW_NAME$1;
-var BUBBLE_INPUT_NAME = "SelectBubbleInput";
+var BUBBLE_INPUT_NAME$1 = "SelectBubbleInput";
 var SelectBubbleInput = reactExports.forwardRef(
   ({ __scopeSelect, value, ...props }, forwardedRef) => {
     const ref = reactExports.useRef(null);
@@ -48693,7 +48764,7 @@ var SelectBubbleInput = reactExports.forwardRef(
     );
   }
 );
-SelectBubbleInput.displayName = BUBBLE_INPUT_NAME;
+SelectBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
 function shouldShowPlaceholder(value) {
   return value === "" || value === void 0;
 }
@@ -48893,7 +48964,7 @@ Separator$1.displayName = NAME;
 function isValidOrientation(orientation) {
   return ORIENTATIONS.includes(orientation);
 }
-var Root = Separator$1;
+var Root$1 = Separator$1;
 function Separator({
   className,
   orientation = "horizontal",
@@ -48901,7 +48972,7 @@ function Separator({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root,
+    Root$1,
     {
       "data-slot": "separator",
       decorative,
@@ -49245,7 +49316,7 @@ var TooltipContentImpl = reactExports.forwardRef(
             },
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Slottable, { children }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(VisuallyHiddenContentContextProvider, { scope: __scopeTooltip, isInside: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Root$1, { id: context.contentId, role: "tooltip", children: ariaLabel || children }) })
+              /* @__PURE__ */ jsxRuntimeExports.jsx(VisuallyHiddenContentContextProvider, { scope: __scopeTooltip, isInside: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Root$2, { id: context.contentId, role: "tooltip", children: ariaLabel || children }) })
             ]
           }
         )
@@ -50504,6 +50575,171 @@ function ConfiguracoesPage() {
     )
   ] });
 }
+var SWITCH_NAME = "Switch";
+var [createSwitchContext] = createContextScope(SWITCH_NAME);
+var [SwitchProvider, useSwitchContext] = createSwitchContext(SWITCH_NAME);
+var Switch$1 = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeSwitch,
+      name,
+      checked: checkedProp,
+      defaultChecked,
+      required,
+      disabled,
+      value = "on",
+      onCheckedChange,
+      form,
+      ...switchProps
+    } = props;
+    const [button, setButton] = reactExports.useState(null);
+    const composedRefs = useComposedRefs$1(forwardedRef, (node) => setButton(node));
+    const hasConsumerStoppedPropagationRef = reactExports.useRef(false);
+    const isFormControl = button ? form || !!button.closest("form") : true;
+    const [checked, setChecked] = useControllableState({
+      prop: checkedProp,
+      defaultProp: defaultChecked ?? false,
+      onChange: onCheckedChange,
+      caller: SWITCH_NAME
+    });
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(SwitchProvider, { scope: __scopeSwitch, checked, disabled, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Primitive.button,
+        {
+          type: "button",
+          role: "switch",
+          "aria-checked": checked,
+          "aria-required": required,
+          "data-state": getState(checked),
+          "data-disabled": disabled ? "" : void 0,
+          disabled,
+          value,
+          ...switchProps,
+          ref: composedRefs,
+          onClick: composeEventHandlers(props.onClick, (event) => {
+            setChecked((prevChecked) => !prevChecked);
+            if (isFormControl) {
+              hasConsumerStoppedPropagationRef.current = event.isPropagationStopped();
+              if (!hasConsumerStoppedPropagationRef.current) event.stopPropagation();
+            }
+          })
+        }
+      ),
+      isFormControl && /* @__PURE__ */ jsxRuntimeExports.jsx(
+        SwitchBubbleInput,
+        {
+          control: button,
+          bubbles: !hasConsumerStoppedPropagationRef.current,
+          name,
+          value,
+          checked,
+          required,
+          disabled,
+          form,
+          style: { transform: "translateX(-100%)" }
+        }
+      )
+    ] });
+  }
+);
+Switch$1.displayName = SWITCH_NAME;
+var THUMB_NAME = "SwitchThumb";
+var SwitchThumb = reactExports.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeSwitch, ...thumbProps } = props;
+    const context = useSwitchContext(THUMB_NAME, __scopeSwitch);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Primitive.span,
+      {
+        "data-state": getState(context.checked),
+        "data-disabled": context.disabled ? "" : void 0,
+        ...thumbProps,
+        ref: forwardedRef
+      }
+    );
+  }
+);
+SwitchThumb.displayName = THUMB_NAME;
+var BUBBLE_INPUT_NAME = "SwitchBubbleInput";
+var SwitchBubbleInput = reactExports.forwardRef(
+  ({
+    __scopeSwitch,
+    control,
+    checked,
+    bubbles = true,
+    ...props
+  }, forwardedRef) => {
+    const ref = reactExports.useRef(null);
+    const composedRefs = useComposedRefs$1(ref, forwardedRef);
+    const prevChecked = usePrevious(checked);
+    const controlSize = useSize(control);
+    reactExports.useEffect(() => {
+      const input = ref.current;
+      if (!input) return;
+      const inputProto = window.HTMLInputElement.prototype;
+      const descriptor = Object.getOwnPropertyDescriptor(
+        inputProto,
+        "checked"
+      );
+      const setChecked = descriptor.set;
+      if (prevChecked !== checked && setChecked) {
+        const event = new Event("click", { bubbles });
+        setChecked.call(input, checked);
+        input.dispatchEvent(event);
+      }
+    }, [prevChecked, checked, bubbles]);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "input",
+      {
+        type: "checkbox",
+        "aria-hidden": true,
+        defaultChecked: checked,
+        ...props,
+        tabIndex: -1,
+        ref: composedRefs,
+        style: {
+          ...props.style,
+          ...controlSize,
+          position: "absolute",
+          pointerEvents: "none",
+          opacity: 0,
+          margin: 0
+        }
+      }
+    );
+  }
+);
+SwitchBubbleInput.displayName = BUBBLE_INPUT_NAME;
+function getState(checked) {
+  return checked ? "checked" : "unchecked";
+}
+var Root = Switch$1;
+var Thumb = SwitchThumb;
+function Switch({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Root,
+    {
+      "data-slot": "switch",
+      className: cn(
+        "peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      ),
+      ...props,
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Thumb,
+        {
+          "data-slot": "switch-thumb",
+          className: cn(
+            "bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
+          )
+        }
+      )
+    }
+  );
+}
 var TABS_NAME = "Tabs";
 var [createTabsContext] = createContextScope(TABS_NAME, [
   createRovingFocusGroupScope
@@ -50560,7 +50796,7 @@ var TabsList$1 = reactExports.forwardRef(
     const context = useTabsContext(TAB_LIST_NAME, __scopeTabs);
     const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeTabs);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Root$5,
+      Root$6,
       {
         asChild: true,
         ...rovingFocusGroupScope,
@@ -50736,19 +50972,783 @@ function TabsContent({
     }
   );
 }
-function EmptyState$1({
-  titulo,
-  descricao
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(motion.div, { initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "flex flex-col items-center justify-center py-20 gap-4", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-full bg-muted/40 p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Construction, { className: "h-8 w-8 text-muted-foreground" }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-base font-semibold text-foreground mb-1", children: titulo }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground max-w-sm", children: descricao })
-    ] })
-  ] }) }) });
+function Textarea({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "textarea",
+    {
+      "data-slot": "textarea",
+      className: cn(
+        "border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        className
+      ),
+      ...props
+    }
+  );
 }
-function ContabilidadePage() {
+const ACCOUNT_TYPE_LABELS = {
+  [AccountType.asset]: "Ativo",
+  [AccountType.liability]: "Passivo",
+  [AccountType.revenue]: "Receita",
+  [AccountType.expense]: "Despesa",
+  [AccountType.equity]: "Patrimônio"
+};
+const ACCOUNT_TYPE_COLORS = {
+  [AccountType.asset]: "bg-blue-500/15 text-blue-400 border-blue-500/30",
+  [AccountType.liability]: "bg-purple-500/15 text-purple-400 border-purple-500/30",
+  [AccountType.revenue]: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  [AccountType.expense]: "bg-red-500/15 text-red-400 border-red-500/30",
+  [AccountType.equity]: "bg-amber-500/15 text-amber-400 border-amber-500/30"
+};
+function formatDate$1(ns) {
+  const ms = Number(ns / 1000000n);
+  return new Date(ms).toLocaleDateString("pt-BR");
+}
+function formatBtc$2(sats) {
+  return `${(Number(sats) / 1e8).toFixed(8)} BTC`;
+}
+const SKELETON_ROWS$3 = ["sk1", "sk2", "sk3", "sk4", "sk5"];
+const EMPTY_ACCOUNT_FORM = {
+  code: "",
+  name: "",
+  accountType: "",
+  parentCode: "",
+  description: "",
+  active: true
+};
+function AccountDialog({ mode, account, onClose, open }) {
+  const { actor } = useActor();
+  const queryClient2 = useQueryClient();
+  const [form, setForm] = reactExports.useState(
+    account ? {
+      code: account.code,
+      name: account.name,
+      accountType: account.accountType,
+      parentCode: account.parentCode ?? "",
+      description: account.description,
+      active: account.active
+    } : EMPTY_ACCOUNT_FORM
+  );
+  const addMutation = useMutation({
+    mutationFn: async (data) => {
+      if (!actor) throw new Error("Sem conexão com o backend");
+      if (!data.accountType) throw new Error("Tipo obrigatório");
+      const now2 = BigInt(Date.now()) * 1000000n;
+      const newAccount = {
+        id: 0n,
+        code: data.code,
+        name: data.name,
+        accountType: data.accountType,
+        parentCode: data.parentCode || void 0,
+        description: data.description,
+        active: data.active,
+        createdAt: now2
+      };
+      return actor.addChartAccount(newAccount);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["chartAccounts"] });
+      ue.success("Conta criada com sucesso");
+      onClose();
+      setForm(EMPTY_ACCOUNT_FORM);
+    },
+    onError: (e3) => ue.error(e3.message || "Erro ao criar conta")
+  });
+  const editMutation = useMutation({
+    mutationFn: async (data) => {
+      if (!actor || !account) throw new Error("Sem conexão com o backend");
+      if (!data.accountType) throw new Error("Tipo obrigatório");
+      const updated = {
+        ...account,
+        code: data.code,
+        name: data.name,
+        accountType: data.accountType,
+        parentCode: data.parentCode || void 0,
+        description: data.description,
+        active: data.active
+      };
+      return actor.editChartAccount(account.id, updated);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["chartAccounts"] });
+      ue.success("Conta atualizada");
+      onClose();
+    },
+    onError: (e3) => ue.error(e3.message || "Erro ao atualizar conta")
+  });
+  const isPending = addMutation.isPending || editMutation.isPending;
+  function handleSubmit(e3) {
+    e3.preventDefault();
+    if (!form.code.trim() || !form.name.trim() || !form.accountType) {
+      ue.error("Preencha os campos obrigatórios");
+      return;
+    }
+    if (mode === "create") addMutation.mutate(form);
+    else editMutation.mutate(form);
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Dialog,
+    {
+      open,
+      onOpenChange: (v2) => {
+        if (!v2) onClose();
+      },
+      children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        DialogContent,
+        {
+          className: "bg-card border-border max-w-md",
+          "data-ocid": "contabilidade.contas.dialog",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "font-display", children: mode === "create" ? "Nova Conta" : "Editar Conta" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { htmlFor: "code", children: "Código *" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Input,
+                    {
+                      id: "code",
+                      "data-ocid": "contabilidade.contas.input",
+                      value: form.code,
+                      onChange: (e3) => setForm((p2) => ({ ...p2, code: e3.target.value })),
+                      placeholder: "Ex: 1.1.01",
+                      className: "bg-background border-border"
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { htmlFor: "parentCode", children: "Código Pai" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Input,
+                    {
+                      id: "parentCode",
+                      "data-ocid": "contabilidade.contas.input",
+                      value: form.parentCode,
+                      onChange: (e3) => setForm((p2) => ({ ...p2, parentCode: e3.target.value })),
+                      placeholder: "Ex: 1.1",
+                      className: "bg-background border-border"
+                    }
+                  )
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { htmlFor: "name", children: "Nome *" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Input,
+                  {
+                    id: "name",
+                    "data-ocid": "contabilidade.contas.input",
+                    value: form.name,
+                    onChange: (e3) => setForm((p2) => ({ ...p2, name: e3.target.value })),
+                    placeholder: "Nome da conta",
+                    className: "bg-background border-border"
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { children: "Tipo *" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  Select,
+                  {
+                    value: form.accountType,
+                    onValueChange: (v2) => setForm((p2) => ({ ...p2, accountType: v2 })),
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        SelectTrigger,
+                        {
+                          "data-ocid": "contabilidade.contas.select",
+                          className: "bg-background border-border",
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectValue, { placeholder: "Selecione o tipo" })
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectContent, { children: Object.values(AccountType).map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: t2, children: ACCOUNT_TYPE_LABELS[t2] }, t2)) })
+                    ]
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { htmlFor: "description", children: "Descrição *" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Textarea,
+                  {
+                    id: "description",
+                    "data-ocid": "contabilidade.contas.textarea",
+                    value: form.description,
+                    onChange: (e3) => setForm((p2) => ({ ...p2, description: e3.target.value })),
+                    placeholder: "Descreva a finalidade desta conta",
+                    className: "bg-background border-border resize-none h-20"
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Switch,
+                  {
+                    id: "active",
+                    "data-ocid": "contabilidade.contas.switch",
+                    checked: form.active,
+                    onCheckedChange: (v2) => setForm((p2) => ({ ...p2, active: v2 }))
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { htmlFor: "active", children: "Conta Ativa" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogFooter, { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Button,
+                  {
+                    type: "button",
+                    variant: "outline",
+                    onClick: onClose,
+                    "data-ocid": "contabilidade.contas.cancel_button",
+                    className: "border-border",
+                    children: "Cancelar"
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  Button,
+                  {
+                    type: "submit",
+                    "data-ocid": "contabilidade.contas.submit_button",
+                    disabled: isPending,
+                    children: [
+                      isPending && /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-4 w-4 mr-2 animate-spin" }),
+                      mode === "create" ? "Criar Conta" : "Salvar"
+                    ]
+                  }
+                )
+              ] })
+            ] })
+          ]
+        }
+      )
+    }
+  );
+}
+const EMPTY_ENTRY_FORM = {
+  date: (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
+  description: "",
+  debitAccountCode: "",
+  creditAccountCode: "",
+  value: "",
+  reference: "",
+  clientId: "1"
+};
+function EntryDialog({
+  accounts,
+  defaultClientId,
+  onClose,
+  open,
+  identity: identity3
+}) {
+  const { actor } = useActor();
+  const queryClient2 = useQueryClient();
+  const [form, setForm] = reactExports.useState({
+    ...EMPTY_ENTRY_FORM,
+    clientId: defaultClientId.toString()
+  });
+  const addMutation = useMutation({
+    mutationFn: async (data) => {
+      if (!actor) throw new Error("Sem conexão com o backend");
+      if (!data.debitAccountCode || !data.creditAccountCode)
+        throw new Error("Contas de débito e crédito obrigatórias");
+      const dateMs = new Date(data.date).getTime();
+      const dateNs = BigInt(dateMs) * 1000000n;
+      const now2 = BigInt(Date.now()) * 1000000n;
+      const entry = {
+        id: 0n,
+        date: dateNs,
+        description: data.description,
+        clientId: BigInt(data.clientId || "1"),
+        debitAccountCode: data.debitAccountCode,
+        creditAccountCode: data.creditAccountCode,
+        value: BigInt(Math.round(Number(data.value) || 0)),
+        reference: data.reference || void 0,
+        createdBy: identity3 == null ? void 0 : identity3.getPrincipal(),
+        createdAt: now2
+      };
+      return actor.addJournalEntry(entry);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["journalEntries"] });
+      ue.success("Lançamento criado com sucesso");
+      onClose();
+      setForm({ ...EMPTY_ENTRY_FORM, clientId: defaultClientId.toString() });
+    },
+    onError: (e3) => ue.error(e3.message || "Erro ao criar lançamento")
+  });
+  function handleSubmit(e3) {
+    e3.preventDefault();
+    if (!form.description.trim() || !form.debitAccountCode || !form.creditAccountCode) {
+      ue.error("Preencha todos os campos obrigatórios");
+      return;
+    }
+    addMutation.mutate(form);
+  }
+  const activeAccounts = accounts.filter((a2) => a2.active);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Dialog,
+    {
+      open,
+      onOpenChange: (v2) => {
+        if (!v2) onClose();
+      },
+      children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        DialogContent,
+        {
+          className: "bg-card border-border max-w-lg",
+          "data-ocid": "contabilidade.lancamentos.dialog",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "font-display", children: "Novo Lançamento" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { htmlFor: "entry-date", children: "Data *" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Input,
+                    {
+                      id: "entry-date",
+                      type: "date",
+                      "data-ocid": "contabilidade.lancamentos.input",
+                      value: form.date,
+                      onChange: (e3) => setForm((p2) => ({ ...p2, date: e3.target.value })),
+                      className: "bg-background border-border"
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { htmlFor: "clientId", children: "ID do Cliente *" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Input,
+                    {
+                      id: "clientId",
+                      type: "number",
+                      "data-ocid": "contabilidade.lancamentos.input",
+                      value: form.clientId,
+                      onChange: (e3) => setForm((p2) => ({ ...p2, clientId: e3.target.value })),
+                      min: "1",
+                      className: "bg-background border-border"
+                    }
+                  )
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { htmlFor: "entry-description", children: "Descrição *" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Input,
+                  {
+                    id: "entry-description",
+                    "data-ocid": "contabilidade.lancamentos.input",
+                    value: form.description,
+                    onChange: (e3) => setForm((p2) => ({ ...p2, description: e3.target.value })),
+                    placeholder: "Descrição do lançamento",
+                    className: "bg-background border-border"
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { children: "Conta Débito *" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  Select,
+                  {
+                    value: form.debitAccountCode,
+                    onValueChange: (v2) => setForm((p2) => ({ ...p2, debitAccountCode: v2 })),
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        SelectTrigger,
+                        {
+                          "data-ocid": "contabilidade.lancamentos.select",
+                          className: "bg-background border-border",
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectValue, { placeholder: "Selecione conta débito" })
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectContent, { children: activeAccounts.map((a2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(SelectItem, { value: a2.code, children: [
+                        a2.code,
+                        " — ",
+                        a2.name
+                      ] }, a2.code)) })
+                    ]
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { children: "Conta Crédito *" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  Select,
+                  {
+                    value: form.creditAccountCode,
+                    onValueChange: (v2) => setForm((p2) => ({ ...p2, creditAccountCode: v2 })),
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        SelectTrigger,
+                        {
+                          "data-ocid": "contabilidade.lancamentos.select",
+                          className: "bg-background border-border",
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectValue, { placeholder: "Selecione conta crédito" })
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectContent, { children: activeAccounts.map((a2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(SelectItem, { value: a2.code, children: [
+                        a2.code,
+                        " — ",
+                        a2.name
+                      ] }, a2.code)) })
+                    ]
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { htmlFor: "entry-value", children: "Valor (satoshis) *" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Input,
+                    {
+                      id: "entry-value",
+                      type: "number",
+                      "data-ocid": "contabilidade.lancamentos.input",
+                      value: form.value,
+                      onChange: (e3) => setForm((p2) => ({ ...p2, value: e3.target.value })),
+                      placeholder: "Ex: 100000",
+                      min: "0",
+                      className: "bg-background border-border"
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Label$1, { htmlFor: "reference", children: "Referência" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Input,
+                    {
+                      id: "reference",
+                      "data-ocid": "contabilidade.lancamentos.input",
+                      value: form.reference,
+                      onChange: (e3) => setForm((p2) => ({ ...p2, reference: e3.target.value })),
+                      placeholder: "Ex: NF-1234",
+                      className: "bg-background border-border"
+                    }
+                  )
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogFooter, { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Button,
+                  {
+                    type: "button",
+                    variant: "outline",
+                    onClick: onClose,
+                    "data-ocid": "contabilidade.lancamentos.cancel_button",
+                    className: "border-border",
+                    children: "Cancelar"
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  Button,
+                  {
+                    type: "submit",
+                    "data-ocid": "contabilidade.lancamentos.submit_button",
+                    disabled: addMutation.isPending,
+                    children: [
+                      addMutation.isPending && /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-4 w-4 mr-2 animate-spin" }),
+                      "Criar Lançamento"
+                    ]
+                  }
+                )
+              ] })
+            ] })
+          ]
+        }
+      )
+    }
+  );
+}
+function PlanoDeContasTab({ canEdit }) {
+  const { actor, isFetching } = useActor();
+  const queryClient2 = useQueryClient();
+  const [dialogOpen, setDialogOpen] = reactExports.useState(false);
+  const [editTarget, setEditTarget] = reactExports.useState(
+    void 0
+  );
+  const { data: accounts = [], isLoading } = useQuery({
+    queryKey: ["chartAccounts"],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getAllChartAccounts();
+    },
+    enabled: !!actor && !isFetching
+  });
+  const deleteMutation = useMutation({
+    mutationFn: async (id2) => {
+      if (!actor) throw new Error("Sem conexão com o backend");
+      return actor.deleteChartAccount(id2);
+    },
+    onSuccess: () => {
+      queryClient2.invalidateQueries({ queryKey: ["chartAccounts"] });
+      ue.success("Conta removida");
+    },
+    onError: () => ue.error("Erro ao remover conta")
+  });
+  function openEdit(account) {
+    setEditTarget(account);
+    setDialogOpen(true);
+  }
+  function closeDialog() {
+    setDialogOpen(false);
+    setEditTarget(void 0);
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    motion.div,
+    {
+      initial: { opacity: 0, y: 10 },
+      animate: { opacity: 1, y: 0 },
+      className: "space-y-4",
+      children: [
+        canEdit && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-end", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            "data-ocid": "contabilidade.contas.open_modal_button",
+            onClick: () => {
+              setEditTarget(void 0);
+              setDialogOpen(true);
+            },
+            className: "gap-2",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(CirclePlus, { className: "h-4 w-4" }),
+              "Nova Conta"
+            ]
+          }
+        ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          AccountDialog,
+          {
+            mode: editTarget ? "edit" : "create",
+            account: editTarget,
+            open: dialogOpen,
+            onClose: closeDialog
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border hover:bg-transparent", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Código" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Nome" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Tipo" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Status" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Criado em" }),
+            canEdit && /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground text-right", children: "Ações" })
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: isLoading ? SKELETON_ROWS$3.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            TableRow,
+            {
+              "data-ocid": "contabilidade.contas.loading_state",
+              className: "border-border/50",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-16" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-40" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-20" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-5 w-16" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" }) }),
+                canEdit && /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-8 w-20 ml-auto" }) })
+              ]
+            },
+            key
+          )) : accounts.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            TableCell,
+            {
+              colSpan: canEdit ? 6 : 5,
+              className: "text-center py-12 text-muted-foreground",
+              "data-ocid": "contabilidade.contas.empty_state",
+              children: "Nenhuma conta no plano de contas. Crie a primeira conta para começar."
+            }
+          ) }) : accounts.map((acc, i) => {
+            const typeLabel = ACCOUNT_TYPE_LABELS[acc.accountType] ?? acc.accountType;
+            const typeColor = ACCOUNT_TYPE_COLORS[acc.accountType] ?? "bg-muted/30 text-muted-foreground border-border";
+            return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              TableRow,
+              {
+                "data-ocid": `contabilidade.contas.item.${i + 1}`,
+                className: "border-border/50 hover:bg-muted/20 transition-colors",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-mono text-sm text-foreground", children: acc.code }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    acc.name,
+                    acc.parentCode && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "ml-2 text-xs text-muted-foreground", children: [
+                      "↳ ",
+                      acc.parentCode
+                    ] })
+                  ] }) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Badge,
+                    {
+                      variant: "outline",
+                      className: `text-xs ${typeColor}`,
+                      children: typeLabel
+                    }
+                  ) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Badge,
+                    {
+                      variant: "outline",
+                      className: `text-xs ${acc.active ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : "bg-muted/30 text-muted-foreground border-border"}`,
+                      children: acc.active ? "Ativo" : "Inativo"
+                    }
+                  ) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: formatDate$1(acc.createdAt) }),
+                  canEdit && /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      Button,
+                      {
+                        variant: "ghost",
+                        size: "icon",
+                        "data-ocid": `contabilidade.contas.edit_button.${i + 1}`,
+                        onClick: () => openEdit(acc),
+                        className: "h-7 w-7 text-muted-foreground hover:text-foreground",
+                        children: /* @__PURE__ */ jsxRuntimeExports.jsx(Pencil, { className: "h-3.5 w-3.5" })
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      Button,
+                      {
+                        variant: "ghost",
+                        size: "icon",
+                        "data-ocid": `contabilidade.contas.delete_button.${i + 1}`,
+                        onClick: () => deleteMutation.mutate(acc.id),
+                        disabled: deleteMutation.isPending,
+                        className: "h-7 w-7 text-muted-foreground hover:text-red-400",
+                        children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "h-3.5 w-3.5" })
+                      }
+                    )
+                  ] }) })
+                ]
+              },
+              acc.id.toString()
+            );
+          }) })
+        ] }) }) }) })
+      ]
+    }
+  );
+}
+function LancamentosTab({
+  canEdit,
+  isAdmin,
+  clientId,
+  identity: identity3
+}) {
+  const { actor, isFetching } = useActor();
+  const [dialogOpen, setDialogOpen] = reactExports.useState(false);
+  const { data: accounts = [] } = useQuery({
+    queryKey: ["chartAccounts"],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getAllChartAccounts();
+    },
+    enabled: !!actor && !isFetching
+  });
+  const { data: entries = [], isLoading } = useQuery({
+    queryKey: isAdmin ? ["journalEntries"] : ["journalEntries", clientId.toString()],
+    queryFn: async () => {
+      if (!actor) return [];
+      if (isAdmin) return actor.getAllJournalEntries();
+      return actor.getJournalEntriesByClientId(clientId);
+    },
+    enabled: !!actor && !isFetching
+  });
+  const accountMap = new Map(accounts.map((a2) => [a2.code, a2.name]));
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    motion.div,
+    {
+      initial: { opacity: 0, y: 10 },
+      animate: { opacity: 1, y: 0 },
+      className: "space-y-4",
+      children: [
+        canEdit && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-end", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            "data-ocid": "contabilidade.lancamentos.open_modal_button",
+            onClick: () => setDialogOpen(true),
+            className: "gap-2",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(CirclePlus, { className: "h-4 w-4" }),
+              "Novo Lançamento"
+            ]
+          }
+        ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          EntryDialog,
+          {
+            accounts,
+            defaultClientId: clientId,
+            open: dialogOpen,
+            onClose: () => setDialogOpen(false),
+            identity: identity3
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border hover:bg-transparent", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Data" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Descrição" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Débito" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Crédito" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-right text-muted-foreground", children: "Valor" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground", children: "Referência" })
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: isLoading ? SKELETON_ROWS$3.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            TableRow,
+            {
+              "data-ocid": "contabilidade.lancamentos.loading_state",
+              className: "border-border/50",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-40" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-28" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-28" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-24 ml-auto" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-16" }) })
+              ]
+            },
+            key
+          )) : entries.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            TableCell,
+            {
+              colSpan: 6,
+              className: "text-center py-12 text-muted-foreground",
+              "data-ocid": "contabilidade.lancamentos.empty_state",
+              children: "Nenhum lançamento contábil encontrado."
+            }
+          ) }) : entries.map((entry, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            TableRow,
+            {
+              "data-ocid": `contabilidade.lancamentos.item.${i + 1}`,
+              className: "border-border/50 hover:bg-muted/20 transition-colors",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: formatDate$1(entry.date) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "font-medium text-foreground max-w-[160px] truncate", children: entry.description }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "text-sm text-muted-foreground", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs", children: entry.debitAccountCode }),
+                  accountMap.has(entry.debitAccountCode) && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "ml-1 text-xs", children: [
+                    "— ",
+                    accountMap.get(entry.debitAccountCode)
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "text-sm text-muted-foreground", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs", children: entry.creditAccountCode }),
+                  accountMap.has(entry.creditAccountCode) && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "ml-1 text-xs", children: [
+                    "— ",
+                    accountMap.get(entry.creditAccountCode)
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right font-mono text-xs text-foreground", children: formatBtc$2(entry.value) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-sm text-muted-foreground", children: entry.reference ?? "—" })
+              ]
+            },
+            entry.id.toString()
+          )) })
+        ] }) }) }) })
+      ]
+    }
+  );
+}
+function ContabilidadePage({ profile }) {
+  const { identity: identity3 } = useInternetIdentity();
+  const canEdit = profile.businessRole === BusinessRole$1.admin || profile.businessRole === BusinessRole$1.accountant;
+  const isAdmin = profile.businessRole === BusinessRole$1.admin;
+  const clientId = profile.businessRole === BusinessRole$1.admin ? 1n : profile.clientId ?? 1n;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-muted-foreground mb-2", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(BookOpen, { className: "h-5 w-5" }),
@@ -50759,18 +51759,14 @@ function ContabilidadePage() {
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "plano", "data-ocid": "contabilidade.tab", children: "Plano de Contas" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "lancamentos", "data-ocid": "contabilidade.tab", children: "Lançamentos" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "plano", className: "mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        EmptyState$1,
-        {
-          titulo: "Nenhum dado disponível",
-          descricao: "O Plano de Contas está em desenvolvimento. Os dados aparecerão aqui assim que o módulo de contabilidade for implementado no backend."
-        }
-      ) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "plano", className: "mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PlanoDeContasTab, { canEdit }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "lancamentos", className: "mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        EmptyState$1,
+        LancamentosTab,
         {
-          titulo: "Nenhum dado disponível",
-          descricao: "Os Lançamentos Contábeis estão em desenvolvimento. Os registros aparecerão aqui assim que o módulo de contabilidade for implementado no backend."
+          canEdit,
+          isAdmin,
+          clientId,
+          identity: identity3
         }
       ) })
     ] })
@@ -73907,13 +74903,13 @@ const categoryData = [
   { name: "Assinaturas SaaS", value: 25, color: "#6366f1" },
   { name: "Consultoria", value: 10, color: "#ec4899" }
 ];
-const SKELETON_ROWS$1 = ["sk-1", "sk-2", "sk-3", "sk-4", "sk-5"];
+const SKELETON_ROWS$2 = ["sk-1", "sk-2", "sk-3", "sk-4", "sk-5"];
 const statusColors = {
   Confirmada: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
   Pendente: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   Falha: "bg-red-500/20 text-red-400 border-red-500/30"
 };
-function formatBtc(satoshis) {
+function formatBtc$1(satoshis) {
   const btc = Number(satoshis) / 1e8;
   return `${btc.toFixed(4)} BTC`;
 }
@@ -74306,7 +75302,7 @@ function DashboardPage({ profile }) {
             {
               className: "px-6 py-4 space-y-3",
               "data-ocid": "dashboard.transactions.loading_state",
-              children: SKELETON_ROWS$1.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
+              children: SKELETON_ROWS$2.map((key) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-24" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-14" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-20 ml-auto" }),
@@ -74353,7 +75349,7 @@ function DashboardPage({ profile }) {
                         children: tipo
                       }
                     ) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-right font-mono text-xs text-foreground", children: formatBtc(tx.value) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-right font-mono text-xs text-foreground", children: formatBtc$1(tx.value) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-right text-xs font-semibold text-muted-foreground", children: "R$ —" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "px-4 py-3 text-xs text-muted-foreground", children: [
                       "Cliente #",
@@ -74704,21 +75700,344 @@ const MESES = [
   "Novembro",
   "Dezembro"
 ];
-function EmptyState({
-  titulo,
-  descricao
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(motion.div, { initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "flex flex-col items-center justify-center py-20 gap-4", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-full bg-muted/40 p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Construction, { className: "h-8 w-8 text-muted-foreground" }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-base font-semibold text-foreground mb-1", children: titulo }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground max-w-sm", children: descricao })
-    ] })
-  ] }) }) });
+function formatBtc(value) {
+  return `${(Number(value) / 1e8).toFixed(8)} BTC`;
 }
-function RelatoriosPage() {
-  const [mes, setMes] = reactExports.useState("3");
-  const [ano, setAno] = reactExports.useState("2026");
+function formatBtcSigned(value) {
+  const n2 = Number(value) / 1e8;
+  return { text: `${n2.toFixed(8)} BTC`, positive: n2 >= 0 };
+}
+const SKELETON_ROWS$1 = ["sk1", "sk2", "sk3", "sk4"];
+function ReportSkeleton() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "data-ocid": "relatorios.loading_state", className: "space-y-2", children: SKELETON_ROWS$1.map((k2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between px-4 py-2", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-40" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-28" })
+  ] }, k2)) });
+}
+function EmptyReport() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      "data-ocid": "relatorios.empty_state",
+      className: "flex flex-col items-center justify-center py-16 gap-3 text-center",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-full bg-muted/40 p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { className: "h-8 w-8 text-muted-foreground" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-base font-semibold text-foreground", children: "Nenhum dado para o período" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground max-w-xs", children: "Não há lançamentos contábeis registrados para este período. Adicione lançamentos na aba Contabilidade para gerar relatórios." })
+      ]
+    }
+  );
+}
+function BalancoTab({
+  clientId,
+  mesIndex,
+  ano
+}) {
+  const { actor, isFetching } = useActor();
+  const { data, isLoading } = useQuery({
+    queryKey: ["balanceSheet", clientId.toString(), mesIndex, ano],
+    queryFn: async () => {
+      if (!actor) throw new Error("actor not ready");
+      return actor.getBalanceSheet(
+        clientId,
+        BigInt(mesIndex + 1),
+        BigInt(ano)
+      );
+    },
+    enabled: !!actor && !isFetching
+  });
+  const isEmpty = !isLoading && data && data.assets.length === 0 && data.liabilities.length === 0 && data.equity.length === 0;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    motion.div,
+    {
+      initial: { opacity: 0, y: 10 },
+      animate: { opacity: 1, y: 0 },
+      className: "space-y-4",
+      children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "pt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ReportSkeleton, {}) }) }) : isEmpty ? /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(EmptyReport, {}) }) }) : data ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 md:grid-cols-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-card border-border shadow-card", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardTitle, { className: "text-base font-display flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TrendingUp, { className: "h-4 w-4 text-blue-400" }),
+            "Ativos"
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border hover:bg-transparent", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground text-xs pl-4", children: "Conta" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground text-xs text-right pr-4", children: "Total" })
+            ] }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: data.assets.map((line, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              TableRow,
+              {
+                "data-ocid": `relatorios.balanco.item.${i + 1}`,
+                className: "border-border/50 hover:bg-muted/20",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "pl-4 text-sm", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-muted-foreground mr-2", children: line.accountCode }),
+                    line.accountName
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-xs text-foreground", children: formatBtc(line.total) })
+                ]
+              },
+              line.accountCode
+            )) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableFooter, { className: "bg-muted/10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "pl-4 font-semibold text-sm", children: "Total Ativos" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-sm font-bold text-blue-400", children: formatBtc(data.totalAssets) })
+            ] }) })
+          ] }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-card border-border shadow-card", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardTitle, { className: "text-base font-display flex items-center gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TrendingDown, { className: "h-4 w-4 text-red-400" }),
+              "Passivos"
+            ] }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: data.liabilities.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-center text-sm text-muted-foreground py-4", children: "Nenhum passivo" }) }) : data.liabilities.map((line, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                TableRow,
+                {
+                  "data-ocid": `relatorios.passivos.item.${i + 1}`,
+                  className: "border-border/50 hover:bg-muted/20",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "pl-4 text-sm", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-muted-foreground mr-2", children: line.accountCode }),
+                      line.accountName
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-xs text-foreground", children: formatBtc(line.total) })
+                  ]
+                },
+                line.accountCode
+              )) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableFooter, { className: "bg-muted/10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "pl-4 font-semibold text-sm", children: "Total Passivos" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-sm font-bold text-red-400", children: formatBtc(data.totalLiabilities) })
+              ] }) })
+            ] }) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-card border-border shadow-card", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-base font-display", children: "Patrimônio Líquido" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: data.equity.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-center text-sm text-muted-foreground py-4", children: "Nenhum patrimônio" }) }) : data.equity.map((line, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                TableRow,
+                {
+                  "data-ocid": `relatorios.equity.item.${i + 1}`,
+                  className: "border-border/50 hover:bg-muted/20",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "pl-4 text-sm", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-muted-foreground mr-2", children: line.accountCode }),
+                      line.accountName
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-xs text-foreground", children: formatBtc(line.total) })
+                  ]
+                },
+                line.accountCode
+              )) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableFooter, { className: "bg-muted/10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "pl-4 font-semibold text-sm", children: "Total Patrimônio" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-sm font-bold text-amber-400", children: formatBtc(data.totalEquity) })
+              ] }) })
+            ] }) })
+          ] })
+        ] })
+      ] }) : null
+    }
+  );
+}
+function DreTab({
+  clientId,
+  mesIndex,
+  ano
+}) {
+  const { actor, isFetching } = useActor();
+  const { data, isLoading } = useQuery({
+    queryKey: ["incomeStatement", clientId.toString(), mesIndex, ano],
+    queryFn: async () => {
+      if (!actor) throw new Error("actor not ready");
+      return actor.getIncomeStatement(
+        clientId,
+        BigInt(mesIndex + 1),
+        BigInt(ano)
+      );
+    },
+    enabled: !!actor && !isFetching
+  });
+  const isEmpty = !isLoading && data && data.revenues.length === 0 && data.expenses.length === 0;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    motion.div,
+    {
+      initial: { opacity: 0, y: 10 },
+      animate: { opacity: 1, y: 0 },
+      className: "space-y-4",
+      children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "pt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ReportSkeleton, {}) }) }) : isEmpty ? /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(EmptyReport, {}) }) }) : data ? /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border hover:bg-transparent", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground pl-4", children: "Conta" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableHead, { className: "text-muted-foreground text-right pr-4", children: "Total" })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(TableBody, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { className: "bg-emerald-500/5 border-border", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            TableCell,
+            {
+              colSpan: 2,
+              className: "pl-4 py-2 text-xs font-semibold text-emerald-400 uppercase tracking-wider",
+              children: "Receitas"
+            }
+          ) }),
+          data.revenues.map((line, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            TableRow,
+            {
+              "data-ocid": `relatorios.dre.item.${i + 1}`,
+              className: "border-border/50 hover:bg-muted/20",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "pl-6 text-sm", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-muted-foreground mr-2", children: line.accountCode }),
+                  line.accountName
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-xs text-emerald-400", children: formatBtc(line.total) })
+              ]
+            },
+            line.accountCode
+          )),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "bg-emerald-500/5 border-border", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "pl-4 font-semibold text-sm", children: "Total Receitas" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-sm font-bold text-emerald-400", children: formatBtc(data.totalRevenue) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableRow, { className: "bg-red-500/5 border-border", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            TableCell,
+            {
+              colSpan: 2,
+              className: "pl-4 py-2 text-xs font-semibold text-red-400 uppercase tracking-wider",
+              children: "Despesas"
+            }
+          ) }),
+          data.expenses.map((line, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            TableRow,
+            {
+              "data-ocid": `relatorios.dre.expense.item.${i + 1}`,
+              className: "border-border/50 hover:bg-muted/20",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(TableCell, { className: "pl-6 text-sm", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-xs text-muted-foreground mr-2", children: line.accountCode }),
+                  line.accountName
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-xs text-red-400", children: formatBtc(line.total) })
+              ]
+            },
+            line.accountCode
+          )),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "bg-red-500/5 border-border", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "pl-4 font-semibold text-sm", children: "Total Despesas" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-sm font-bold text-red-400", children: formatBtc(data.totalExpenses) })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TableFooter, { className: "bg-muted/20", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "pl-4 font-bold text-sm", children: "Lucro / Prejuízo Líquido" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            TableCell,
+            {
+              className: `text-right pr-4 font-mono text-sm font-bold ${formatBtcSigned(data.netIncome).positive ? "text-emerald-400" : "text-red-400"}`,
+              children: formatBtcSigned(data.netIncome).text
+            }
+          )
+        ] }) })
+      ] }) }) }) : null
+    }
+  );
+}
+function FluxoTab({
+  clientId,
+  mesIndex,
+  ano
+}) {
+  const { actor, isFetching } = useActor();
+  const { data, isLoading } = useQuery({
+    queryKey: ["cashFlow", clientId.toString(), mesIndex, ano],
+    queryFn: async () => {
+      if (!actor) throw new Error("actor not ready");
+      return actor.getCashFlow(
+        clientId,
+        BigInt(mesIndex + 1),
+        BigInt(ano)
+      );
+    },
+    enabled: !!actor && !isFetching
+  });
+  const isEmpty = !isLoading && data && data.inflows.length === 0 && data.outflows.length === 0;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    motion.div,
+    {
+      initial: { opacity: 0, y: 10 },
+      animate: { opacity: 1, y: 0 },
+      className: "space-y-4",
+      children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "pt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ReportSkeleton, {}) }) }) : isEmpty ? /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(EmptyReport, {}) }) }) : data ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 md:grid-cols-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-card border-border shadow-card", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardTitle, { className: "text-base font-display flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TrendingUp, { className: "h-4 w-4 text-emerald-400" }),
+            "Entradas"
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: data.inflows.map((line, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              TableRow,
+              {
+                "data-ocid": `relatorios.fluxo.inflow.item.${i + 1}`,
+                className: "border-border/50 hover:bg-muted/20",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "pl-4 text-sm", children: line.description }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-xs text-emerald-400", children: formatBtc(line.value) })
+                ]
+              },
+              `inflow-${line.description}-${i}`
+            )) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableFooter, { className: "bg-muted/10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "pl-4 font-semibold text-sm", children: "Total Entradas" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-sm font-bold text-emerald-400", children: formatBtc(data.totalInflows) })
+            ] }) })
+          ] }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-card border-border shadow-card", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardTitle, { className: "text-base font-display flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TrendingDown, { className: "h-4 w-4 text-red-400" }),
+            "Saídas"
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableBody, { children: data.outflows.map((line, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              TableRow,
+              {
+                "data-ocid": `relatorios.fluxo.outflow.item.${i + 1}`,
+                className: "border-border/50 hover:bg-muted/20",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "pl-4 text-sm", children: line.description }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-xs text-red-400", children: formatBtc(line.value) })
+                ]
+              },
+              `outflow-${line.description}-${i}`
+            )) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TableFooter, { className: "bg-muted/10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(TableRow, { className: "border-border", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "pl-4 font-semibold text-sm", children: "Total Saídas" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(TableCell, { className: "text-right pr-4 font-mono text-sm font-bold text-red-400", children: formatBtc(data.totalOutflows) })
+            ] }) })
+          ] }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "md:col-span-2 bg-card border-border shadow-card", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "flex items-center justify-between py-4 px-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-display font-semibold text-sm", children: "Fluxo de Caixa Líquido" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Separator, { orientation: "vertical", className: "h-5" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "span",
+            {
+              className: `font-mono text-lg font-bold ${formatBtcSigned(data.netCashFlow).positive ? "text-emerald-400" : "text-red-400"}`,
+              children: formatBtcSigned(data.netCashFlow).text
+            }
+          )
+        ] }) })
+      ] }) : null
+    }
+  );
+}
+function RelatoriosPage({ profile }) {
+  const [mes, setMes] = reactExports.useState(String((/* @__PURE__ */ new Date()).getMonth()));
+  const [ano, setAno] = reactExports.useState(String((/* @__PURE__ */ new Date()).getFullYear()));
+  const [activeTab, setActiveTab] = reactExports.useState("balanco");
+  const clientId = profile.businessRole === BusinessRole$1.admin ? 1n : profile.clientId ?? 1n;
+  const mesIndex = Number.parseInt(mes);
+  const anoNum = Number.parseInt(ano);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-6", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-muted-foreground mb-2", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(ChartColumn, { className: "h-5 w-5" }),
@@ -74767,34 +76086,24 @@ function RelatoriosPage() {
         }
       )
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(Tabs, { defaultValue: "balanco", "data-ocid": "relatorios.tab", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(TabsList, { className: "bg-card border border-border", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "balanco", "data-ocid": "relatorios.tab", children: "Balanço Patrimonial" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "dre", "data-ocid": "relatorios.tab", children: "DRE" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "fluxo", "data-ocid": "relatorios.tab", children: "Fluxo de Caixa" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "balanco", className: "mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        EmptyState,
-        {
-          titulo: "Nenhum dado disponível",
-          descricao: "O Balanço Patrimonial está em desenvolvimento. Os dados aparecerão aqui assim que o módulo de relatórios for implementado no backend."
-        }
-      ) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "dre", className: "mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        EmptyState,
-        {
-          titulo: "Nenhum dado disponível",
-          descricao: `A DRE de ${MESES[Number.parseInt(mes)]}/${ano} está em desenvolvimento. Os dados aparecerão aqui assim que o módulo de relatórios for implementado no backend.`
-        }
-      ) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "fluxo", className: "mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        EmptyState,
-        {
-          titulo: "Nenhum dado disponível",
-          descricao: "O Fluxo de Caixa está em desenvolvimento. Os dados aparecerão aqui assim que o módulo de relatórios for implementado no backend."
-        }
-      ) })
-    ] })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      Tabs,
+      {
+        value: activeTab,
+        onValueChange: setActiveTab,
+        "data-ocid": "relatorios.tab",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(TabsList, { className: "bg-card border border-border", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "balanco", "data-ocid": "relatorios.tab", children: "Balanço Patrimonial" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "dre", "data-ocid": "relatorios.tab", children: "DRE" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TabsTrigger, { value: "fluxo", "data-ocid": "relatorios.tab", children: "Fluxo de Caixa" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "balanco", className: "mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(BalancoTab, { clientId, mesIndex, ano: anoNum }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "dre", className: "mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(DreTab, { clientId, mesIndex, ano: anoNum }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TabsContent, { value: "fluxo", className: "mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FluxoTab, { clientId, mesIndex, ano: anoNum }) })
+        ]
+      }
+    )
   ] });
 }
 function formatDate(ns) {
@@ -75095,8 +76404,8 @@ function App() {
     dashboard: /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPage, { profile }),
     clientes: /* @__PURE__ */ jsxRuntimeExports.jsx(ClientesPage, {}),
     transacoes: /* @__PURE__ */ jsxRuntimeExports.jsx(TransacoesPage, { profile }),
-    contabilidade: /* @__PURE__ */ jsxRuntimeExports.jsx(ContabilidadePage, {}),
-    relatorios: /* @__PURE__ */ jsxRuntimeExports.jsx(RelatoriosPage, {}),
+    contabilidade: /* @__PURE__ */ jsxRuntimeExports.jsx(ContabilidadePage, { profile }),
+    relatorios: /* @__PURE__ */ jsxRuntimeExports.jsx(RelatoriosPage, { profile }),
     auditoria: /* @__PURE__ */ jsxRuntimeExports.jsx(AuditoriaPage, {}),
     assinaturas: /* @__PURE__ */ jsxRuntimeExports.jsx(AssinaturasPage, { profile }),
     configuracoes: /* @__PURE__ */ jsxRuntimeExports.jsx(ConfiguracoesPage, {})

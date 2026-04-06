@@ -57,6 +57,82 @@ export interface ClientBitcoinAddressResult {
     walletType: WalletType;
     address: string;
 }
+
+// Accounting types
+export type AccountId = bigint;
+export interface ChartAccount {
+    id: AccountId;
+    code: string;
+    name: string;
+    accountType: AccountType;
+    parentCode?: string;
+    description: string;
+    active: boolean;
+    createdAt: Time;
+}
+export type JournalEntryId = bigint;
+export interface JournalEntry {
+    id: JournalEntryId;
+    date: Time;
+    description: string;
+    clientId: ClientId;
+    debitAccountCode: string;
+    creditAccountCode: string;
+    value: bigint;
+    reference?: string;
+    createdBy: Principal;
+    createdAt: Time;
+}
+export interface BalanceSheetLine {
+    accountCode: string;
+    accountName: string;
+    total: bigint;
+}
+export interface BalanceSheet {
+    assets: Array<BalanceSheetLine>;
+    liabilities: Array<BalanceSheetLine>;
+    equity: Array<BalanceSheetLine>;
+    totalAssets: bigint;
+    totalLiabilities: bigint;
+    totalEquity: bigint;
+    month: bigint;
+    year: bigint;
+}
+export interface IncomeStatementLine {
+    accountCode: string;
+    accountName: string;
+    total: bigint;
+}
+export interface IncomeStatement {
+    revenues: Array<IncomeStatementLine>;
+    expenses: Array<IncomeStatementLine>;
+    totalRevenue: bigint;
+    totalExpenses: bigint;
+    netIncome: bigint;
+    month: bigint;
+    year: bigint;
+}
+export interface CashFlowLine {
+    description: string;
+    value: bigint;
+}
+export interface CashFlow {
+    inflows: Array<CashFlowLine>;
+    outflows: Array<CashFlowLine>;
+    totalInflows: bigint;
+    totalOutflows: bigint;
+    netCashFlow: bigint;
+    month: bigint;
+    year: bigint;
+}
+
+export enum AccountType {
+    asset = "asset",
+    liability = "liability",
+    revenue = "revenue",
+    expense = "expense",
+    equity = "equity"
+}
 export enum BusinessRole {
     accountant = "accountant",
     client = "client",
@@ -93,6 +169,7 @@ export enum WalletType {
     manual = "manual"
 }
 export interface backendInterface {
+    // Existing
     addSubscription(newSub: Subscription): Promise<SubscriptionId>;
     addTransaction(newTx: Transaction): Promise<TransactionId>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
@@ -114,4 +191,18 @@ export interface backendInterface {
     registerClient(newClient: Client): Promise<ClientId>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     setClientBitcoinAddress(clientId: ClientId, address: string, walletType: WalletType): Promise<void>;
+    // Chart of Accounts
+    addChartAccount(account: ChartAccount): Promise<AccountId>;
+    editChartAccount(accountId: AccountId, updated: ChartAccount): Promise<void>;
+    deleteChartAccount(accountId: AccountId): Promise<void>;
+    getChartAccount(accountId: AccountId): Promise<ChartAccount | null>;
+    getAllChartAccounts(): Promise<Array<ChartAccount>>;
+    // Journal Entries
+    addJournalEntry(entry: JournalEntry): Promise<JournalEntryId>;
+    getAllJournalEntries(): Promise<Array<JournalEntry>>;
+    getJournalEntriesByClientId(clientId: ClientId): Promise<Array<JournalEntry>>;
+    // Financial Reports
+    getBalanceSheet(clientId: ClientId, month: bigint, year: bigint): Promise<BalanceSheet>;
+    getIncomeStatement(clientId: ClientId, month: bigint, year: bigint): Promise<IncomeStatement>;
+    getCashFlow(clientId: ClientId, month: bigint, year: bigint): Promise<CashFlow>;
 }

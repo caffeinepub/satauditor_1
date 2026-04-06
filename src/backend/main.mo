@@ -5,6 +5,7 @@ import Runtime "mo:core/Runtime";
 import Iter "mo:core/Iter";
 import Blob "mo:core/Blob";
 import Array "mo:core/Array";
+import Int "mo:core/Int";
 
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
@@ -76,7 +77,86 @@ actor {
     #equity;
   };
 
-  // Chart of Accounts, Balance Sheet, and Income Statement
+  // ── ACCOUNTING TYPES ──────────────────────────────────────────────────────
+
+  public type AccountId = Nat;
+
+  public type ChartAccount = {
+    id : AccountId;
+    code : Text;
+    name : Text;
+    accountType : AccountType;
+    parentCode : ?Text;
+    description : Text;
+    active : Bool;
+    createdAt : Time.Time;
+  };
+
+  public type JournalEntryId = Nat;
+
+  public type JournalEntry = {
+    id : JournalEntryId;
+    date : Time.Time;
+    description : Text;
+    clientId : ClientId;
+    debitAccountCode : Text;
+    creditAccountCode : Text;
+    value : Int;
+    reference : ?Text;
+    createdBy : Principal;
+    createdAt : Time.Time;
+  };
+
+  public type BalanceSheetLine = {
+    accountCode : Text;
+    accountName : Text;
+    total : Int;
+  };
+
+  public type BalanceSheet = {
+    assets : [BalanceSheetLine];
+    liabilities : [BalanceSheetLine];
+    equity : [BalanceSheetLine];
+    totalAssets : Int;
+    totalLiabilities : Int;
+    totalEquity : Int;
+    month : Nat;
+    year : Nat;
+  };
+
+  public type IncomeStatementLine = {
+    accountCode : Text;
+    accountName : Text;
+    total : Int;
+  };
+
+  public type IncomeStatement = {
+    revenues : [IncomeStatementLine];
+    expenses : [IncomeStatementLine];
+    totalRevenue : Int;
+    totalExpenses : Int;
+    netIncome : Int;
+    month : Nat;
+    year : Nat;
+  };
+
+  public type CashFlowLine = {
+    description : Text;
+    value : Int;
+  };
+
+  public type CashFlow = {
+    inflows : [CashFlowLine];
+    outflows : [CashFlowLine];
+    totalInflows : Int;
+    totalOutflows : Int;
+    netCashFlow : Int;
+    month : Nat;
+    year : Nat;
+  };
+
+  // ── END ACCOUNTING TYPES ─────────────────────────────────────────────────
+
   type Account = {
     code : Text;
     name : Text;
@@ -177,6 +257,23 @@ actor {
 
   var userProfiles = Map.empty<Principal, UserProfile>();
 
+  // ── ACCOUNTING STATE ──────────────────────────────────────────────────────
+  var chartAccounts = Map.empty<AccountId, ChartAccount>();
+  var nextAccountId = 1;
+
+  var journalEntries = Map.empty<JournalEntryId, JournalEntry>();
+  var nextJournalEntryId = 1;
+  // ── END ACCOUNTING STATE ──────────────────────────────────────────────────
+
+  // Helper: check if caller is admin or accountant
+  private func isAdminOrAccountant(caller : Principal) : Bool {
+    if (AccessControl.isAdmin(accessControlState, caller)) { return true };
+    switch (userProfiles.get(caller)) {
+      case (?p) { p.businessRole == #accountant };
+      case (null) { false };
+    };
+  };
+
   // Helper function to check if caller owns the client
   private func callerOwnsClient(caller : Principal, clientId : ClientId) : Bool {
     switch (userProfiles.get(caller)) {
@@ -196,7 +293,30 @@ actor {
     Blob.fromArray(byteArray);
   };
 
-  // User profile management (required by frontend)
+  // Helper: nanosecond timestamp -> (month: Nat, year: Nat)
+  private func timestampToMonthYear(ts : Time.Time) : (Nat, Nat) {
+    let seconds = Int.abs(ts) / 1_000_000_000;
+    let days = seconds / 86400;
+    var year = 1970;
+    var remaining = days;
+    label yearLoop loop {
+      let daysInYear : Nat = if (year % 400 == 0) { 366 } else if (year % 100 == 0) { 365 } else if (year % 4 == 0) { 366 } else { 365 };
+      if (remaining < daysInYear) { break yearLoop };
+      remaining -= daysInYear;
+      year += 1;
+    };
+    let isLeap = (year % 400 == 0) or (year % 4 == 0 and year % 100 != 0);
+    let monthDays : [Nat] = [31, if isLeap { 29 } else { 28 }, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    var month = 1;
+    label monthLoop for (md in monthDays.vals()) {
+      if (remaining < md) { break monthLoop };
+      remaining -= md;
+      month += 1;
+    };
+    (month, year);
+  };
+
+  // User profile management
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view profiles");
@@ -237,12 +357,7 @@ actor {
       case (null) { null };
       case (?client) {
         switch (client.bitcoinAddress, client.walletType) {
-          case (?address, ?walletType) {
-            ?{
-              address;
-              walletType;
-            };
-          };
+          case (?address, ?walletType) { ?{ address; walletType } };
           case (_) { null };
         };
       };
@@ -254,21 +369,13 @@ actor {
       Runtime.trap("Unauthorized: Only admins or client owners can set Bitcoin addresses");
     };
     switch (clients.get(clientId)) {
-      case (null) {
-        Runtime.trap("Client does not exist");
-      };
+      case (null) { Runtime.trap("Client does not exist") };
       case (?client) {
-        let updatedClient = {
-          client with
-          bitcoinAddress = ?address;
-          walletType = ?walletType;
-        };
-        clients.add(clientId, updatedClient);
+        clients.add(clientId, { client with bitcoinAddress = ?address; walletType = ?walletType });
       };
     };
   };
 
-  // NEW: Get ckBTC balance for a client
   public shared ({ caller }) func getCkBtcBalance(clientId : ClientId) : async Nat {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view balances");
@@ -276,11 +383,8 @@ actor {
     if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
       Runtime.trap("Unauthorized: Can only view balance for your own client");
     };
-
     switch (clients.get(clientId)) {
-      case (null) {
-        Runtime.trap("Client does not exist");
-      };
+      case (null) { Runtime.trap("Client does not exist") };
       case (?client) {
         switch (client.bitcoinAddress) {
           case (null) { 0 };
@@ -302,11 +406,7 @@ actor {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can register clients");
     };
-    let clientWithId = {
-      newClient with
-      id = nextClientId;
-      createdAt = Time.now();
-    };
+    let clientWithId = { newClient with id = nextClientId; createdAt = Time.now() };
     clients.add(nextClientId, clientWithId);
     nextClientId += 1;
     clientWithId.id;
@@ -323,26 +423,21 @@ actor {
           updatedClient with
           id = clientId;
           createdAt = existingClient.createdAt;
-          bitcoinAddress = existingClient.bitcoinAddress; // Preserve bitcoin address
-          walletType = existingClient.walletType; // Preserve wallet type
+          bitcoinAddress = existingClient.bitcoinAddress;
+          walletType = existingClient.walletType;
         };
         clients.add(clientId, clientToUpdate);
       };
     };
   };
 
-  // NEW: Delete client (admin only)
   public shared ({ caller }) func deleteClient(clientId : ClientId) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can delete clients");
     };
     switch (clients.get(clientId)) {
-      case (null) {
-        Runtime.trap("Client not found");
-      };
-      case (?_) {
-        clients.remove(clientId);
-      };
+      case (null) { Runtime.trap("Client not found") };
+      case (?_) { clients.remove(clientId) };
     };
   };
 
@@ -360,11 +455,9 @@ actor {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view clients");
     };
-    // Admins can see all clients
     if (AccessControl.isAdmin(accessControlState, caller)) {
       return clients.values().toArray();
     };
-    // Regular users can only see their own client
     switch (userProfiles.get(caller)) {
       case (null) { [] };
       case (?profile) {
@@ -381,71 +474,50 @@ actor {
     };
   };
 
-  // ⚠🔼 6 NEW FUNCTIONS ADDED BELOW 🔼⚠
+  // ── TRANSACTIONS ──────────────────────────────────────────────────────────
 
-  // 1. Get all transactions (with filter for non-admins)
   public query ({ caller }) func getAllTransactions() : async [Transaction] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view transactions");
     };
-
     if (AccessControl.isAdmin(accessControlState, caller)) {
-      // Admins see all transactions
       return transactions.values().toArray();
     };
-
-    // Non-admins: filter transactions by their clientId
     switch (userProfiles.get(caller)) {
       case (null) { [] };
       case (?profile) {
         switch (profile.clientId) {
           case (null) { [] };
           case (?ownedClientId) {
-            transactions.values().filter(
-              func(transaction) {
-                transaction.clientId == ownedClientId;
-              }
-            ).toArray();
+            transactions.values().filter(func(t) { t.clientId == ownedClientId }).toArray();
           };
         };
       };
     };
   };
 
-  // 2. Get transactions by specific clientId
   public query ({ caller }) func getTransactionsByClientId(clientId : ClientId) : async [Transaction] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view transactions");
     };
-
     if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
       Runtime.trap("Unauthorized: Can only view your own transactions");
     };
-
-    transactions.values().filter(
-      func(transaction) {
-        transaction.clientId == clientId;
-      }
-    ).toArray();
+    transactions.values().filter(func(t) { t.clientId == clientId }).toArray();
   };
 
-  // 3. Add new transaction (admin only)
   public shared ({ caller }) func addTransaction(newTx : Transaction) : async TransactionId {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can add transactions");
     };
-
-    let txWithId = {
-      newTx with
-      id = nextTransactionId;
-      createdAt = Time.now();
-    };
+    let txWithId = { newTx with id = nextTransactionId; createdAt = Time.now() };
     transactions.add(nextTransactionId, txWithId);
     nextTransactionId += 1;
     txWithId.id;
   };
 
-  // 4. Get all subscriptions (admin only)
+  // ── SUBSCRIPTIONS ─────────────────────────────────────────────────────────
+
   public query ({ caller }) func getAllSubscriptions() : async [Subscription] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can view all subscriptions");
@@ -453,39 +525,227 @@ actor {
     subscriptions.values().toArray();
   };
 
-  // 5. Get subscription by clientId
   public query ({ caller }) func getSubscriptionByClientId(clientId : ClientId) : async ?Subscription {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view subscriptions");
     };
-
     if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
       Runtime.trap("Unauthorized: Can only view your own subscription");
     };
-
-    let matches = subscriptions.values().filter(
-      func(sub) {
-        sub.clientId == clientId;
-      }
-    ).toArray();
-
+    let matches = subscriptions.values().filter(func(s) { s.clientId == clientId }).toArray();
     if (matches.size() == 0) { return null };
     ?matches[0];
   };
 
-  // 6. Add new subscription (admin only)
   public shared ({ caller }) func addSubscription(newSub : Subscription) : async SubscriptionId {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can add subscriptions");
     };
-
-    let subWithId = {
-      newSub with
-      id = nextSubscriptionId;
-      createdAt = Time.now();
-    };
+    let subWithId = { newSub with id = nextSubscriptionId; createdAt = Time.now() };
     subscriptions.add(nextSubscriptionId, subWithId);
     nextSubscriptionId += 1;
     subWithId.id;
+  };
+
+  // ── CHART OF ACCOUNTS (PLANO DE CONTAS) ───────────────────────────────────
+
+  public shared ({ caller }) func addChartAccount(account : ChartAccount) : async AccountId {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can add accounts");
+    };
+    let withId = { account with id = nextAccountId; createdAt = Time.now() };
+    chartAccounts.add(nextAccountId, withId);
+    nextAccountId += 1;
+    withId.id;
+  };
+
+  public shared ({ caller }) func editChartAccount(accountId : AccountId, updated : ChartAccount) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can edit accounts");
+    };
+    switch (chartAccounts.get(accountId)) {
+      case (null) { Runtime.trap("Account not found") };
+      case (?existing) {
+        chartAccounts.add(accountId, { updated with id = accountId; createdAt = existing.createdAt });
+      };
+    };
+  };
+
+  public shared ({ caller }) func deleteChartAccount(accountId : AccountId) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can delete accounts");
+    };
+    switch (chartAccounts.get(accountId)) {
+      case (null) { Runtime.trap("Account not found") };
+      case (?_) { chartAccounts.remove(accountId) };
+    };
+  };
+
+  public query ({ caller }) func getChartAccount(accountId : AccountId) : async ?ChartAccount {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized");
+    };
+    chartAccounts.get(accountId);
+  };
+
+  public query ({ caller }) func getAllChartAccounts() : async [ChartAccount] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized");
+    };
+    chartAccounts.values().toArray();
+  };
+
+  // ── JOURNAL ENTRIES (LANÇAMENTOS CONTÁBEIS) ───────────────────────────────
+
+  public shared ({ caller }) func addJournalEntry(entry : JournalEntry) : async JournalEntryId {
+    if (not isAdminOrAccountant(caller)) {
+      Runtime.trap("Unauthorized: Only admins or accountants can add journal entries");
+    };
+    let withId = { entry with id = nextJournalEntryId; createdBy = caller; createdAt = Time.now() };
+    journalEntries.add(nextJournalEntryId, withId);
+    nextJournalEntryId += 1;
+    withId.id;
+  };
+
+  public query ({ caller }) func getAllJournalEntries() : async [JournalEntry] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can view all journal entries");
+    };
+    journalEntries.values().toArray();
+  };
+
+  public query ({ caller }) func getJournalEntriesByClientId(clientId : ClientId) : async [JournalEntry] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized");
+    };
+    if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
+      Runtime.trap("Unauthorized: Can only view your own journal entries");
+    };
+    journalEntries.values().filter(func(e) { e.clientId == clientId }).toArray();
+  };
+
+  // ── FINANCIAL REPORTS ─────────────────────────────────────────────────────
+
+  public query ({ caller }) func getBalanceSheet(clientId : ClientId, month : Nat, year : Nat) : async BalanceSheet {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized");
+    };
+    if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
+      Runtime.trap("Unauthorized: Can only view your own reports");
+    };
+
+    let entries = journalEntries.values().filter(func(e) {
+      let (m, y) = timestampToMonthYear(e.date);
+      e.clientId == clientId and m <= month and y <= year;
+    }).toArray();
+
+    // Collect active accounts by type, compute totals from journal entries
+    let activeAccounts = chartAccounts.values().filter(func(a) { a.active }).toArray();
+
+    let assetLines = activeAccounts.filter(func(a) { a.accountType == #asset }).map(func(acc) {
+      var total : Int = 0;
+      for (e in entries.vals()) {
+        if (e.debitAccountCode == acc.code) { total += e.value };
+        if (e.creditAccountCode == acc.code) { total -= e.value };
+      };
+      { accountCode = acc.code; accountName = acc.name; total } : BalanceSheetLine;
+    });
+
+    let liabilityLines = activeAccounts.filter(func(a) { a.accountType == #liability }).map(func(acc) {
+      var total : Int = 0;
+      for (e in entries.vals()) {
+        if (e.debitAccountCode == acc.code) { total += e.value };
+        if (e.creditAccountCode == acc.code) { total -= e.value };
+      };
+      { accountCode = acc.code; accountName = acc.name; total } : BalanceSheetLine;
+    });
+
+    let equityLines = activeAccounts.filter(func(a) { a.accountType == #equity }).map(func(acc) {
+      var total : Int = 0;
+      for (e in entries.vals()) {
+        if (e.debitAccountCode == acc.code) { total += e.value };
+        if (e.creditAccountCode == acc.code) { total -= e.value };
+      };
+      { accountCode = acc.code; accountName = acc.name; total } : BalanceSheetLine;
+    });
+
+    var totalAssets : Int = 0;
+    for (l in assetLines.vals()) { totalAssets += l.total };
+    var totalLiabilities : Int = 0;
+    for (l in liabilityLines.vals()) { totalLiabilities += l.total };
+    var totalEquity : Int = 0;
+    for (l in equityLines.vals()) { totalEquity += l.total };
+
+    { assets = assetLines; liabilities = liabilityLines; equity = equityLines; totalAssets; totalLiabilities; totalEquity; month; year };
+  };
+
+  public query ({ caller }) func getIncomeStatement(clientId : ClientId, month : Nat, year : Nat) : async IncomeStatement {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized");
+    };
+    if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
+      Runtime.trap("Unauthorized: Can only view your own reports");
+    };
+
+    let entries = journalEntries.values().filter(func(e) {
+      let (m, y) = timestampToMonthYear(e.date);
+      e.clientId == clientId and m == month and y == year;
+    }).toArray();
+
+    let activeAccounts = chartAccounts.values().filter(func(a) { a.active }).toArray();
+
+    let revenueLines = activeAccounts.filter(func(a) { a.accountType == #revenue }).map(func(acc) {
+      var total : Int = 0;
+      for (e in entries.vals()) {
+        if (e.creditAccountCode == acc.code) { total += e.value };
+        if (e.debitAccountCode == acc.code) { total -= e.value };
+      };
+      { accountCode = acc.code; accountName = acc.name; total } : IncomeStatementLine;
+    });
+
+    let expenseLines = activeAccounts.filter(func(a) { a.accountType == #expense }).map(func(acc) {
+      var total : Int = 0;
+      for (e in entries.vals()) {
+        if (e.debitAccountCode == acc.code) { total += e.value };
+        if (e.creditAccountCode == acc.code) { total -= e.value };
+      };
+      { accountCode = acc.code; accountName = acc.name; total } : IncomeStatementLine;
+    });
+
+    var totalRevenue : Int = 0;
+    for (l in revenueLines.vals()) { totalRevenue += l.total };
+    var totalExpenses : Int = 0;
+    for (l in expenseLines.vals()) { totalExpenses += l.total };
+
+    { revenues = revenueLines; expenses = expenseLines; totalRevenue; totalExpenses; netIncome = totalRevenue - totalExpenses; month; year };
+  };
+
+  public query ({ caller }) func getCashFlow(clientId : ClientId, month : Nat, year : Nat) : async CashFlow {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized");
+    };
+    if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
+      Runtime.trap("Unauthorized: Can only view your own reports");
+    };
+
+    let entries = journalEntries.values().filter(func(e) {
+      let (m, y) = timestampToMonthYear(e.date);
+      e.clientId == clientId and m == month and y == year;
+    }).toArray();
+
+    let inflows = entries.filter(func(e) { e.value > 0 }).map(func(e) {
+      { description = e.description; value = e.value } : CashFlowLine;
+    });
+
+    let outflows = entries.filter(func(e) { e.value < 0 }).map(func(e) {
+      { description = e.description; value = Int.abs(e.value) } : CashFlowLine;
+    });
+
+    var totalInflows : Int = 0;
+    for (l in inflows.vals()) { totalInflows += l.value };
+    var totalOutflows : Int = 0;
+    for (l in outflows.vals()) { totalOutflows += l.value };
+
+    { inflows; outflows; totalInflows; totalOutflows; netCashFlow = totalInflows - totalOutflows; month; year };
   };
 };

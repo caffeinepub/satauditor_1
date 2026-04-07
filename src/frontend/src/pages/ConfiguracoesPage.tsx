@@ -52,6 +52,7 @@ export default function ConfiguracoesPage() {
   const [adminPasswordInput, setAdminPasswordInput] = useState("");
   const [adminUnlocked, setAdminUnlocked] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [adminSaving, setAdminSaving] = useState(false);
 
   useEffect(() => {
     if (!actor) return;
@@ -80,17 +81,45 @@ export default function ConfiguracoesPage() {
     };
   }, [actor]);
 
-  const handleAdminPasswordSubmit = () => {
-    if (checkAdminPassword(adminPasswordInput)) {
+  const handleAdminPasswordSubmit = async () => {
+    if (!checkAdminPassword(adminPasswordInput)) {
+      setPasswordError(true);
+      setAdminPasswordInput("");
+      return;
+    }
+
+    if (!actor) {
+      toast.error("Ator não disponível. Tente novamente.");
+      return;
+    }
+
+    setAdminSaving(true);
+    try {
+      await actor.saveCallerUserProfile({
+        name: name.trim() || "Administrador",
+        email: email.trim(),
+        businessRole: BusinessRole.admin,
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["userProfile", identity?.getPrincipal().toString()],
+      });
+
       setAdminUnlocked(true);
       setRole(BusinessRole.admin);
       setShowAdminModal(false);
       setPasswordError(false);
       setAdminPasswordInput("");
-      toast.success("Acesso administrativo liberado!");
-    } else {
-      setPasswordError(true);
-      setAdminPasswordInput("");
+
+      toast.success("Acesso administrativo ativado! Recarregando...");
+
+      // Reload so the sidebar re-reads the profile from the backend
+      setTimeout(() => window.location.reload(), 1200);
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao ativar acesso administrativo. Tente novamente.");
+    } finally {
+      setAdminSaving(false);
     }
   };
 
@@ -398,7 +427,8 @@ export default function ConfiguracoesPage() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
             onClick={(e) => {
-              if (e.target === e.currentTarget) setShowAdminModal(false);
+              if (e.target === e.currentTarget && !adminSaving)
+                setShowAdminModal(false);
             }}
           >
             <motion.div
@@ -437,9 +467,11 @@ export default function ConfiguracoesPage() {
                     );
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") handleAdminPasswordSubmit();
+                    if (e.key === "Enter" && !adminSaving)
+                      handleAdminPasswordSubmit();
                   }}
                   autoFocus
+                  disabled={adminSaving}
                   className={`h-12 text-center text-2xl tracking-[0.5em] bg-input/50 border-border ${
                     passwordError ? "border-red-500/60 bg-red-500/5" : ""
                   }`}
@@ -455,6 +487,7 @@ export default function ConfiguracoesPage() {
                     type="button"
                     variant="outline"
                     onClick={() => setShowAdminModal(false)}
+                    disabled={adminSaving}
                     className="flex-1 border-border text-muted-foreground hover:text-foreground"
                   >
                     Cancelar
@@ -462,10 +495,17 @@ export default function ConfiguracoesPage() {
                   <Button
                     type="button"
                     onClick={handleAdminPasswordSubmit}
-                    disabled={adminPasswordInput.length !== 4}
+                    disabled={adminPasswordInput.length !== 4 || adminSaving}
                     className="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-semibold"
                   >
-                    Confirmar
+                    {adminSaving ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Ativando...
+                      </>
+                    ) : (
+                      "Confirmar"
+                    )}
                   </Button>
                 </div>
               </div>

@@ -50641,6 +50641,7 @@ function ConfiguracoesPage() {
   const [adminPasswordInput, setAdminPasswordInput] = reactExports.useState("");
   const [adminUnlocked, setAdminUnlocked] = reactExports.useState(false);
   const [passwordError, setPasswordError] = reactExports.useState(false);
+  const [adminSaving, setAdminSaving] = reactExports.useState(false);
   reactExports.useEffect(() => {
     if (!actor) return;
     let cancelled = false;
@@ -50662,17 +50663,38 @@ function ConfiguracoesPage() {
       cancelled = true;
     };
   }, [actor]);
-  const handleAdminPasswordSubmit = () => {
-    if (checkAdminPassword(adminPasswordInput)) {
+  const handleAdminPasswordSubmit = async () => {
+    if (!checkAdminPassword(adminPasswordInput)) {
+      setPasswordError(true);
+      setAdminPasswordInput("");
+      return;
+    }
+    if (!actor) {
+      ue.error("Ator não disponível. Tente novamente.");
+      return;
+    }
+    setAdminSaving(true);
+    try {
+      await actor.saveCallerUserProfile({
+        name: name.trim() || "Administrador",
+        email: email.trim(),
+        businessRole: BusinessRole$1.admin
+      });
+      await queryClient2.invalidateQueries({
+        queryKey: ["userProfile", identity3 == null ? void 0 : identity3.getPrincipal().toString()]
+      });
       setAdminUnlocked(true);
       setRole(BusinessRole$1.admin);
       setShowAdminModal(false);
       setPasswordError(false);
       setAdminPasswordInput("");
-      ue.success("Acesso administrativo liberado!");
-    } else {
-      setPasswordError(true);
-      setAdminPasswordInput("");
+      ue.success("Acesso administrativo ativado! Recarregando...");
+      setTimeout(() => window.location.reload(), 1200);
+    } catch (err) {
+      console.error(err);
+      ue.error("Erro ao ativar acesso administrativo. Tente novamente.");
+    } finally {
+      setAdminSaving(false);
     }
   };
   const handleSave = async (e3) => {
@@ -50944,7 +50966,8 @@ function ConfiguracoesPage() {
         exit: { opacity: 0 },
         className: "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4",
         onClick: (e3) => {
-          if (e3.target === e3.currentTarget) setShowAdminModal(false);
+          if (e3.target === e3.currentTarget && !adminSaving)
+            setShowAdminModal(false);
         },
         children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
           motion.div,
@@ -50979,9 +51002,11 @@ function ConfiguracoesPage() {
                       );
                     },
                     onKeyDown: (e3) => {
-                      if (e3.key === "Enter") handleAdminPasswordSubmit();
+                      if (e3.key === "Enter" && !adminSaving)
+                        handleAdminPasswordSubmit();
                     },
                     autoFocus: true,
+                    disabled: adminSaving,
                     className: `h-12 text-center text-2xl tracking-[0.5em] bg-input/50 border-border ${passwordError ? "border-red-500/60 bg-red-500/5" : ""}`
                   }
                 ),
@@ -50993,6 +51018,7 @@ function ConfiguracoesPage() {
                       type: "button",
                       variant: "outline",
                       onClick: () => setShowAdminModal(false),
+                      disabled: adminSaving,
                       className: "flex-1 border-border text-muted-foreground hover:text-foreground",
                       children: "Cancelar"
                     }
@@ -51002,9 +51028,12 @@ function ConfiguracoesPage() {
                     {
                       type: "button",
                       onClick: handleAdminPasswordSubmit,
-                      disabled: adminPasswordInput.length !== 4,
+                      disabled: adminPasswordInput.length !== 4 || adminSaving,
                       className: "flex-1 bg-amber-500 hover:bg-amber-400 text-black font-semibold",
-                      children: "Confirmar"
+                      children: adminSaving ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "mr-2 h-4 w-4 animate-spin" }),
+                        "Ativando..."
+                      ] }) : "Confirmar"
                     }
                   )
                 ] })

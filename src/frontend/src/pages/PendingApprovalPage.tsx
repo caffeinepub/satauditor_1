@@ -1,25 +1,59 @@
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useActor } from "@/hooks/useActor";
 import { useInternetIdentity } from "@/hooks/useInternetIdentity";
-import { useQueryClient } from "@tanstack/react-query";
-import { Clock, LogOut, MessageCircle, RefreshCw } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Clock, LogOut, MessageCircle, RefreshCw, Send } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 
 export default function PendingApprovalPage() {
-  const { clear } = useInternetIdentity();
+  const { clear, identity } = useInternetIdentity();
+  const { actor, isFetching } = useActor();
   const queryClient = useQueryClient();
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const principal = identity?.getPrincipal().toString() ?? "";
+
+  const { data: profile, isLoading: profileLoading } = useQuery({
+    queryKey: ["pendingProfile", principal],
+    queryFn: async () => {
+      if (!actor) return null;
+      try {
+        return await (actor as any).getCallerUserProfile();
+      } catch {
+        return null;
+      }
+    },
+    enabled: !!actor && !isFetching && !!principal,
+    staleTime: 10000,
+    refetchInterval: false,
+  });
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
     await queryClient.invalidateQueries({ queryKey: ["approvalStatus"] });
+    await queryClient.invalidateQueries({ queryKey: ["userProfile"] });
     setTimeout(() => setIsRefreshing(false), 1200);
   };
 
-  const whatsappMessage = encodeURIComponent(
+  const handleRequestAccess = () => {
+    const name = profile?.name ?? "Não informado";
+    const email = profile?.email ?? "Não informado";
+    const shortPrincipal = principal
+      ? `${principal.slice(0, 12)}...${principal.slice(-6)}`
+      : "Não disponível";
+
+    const message = encodeURIComponent(
+      `Olá! Estou solicitando acesso ao SatAuditor.\n\n📋 *Dados cadastrais:*\n• Nome: ${name}\n• E-mail: ${email}\n• ID: ${shortPrincipal}\n\nPor favor, aprove meu acesso à plataforma. Obrigado!`,
+    );
+
+    window.open(`https://wa.me/5516994410284?text=${message}`, "_blank");
+  };
+
+  const whatsappContactUrl = `https://wa.me/5516994410284?text=${encodeURIComponent(
     "Olá! Realizei meu cadastro no SatAuditor e gostaria de confirmar meu acesso.",
-  );
-  const whatsappUrl = `https://wa.me/5516994410284?text=${whatsappMessage}`;
+  )}`;
 
   return (
     <div
@@ -99,17 +133,66 @@ export default function PendingApprovalPage() {
             </div>
             <p className="text-xs text-muted-foreground text-center leading-relaxed">
               A análise é realizada em até 24 horas úteis. Caso não receba
-              retorno, entre em contato pelo WhatsApp abaixo.
+              retorno, utilize o botão abaixo para enviar sua solicitação.
             </p>
           </div>
 
-          {/* WhatsApp contact */}
+          {/* Request Access CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.4 }}
+            className="rounded-xl bg-emerald-500/10 border border-emerald-500/25 p-4 space-y-3"
+          >
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-foreground text-center">
+                Envie sua solicitação de acesso
+              </p>
+              <p className="text-xs text-muted-foreground text-center leading-relaxed">
+                Para liberar seu acesso, clique abaixo para enviar sua
+                solicitação diretamente ao administrador via WhatsApp.
+              </p>
+            </div>
+
+            {profileLoading ? (
+              <Skeleton className="h-12 w-full rounded-lg" />
+            ) : (
+              <button
+                type="button"
+                data-ocid="pending_approval.request_access_button"
+                onClick={handleRequestAccess}
+                className="w-full flex items-center justify-center gap-2 h-12 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-emerald-900/30"
+              >
+                <Send className="h-4 w-4" />
+                Solicitar Acesso pelo WhatsApp
+              </button>
+            )}
+          </motion.div>
+
+          {/* Profile info (if loaded) */}
+          {profile && (
+            <div className="rounded-lg bg-muted/20 border border-border/50 px-4 py-3 space-y-1">
+              <p className="text-xs text-muted-foreground font-medium">
+                Dados da solicitação:
+              </p>
+              <p className="text-xs text-foreground truncate">
+                <span className="text-muted-foreground">Nome: </span>
+                {profile.name ?? "—"}
+              </p>
+              <p className="text-xs text-foreground truncate">
+                <span className="text-muted-foreground">E-mail: </span>
+                {profile.email ?? "—"}
+              </p>
+            </div>
+          )}
+
+          {/* WhatsApp contact (dúvidas) */}
           <div className="rounded-lg bg-muted/30 border border-border px-4 py-3 space-y-2">
             <p className="text-xs text-muted-foreground text-center">
               Dúvidas? Entre em contato pelo WhatsApp:
             </p>
             <a
-              href={whatsappUrl}
+              href={whatsappContactUrl}
               target="_blank"
               rel="noopener noreferrer"
               data-ocid="pending_approval.link"

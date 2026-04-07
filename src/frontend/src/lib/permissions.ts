@@ -1,5 +1,5 @@
 import type { PageName } from "../App";
-import { BusinessRole } from "../backend.d";
+import { BusinessRole } from "../types/domain";
 
 export const ROLE_PERMISSIONS: Record<BusinessRole, PageName[]> = {
   [BusinessRole.admin]: [
@@ -13,6 +13,7 @@ export const ROLE_PERMISSIONS: Record<BusinessRole, PageName[]> = {
     "assinaturas",
     "configuracoes",
     "aprovacoes",
+    "importar-extrato",
   ],
   [BusinessRole.accountant]: [
     "dashboard",
@@ -22,6 +23,7 @@ export const ROLE_PERMISSIONS: Record<BusinessRole, PageName[]> = {
     "relatorios",
     "auditoria",
     "configuracoes",
+    "importar-extrato",
   ],
   [BusinessRole.client]: [
     "dashboard",

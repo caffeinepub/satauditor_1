@@ -1,0 +1,212 @@
+// Version: 1.0.0
+type AccountId__765643564 = Nat;
+type AccountType__448164167 =
+  {#asset; #equity; #expense; #liability; #revenue};
+type Account__928440765 =
+  {
+    accountType : AccountType__448164167;
+    balance : Int;
+    code : Text;
+    name : Text
+  };
+type AuditLogStored__798273817 =
+  {
+    action : Text;
+    newData : ?Text;
+    previousData : ?Text;
+    timestamp : Time__900049286;
+    user : Principal
+  };
+type BusinessRole__1046892676 = {#accountant; #admin; #client};
+type ChartAccount__218940492 =
+  {
+    accountType : AccountType__448164167;
+    active : Bool;
+    code : Text;
+    createdAt : Time__900049286;
+    description : Text;
+    id : AccountId__765643564;
+    name : Text;
+    parentCode : ?Text
+  };
+type ClientId__894050839 = Nat;
+type Client__171211559 =
+  {
+    active : Bool;
+    address : Text;
+    bitcoinAddress : ?Text;
+    cnpj : Text;
+    createdAt : Time__900049286;
+    email : Text;
+    id : ClientId__894050839;
+    name : Text;
+    phone : Text;
+    plan : PlanType__945487099;
+    updatedAt : Time__900049286;
+    walletType : ?WalletType__701049132
+  };
+type ComplianceAlert__1045713131 =
+  {
+    message : Text;
+    resolved : Bool;
+    timestamp : Time__900049286;
+    transactionId : TransactionId__1003217902
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type Icrc1Account__643105016 = {owner : Principal; subaccount : ?Blob};
+type ImportRecord__69821630 =
+  {
+    filename : Text;
+    id : Nat;
+    importedAt : Time__900049286;
+    importedBy : Principal;
+    recordCount : Nat
+  };
+type Int__270357528 = Int__616954475;
+type Int__616954475 = Int;
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type JournalEntryId__833398558 = Nat;
+type JournalEntry__751434829 =
+  {
+    clientId : ClientId__894050839;
+    createdAt : Time__900049286;
+    createdBy : Principal;
+    creditAccountCode : Text;
+    date : Time__900049286;
+    debitAccountCode : Text;
+    description : Text;
+    id : JournalEntryId__833398558;
+    reference : ?Text;
+    value : Int
+  };
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type PlanType__945487099 = {#basic; #enterprise; #professional};
+type SubscriptionId__825880366 = Nat;
+type SubscriptionStatus__278950313 = {#active; #inactive; #suspended};
+type Subscription__231062474 =
+  {
+    clientId : ClientId__894050839;
+    createdAt : Time__900049286;
+    id : SubscriptionId__825880366;
+    plan : PlanType__945487099;
+    startDate : Time__900049286;
+    status : SubscriptionStatus__278950313;
+    updatedAt : Time__900049286
+  };
+type Time__796480547 = Int__270357528;
+type Time__900049286 = Time__796480547;
+type TransactionCategory__960106729 =
+  {#asset; #equity; #expense; #liability; #revenue};
+type TransactionId__1003217902 = Nat;
+type TransactionType__767491300 = {#expense; #income};
+type Transaction__865268250 =
+  {
+    category : TransactionCategory__960106729;
+    clientId : ClientId__894050839;
+    confirmed : Bool;
+    createdAt : Time__900049286;
+    date : Time__900049286;
+    description : Text;
+    hash : Text;
+    id : TransactionId__1003217902;
+    transactionType : TransactionType__767491300;
+    updatedAt : Time__900049286;
+    value : Nat
+  };
+type UserApprovalStatus__753286710 = {#approved; #pending; #rejected};
+type UserProfile__491224006 =
+  {
+    businessRole : BusinessRole__1046892676;
+    clientId : ?ClientId__894050839;
+    email : Text;
+    name : Text
+  };
+type UserRole__521596351 = {#admin; #guest; #user};
+type WalletType__701049132 = {#ckbtc; #manual};
+actor {
+  stable var accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__521596351>
+    };
+  stable var accounts :
+    {
+      var root : Node__46230540<Text, Account__928440765>;
+      var size : Nat__490723111
+    };
+  stable var auditLogs :
+    {
+      var root : Node__46230540<Nat, AuditLogStored__798273817>;
+      var size : Nat__490723111
+    };
+  stable var chartAccounts :
+    {
+      var root : Node__46230540<AccountId__765643564, ChartAccount__218940492>;
+      var size : Nat__490723111
+    };
+  stable ckBtcLedger :
+    actor {
+      icrc1_balance_of : shared query Icrc1Account__643105016 -> async Nat
+    };
+  stable var clients :
+    {
+      var root : Node__46230540<ClientId__894050839, Client__171211559>;
+      var size : Nat__490723111
+    };
+  stable var complianceAlerts :
+    {
+      var root : Node__46230540<Nat, ComplianceAlert__1045713131>;
+      var size : Nat__490723111
+    };
+  stable var importRecords :
+    {
+      var root : Node__46230540<Nat, ImportRecord__69821630>;
+      var size : Nat__490723111
+    };
+  stable var journalEntries :
+    {
+      var root :
+        Node__46230540<JournalEntryId__833398558, JournalEntry__751434829>;
+      var size : Nat__490723111
+    };
+  stable var nextAccountId : Nat;
+  stable var nextAlertId : Nat;
+  stable var nextAuditLogId : Nat;
+  stable var nextClientId : Nat;
+  stable var nextImportRecordId : Nat;
+  stable var nextJournalEntryId : Nat;
+  stable var nextSubscriptionId : Nat;
+  stable var nextTransactionId : Nat;
+  stable var subscriptions :
+    {
+      var root :
+        Node__46230540<SubscriptionId__825880366, Subscription__231062474>;
+      var size : Nat__490723111
+    };
+  stable var transactions :
+    {
+      var root :
+        Node__46230540<TransactionId__1003217902, Transaction__865268250>;
+      var size : Nat__490723111
+    };
+  stable var userApprovalStatus :
+    {
+      var root : Node__46230540<Principal, UserApprovalStatus__753286710>;
+      var size : Nat__490723111
+    };
+  stable var userProfiles :
+    {
+      var root : Node__46230540<Principal, UserProfile__491224006>;
+      var size : Nat__490723111
+    }
+};

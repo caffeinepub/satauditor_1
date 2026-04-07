@@ -16,8 +16,12 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { BusinessRole, type Transaction, type UserProfile } from "../backend.d";
 import { useActor } from "../hooks/useActor";
+import {
+  BusinessRole,
+  type Transaction,
+  type UserProfile,
+} from "../types/domain";
 
 interface DashboardPageProps {
   profile: UserProfile;

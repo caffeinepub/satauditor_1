@@ -1,0 +1,257 @@
+type WalletType = 
+ variant {
+   ckbtc;
+   manual;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = 
+ record {
+   businessRole: BusinessRole;
+   clientId: opt ClientId;
+   email: text;
+   name: text;
+ };
+type UserApprovalStatus = 
+ variant {
+   approved;
+   pending;
+   rejected;
+ };
+type TransactionType = 
+ variant {
+   expense;
+   income;
+ };
+type TransactionId = nat;
+type TransactionCategory = 
+ variant {
+   asset;
+   equity;
+   expense;
+   liability;
+   revenue;
+ };
+type Transaction = 
+ record {
+   category: TransactionCategory;
+   clientId: ClientId;
+   confirmed: bool;
+   createdAt: Time;
+   date: Time;
+   description: text;
+   hash: text;
+   id: TransactionId;
+   transactionType: TransactionType;
+   updatedAt: Time;
+   value: nat;
+ };
+type Time = int;
+type SubscriptionStatus = 
+ variant {
+   active;
+   inactive;
+   suspended;
+ };
+type SubscriptionId = nat;
+type Subscription = 
+ record {
+   clientId: ClientId;
+   createdAt: Time;
+   id: SubscriptionId;
+   plan: PlanType;
+   startDate: Time;
+   status: SubscriptionStatus;
+   updatedAt: Time;
+ };
+type PlanType = 
+ variant {
+   basic;
+   enterprise;
+   professional;
+ };
+type JournalEntryId = nat;
+type JournalEntry = 
+ record {
+   clientId: ClientId;
+   createdAt: Time;
+   createdBy: principal;
+   creditAccountCode: text;
+   date: Time;
+   debitAccountCode: text;
+   description: text;
+   id: JournalEntryId;
+   reference: opt text;
+   value: int;
+ };
+type IncomeStatementLine = 
+ record {
+   accountCode: text;
+   accountName: text;
+   total: int;
+ };
+type IncomeStatement = 
+ record {
+   expenses: vec IncomeStatementLine;
+   month: nat;
+   netIncome: int;
+   revenues: vec IncomeStatementLine;
+   totalExpenses: int;
+   totalRevenue: int;
+   year: nat;
+ };
+type ImportRecord = 
+ record {
+   filename: text;
+   id: nat;
+   importedAt: Time;
+   importedBy: principal;
+   recordCount: nat;
+ };
+type ClientId = nat;
+type ClientBitcoinAddressResult = 
+ record {
+   address: text;
+   walletType: WalletType;
+ };
+type Client = 
+ record {
+   active: bool;
+   address: text;
+   bitcoinAddress: opt text;
+   cnpj: text;
+   createdAt: Time;
+   email: text;
+   id: ClientId;
+   name: text;
+   phone: text;
+   plan: PlanType;
+   updatedAt: Time;
+   walletType: opt WalletType;
+ };
+type ChartAccount = 
+ record {
+   accountType: AccountType;
+   active: bool;
+   code: text;
+   createdAt: Time;
+   description: text;
+   id: AccountId;
+   name: text;
+   parentCode: opt text;
+ };
+type CashFlowLine = 
+ record {
+   description: text;
+   value: int;
+ };
+type CashFlow = 
+ record {
+   inflows: vec CashFlowLine;
+   month: nat;
+   netCashFlow: int;
+   outflows: vec CashFlowLine;
+   totalInflows: int;
+   totalOutflows: int;
+   year: nat;
+ };
+type BusinessRole = 
+ variant {
+   accountant;
+   admin;
+   client;
+ };
+type BalanceSheetLine = 
+ record {
+   accountCode: text;
+   accountName: text;
+   total: int;
+ };
+type BalanceSheet = 
+ record {
+   assets: vec BalanceSheetLine;
+   equity: vec BalanceSheetLine;
+   liabilities: vec BalanceSheetLine;
+   month: nat;
+   totalAssets: int;
+   totalEquity: int;
+   totalLiabilities: int;
+   year: nat;
+ };
+type AuditLogId = nat;
+type AuditLog = 
+ record {
+   action: text;
+   details: text;
+   id: AuditLogId;
+   timestamp: Time;
+   user: principal;
+ };
+type AccountType = 
+ variant {
+   asset;
+   equity;
+   expense;
+   liability;
+   revenue;
+ };
+type AccountId = nat;
+service : {
+  _initializeAccessControlWithSecret: (userSecret: text) -> ();
+  addChartAccount: (account: ChartAccount) -> (AccountId);
+  addJournalEntry: (entry: JournalEntry) -> (JournalEntryId);
+  addSubscription: (newSub: Subscription) -> (SubscriptionId);
+  addTransaction: (newTx: Transaction) -> (TransactionId);
+  approveUser: (user: principal) -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  deleteChartAccount: (accountId: AccountId) -> ();
+  deleteClient: (clientId: ClientId) -> ();
+  editChartAccount: (accountId: AccountId, updated: ChartAccount) -> ();
+  editClient: (clientId: ClientId, updatedClient: Client) -> ();
+  generateCkBtcAddress: (clientId: ClientId) -> (text);
+  getAllAuditLogs: () -> (vec AuditLog) query;
+  getAllChartAccounts: () -> (vec ChartAccount) query;
+  getAllClients: () -> (vec Client) query;
+  getAllJournalEntries: () -> (vec JournalEntry) query;
+  getAllSubscriptions: () -> (vec Subscription) query;
+  getAllTransactions: () -> (vec Transaction) query;
+  getBalanceSheet: (clientId: ClientId, month: nat, year: nat) ->
+   (BalanceSheet) query;
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getCashFlow: (clientId: ClientId, month: nat, year: nat) ->
+   (CashFlow) query;
+  getChartAccount: (accountId: AccountId) -> (opt ChartAccount) query;
+  getCkBtcBalance: (clientId: ClientId) -> (nat);
+  getClient: (clientId: ClientId) -> (opt Client) query;
+  getClientBitcoinAddress: (clientId: ClientId) ->
+   (opt ClientBitcoinAddressResult) query;
+  getImportHistory: () -> (vec ImportRecord) query;
+  getIncomeStatement: (clientId: ClientId, month: nat, year: nat) ->
+   (IncomeStatement) query;
+  getJournalEntriesByClientId: (clientId: ClientId) ->
+   (vec JournalEntry) query;
+  getPendingUsers: () -> (vec record {
+                                principal;
+                                UserProfile;
+                              }) query;
+  getSubscriptionByClientId: (clientId: ClientId) -> (opt Subscription) query;
+  getTransactionsByClientId: (clientId: ClientId) -> (vec Transaction) query;
+  getUserApprovalStatus: () -> (UserApprovalStatus) query;
+  getUserProfile: (user: principal) -> (opt UserProfile) query;
+  importTransactions: (txs: vec Transaction, filename: text) ->
+   (variant {
+      err: text;
+      ok: nat;
+    });
+  isCallerAdmin: () -> (bool) query;
+  registerClient: (newClient: Client) -> (ClientId);
+  rejectUser: (user: principal) -> ();
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  setClientBitcoinAddress: (clientId: ClientId, address: text, walletType:
+   WalletType) -> ();
+}

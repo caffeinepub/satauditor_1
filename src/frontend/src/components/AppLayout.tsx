@@ -20,6 +20,7 @@ import {
   Menu,
   Settings,
   Shield,
+  Upload,
   UserCheck,
   Users,
   Wallet,
@@ -29,8 +30,6 @@ import { AnimatePresence, motion } from "motion/react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import type { PageName } from "../App";
-import { BusinessRole } from "../backend.d";
-import type { UserProfile } from "../backend.d";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { usePWAInstall } from "../hooks/usePWAInstall";
 import {
@@ -38,6 +37,7 @@ import {
   ROLE_LABELS,
   ROLE_PERMISSIONS,
 } from "../lib/permissions";
+import { BusinessRole, type UserProfile } from "../types/domain";
 
 interface NavItem {
   id: PageName;
@@ -49,6 +49,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "clientes", label: "Clientes", icon: Users },
   { id: "transacoes", label: "Transações", icon: ArrowLeftRight },
+  { id: "importar-extrato", label: "Importar Extrato", icon: Upload },
   { id: "carteira", label: "Carteira", icon: Wallet },
   { id: "contabilidade", label: "Contabilidade", icon: BookOpen },
   { id: "relatorios", label: "Relatórios", icon: FileBarChart },
@@ -62,6 +63,7 @@ const PAGE_TITLES: Record<PageName, string> = {
   dashboard: "Dashboard",
   clientes: "Clientes",
   transacoes: "Transações Bitcoin",
+  "importar-extrato": "Importar Extrato",
   carteira: "Carteira Bitcoin",
   contabilidade: "Contabilidade",
   relatorios: "Relatórios Financeiros",

@@ -23,10 +23,10 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { BusinessRole } from "../backend.d";
 import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { checkAdminPassword } from "../lib/adminPassword";
+import { BusinessRole } from "../types/domain";
 
 const roleLabels: Record<BusinessRole, string> = {
   [BusinessRole.client]: "Cliente — Empresa usando o serviço",

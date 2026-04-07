@@ -1,4 +1,3 @@
-import { PlanType, WalletType } from "@/backend";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -36,6 +35,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useActor } from "@/hooks/useActor";
+import { PlanType, WalletType } from "@/types/domain";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Copy,
@@ -75,6 +75,8 @@ function planTypeToPortuguese(plan: PlanType): Cliente["plano"] {
       return "Profissional";
     case PlanType.enterprise:
       return "Enterprise";
+    default:
+      return "Básico";
   }
 }
 
@@ -226,6 +228,8 @@ export default function ClientesPage() {
       return result.map(backendToLocal);
     },
     enabled: !!actor && !actorLoading,
+    staleTime: 30000,
+    refetchInterval: false,
   });
 
   // ── Mutation: create client ──────────────────────────────────────────────

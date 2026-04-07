@@ -17,8 +17,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { type UserProfile, WalletType } from "../backend.d";
 import { useActor } from "../hooks/useActor";
+import { type UserProfile, WalletType } from "../types/domain";
 
 interface CarteiraPageProps {
   profile: UserProfile;
@@ -55,6 +55,8 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
       return actor.getClientBitcoinAddress(clientId!);
     },
     enabled: !!actor && !isFetching && hasClient,
+    staleTime: 30000,
+    refetchInterval: false,
   });
 
   // Fetch ckBTC balance
@@ -65,6 +67,8 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
       return actor.getCkBtcBalance(clientId!);
     },
     enabled: !!actor && !isFetching && hasClient,
+    staleTime: 30000,
+    refetchInterval: false,
   });
 
   // Generate ckBTC address mutation
@@ -72,7 +76,16 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
     mutationFn: async () => {
       if (!actor || !hasClient)
         throw new Error("Actor ou cliente não disponível");
-      return actor.generateCkBtcAddress(clientId!);
+      try {
+        return await actor.generateCkBtcAddress(clientId!);
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        throw new Error(
+          msg.includes("reject") || msg.includes("error")
+            ? "Não foi possível gerar o endereço ckBTC. Tente novamente mais tarde."
+            : `Erro ao gerar endereço: ${msg}`,
+        );
+      }
     },
     onSuccess: () => {
       toast.success("Endereço ckBTC gerado com sucesso!");
@@ -84,8 +97,11 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
       });
       refetchAddress();
     },
-    onError: () => {
-      toast.error("Erro ao gerar endereço ckBTC. Tente novamente.");
+    onError: (err: Error) => {
+      toast.error(
+        err.message ||
+          "Não foi possível gerar o endereço ckBTC. Tente novamente.",
+      );
     },
   });
 

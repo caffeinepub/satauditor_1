@@ -11,8 +11,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Inbox, ShieldCheck } from "lucide-react";
 import { motion } from "motion/react";
-import type { AuditLog } from "../backend.d";
 import { useActor } from "../hooks/useActor";
+import type { AuditLog } from "../types/domain";
 
 function formatTimestamp(ts: bigint): string {
   const ms = Number(ts / 1_000_000n);
@@ -106,7 +106,10 @@ export default function AuditoriaPage() {
                           {formatTimestamp(log.timestamp)}
                         </TableCell>
                         <TableCell className="text-sm font-mono">
-                          {shortenPrincipal(log.user)}
+                          {shortenPrincipal(
+                            log.user ??
+                              log.principal ?? { toString: () => "—" },
+                          )}
                         </TableCell>
                         <TableCell>
                           <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-primary/10 text-primary">

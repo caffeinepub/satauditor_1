@@ -14,10 +14,10 @@ import { KeyRound, Loader2, UserCircle2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { BusinessRole } from "../backend.d";
 import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { checkAdminPassword } from "../lib/adminPassword";
+import { BusinessRole } from "../types/domain";
 
 export default function OnboardingPage() {
   const { identity } = useInternetIdentity();

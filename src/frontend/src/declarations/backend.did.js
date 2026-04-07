@@ -8,14 +8,45 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const AccountId = IDL.Nat;
+export const Time = IDL.Int;
+export const AccountType = IDL.Variant({
+  'revenue' : IDL.Null,
+  'liability' : IDL.Null,
+  'expense' : IDL.Null,
+  'asset' : IDL.Null,
+  'equity' : IDL.Null,
+});
+export const ChartAccount = IDL.Record({
+  'id' : AccountId,
+  'active' : IDL.Bool,
+  'code' : IDL.Text,
+  'name' : IDL.Text,
+  'createdAt' : Time,
+  'description' : IDL.Text,
+  'accountType' : AccountType,
+  'parentCode' : IDL.Opt(IDL.Text),
+});
+export const JournalEntryId = IDL.Nat;
+export const ClientId = IDL.Nat;
+export const JournalEntry = IDL.Record({
+  'id' : JournalEntryId,
+  'clientId' : ClientId,
+  'value' : IDL.Int,
+  'date' : Time,
+  'createdAt' : Time,
+  'createdBy' : IDL.Principal,
+  'reference' : IDL.Opt(IDL.Text),
+  'description' : IDL.Text,
+  'debitAccountCode' : IDL.Text,
+  'creditAccountCode' : IDL.Text,
+});
 export const SubscriptionId = IDL.Nat;
 export const SubscriptionStatus = IDL.Variant({
   'active' : IDL.Null,
   'inactive' : IDL.Null,
   'suspended' : IDL.Null,
 });
-export const ClientId = IDL.Nat;
-export const Time = IDL.Int;
 export const PlanType = IDL.Variant({
   'enterprise' : IDL.Null,
   'professional' : IDL.Null,
@@ -78,6 +109,29 @@ export const Client = IDL.Record({
   'bitcoinAddress' : IDL.Opt(IDL.Text),
   'phone' : IDL.Text,
 });
+export const AuditLogId = IDL.Nat;
+export const AuditLog = IDL.Record({
+  'id' : AuditLogId,
+  'action' : IDL.Text,
+  'user' : IDL.Principal,
+  'timestamp' : Time,
+  'details' : IDL.Text,
+});
+export const BalanceSheetLine = IDL.Record({
+  'total' : IDL.Int,
+  'accountCode' : IDL.Text,
+  'accountName' : IDL.Text,
+});
+export const BalanceSheet = IDL.Record({
+  'month' : IDL.Nat,
+  'liabilities' : IDL.Vec(BalanceSheetLine),
+  'totalAssets' : IDL.Int,
+  'totalLiabilities' : IDL.Int,
+  'assets' : IDL.Vec(BalanceSheetLine),
+  'year' : IDL.Nat,
+  'totalEquity' : IDL.Int,
+  'equity' : IDL.Vec(BalanceSheetLine),
+});
 export const BusinessRole = IDL.Variant({
   'accountant' : IDL.Null,
   'client' : IDL.Null,
@@ -89,29 +143,99 @@ export const UserProfile = IDL.Record({
   'businessRole' : BusinessRole,
   'email' : IDL.Text,
 });
+export const CashFlowLine = IDL.Record({
+  'value' : IDL.Int,
+  'description' : IDL.Text,
+});
+export const CashFlow = IDL.Record({
+  'inflows' : IDL.Vec(CashFlowLine),
+  'month' : IDL.Nat,
+  'outflows' : IDL.Vec(CashFlowLine),
+  'year' : IDL.Nat,
+  'totalOutflows' : IDL.Int,
+  'netCashFlow' : IDL.Int,
+  'totalInflows' : IDL.Int,
+});
 export const ClientBitcoinAddressResult = IDL.Record({
   'walletType' : WalletType,
   'address' : IDL.Text,
 });
+export const ImportRecord = IDL.Record({
+  'id' : IDL.Nat,
+  'importedAt' : Time,
+  'importedBy' : IDL.Principal,
+  'filename' : IDL.Text,
+  'recordCount' : IDL.Nat,
+});
+export const IncomeStatementLine = IDL.Record({
+  'total' : IDL.Int,
+  'accountCode' : IDL.Text,
+  'accountName' : IDL.Text,
+});
+export const IncomeStatement = IDL.Record({
+  'month' : IDL.Nat,
+  'expenses' : IDL.Vec(IncomeStatementLine),
+  'year' : IDL.Nat,
+  'totalExpenses' : IDL.Int,
+  'revenues' : IDL.Vec(IncomeStatementLine),
+  'totalRevenue' : IDL.Int,
+  'netIncome' : IDL.Int,
+});
+export const UserApprovalStatus = IDL.Variant({
+  'pending' : IDL.Null,
+  'approved' : IDL.Null,
+  'rejected' : IDL.Null,
+});
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'addChartAccount' : IDL.Func([ChartAccount], [AccountId], []),
+  'addJournalEntry' : IDL.Func([JournalEntry], [JournalEntryId], []),
   'addSubscription' : IDL.Func([Subscription], [SubscriptionId], []),
   'addTransaction' : IDL.Func([Transaction], [TransactionId], []),
+  'approveUser' : IDL.Func([IDL.Principal], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'deleteChartAccount' : IDL.Func([AccountId], [], []),
   'deleteClient' : IDL.Func([ClientId], [], []),
+  'editChartAccount' : IDL.Func([AccountId, ChartAccount], [], []),
   'editClient' : IDL.Func([ClientId, Client], [], []),
   'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
+  'getAllAuditLogs' : IDL.Func([], [IDL.Vec(AuditLog)], ['query']),
+  'getAllChartAccounts' : IDL.Func([], [IDL.Vec(ChartAccount)], ['query']),
   'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
+  'getAllJournalEntries' : IDL.Func([], [IDL.Vec(JournalEntry)], ['query']),
   'getAllSubscriptions' : IDL.Func([], [IDL.Vec(Subscription)], ['query']),
   'getAllTransactions' : IDL.Func([], [IDL.Vec(Transaction)], ['query']),
+  'getBalanceSheet' : IDL.Func(
+      [ClientId, IDL.Nat, IDL.Nat],
+      [BalanceSheet],
+      ['query'],
+    ),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getCashFlow' : IDL.Func([ClientId, IDL.Nat, IDL.Nat], [CashFlow], ['query']),
+  'getChartAccount' : IDL.Func([AccountId], [IDL.Opt(ChartAccount)], ['query']),
   'getCkBtcBalance' : IDL.Func([ClientId], [IDL.Nat], []),
   'getClient' : IDL.Func([ClientId], [IDL.Opt(Client)], ['query']),
   'getClientBitcoinAddress' : IDL.Func(
       [ClientId],
       [IDL.Opt(ClientBitcoinAddressResult)],
+      ['query'],
+    ),
+  'getImportHistory' : IDL.Func([], [IDL.Vec(ImportRecord)], ['query']),
+  'getIncomeStatement' : IDL.Func(
+      [ClientId, IDL.Nat, IDL.Nat],
+      [IncomeStatement],
+      ['query'],
+    ),
+  'getJournalEntriesByClientId' : IDL.Func(
+      [ClientId],
+      [IDL.Vec(JournalEntry)],
+      ['query'],
+    ),
+  'getPendingUsers' : IDL.Func(
+      [],
+      [IDL.Vec(IDL.Tuple(IDL.Principal, UserProfile))],
       ['query'],
     ),
   'getSubscriptionByClientId' : IDL.Func(
@@ -124,13 +248,20 @@ export const idlService = IDL.Service({
       [IDL.Vec(Transaction)],
       ['query'],
     ),
+  'getUserApprovalStatus' : IDL.Func([], [UserApprovalStatus], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
+  'importTransactions' : IDL.Func(
+      [IDL.Vec(Transaction), IDL.Text],
+      [IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text })],
+      [],
+    ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'registerClient' : IDL.Func([Client], [ClientId], []),
+  'rejectUser' : IDL.Func([IDL.Principal], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'setClientBitcoinAddress' : IDL.Func(
       [ClientId, IDL.Text, WalletType],
@@ -142,14 +273,45 @@ export const idlService = IDL.Service({
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const AccountId = IDL.Nat;
+  const Time = IDL.Int;
+  const AccountType = IDL.Variant({
+    'revenue' : IDL.Null,
+    'liability' : IDL.Null,
+    'expense' : IDL.Null,
+    'asset' : IDL.Null,
+    'equity' : IDL.Null,
+  });
+  const ChartAccount = IDL.Record({
+    'id' : AccountId,
+    'active' : IDL.Bool,
+    'code' : IDL.Text,
+    'name' : IDL.Text,
+    'createdAt' : Time,
+    'description' : IDL.Text,
+    'accountType' : AccountType,
+    'parentCode' : IDL.Opt(IDL.Text),
+  });
+  const JournalEntryId = IDL.Nat;
+  const ClientId = IDL.Nat;
+  const JournalEntry = IDL.Record({
+    'id' : JournalEntryId,
+    'clientId' : ClientId,
+    'value' : IDL.Int,
+    'date' : Time,
+    'createdAt' : Time,
+    'createdBy' : IDL.Principal,
+    'reference' : IDL.Opt(IDL.Text),
+    'description' : IDL.Text,
+    'debitAccountCode' : IDL.Text,
+    'creditAccountCode' : IDL.Text,
+  });
   const SubscriptionId = IDL.Nat;
   const SubscriptionStatus = IDL.Variant({
     'active' : IDL.Null,
     'inactive' : IDL.Null,
     'suspended' : IDL.Null,
   });
-  const ClientId = IDL.Nat;
-  const Time = IDL.Int;
   const PlanType = IDL.Variant({
     'enterprise' : IDL.Null,
     'professional' : IDL.Null,
@@ -209,6 +371,29 @@ export const idlFactory = ({ IDL }) => {
     'bitcoinAddress' : IDL.Opt(IDL.Text),
     'phone' : IDL.Text,
   });
+  const AuditLogId = IDL.Nat;
+  const AuditLog = IDL.Record({
+    'id' : AuditLogId,
+    'action' : IDL.Text,
+    'user' : IDL.Principal,
+    'timestamp' : Time,
+    'details' : IDL.Text,
+  });
+  const BalanceSheetLine = IDL.Record({
+    'total' : IDL.Int,
+    'accountCode' : IDL.Text,
+    'accountName' : IDL.Text,
+  });
+  const BalanceSheet = IDL.Record({
+    'month' : IDL.Nat,
+    'liabilities' : IDL.Vec(BalanceSheetLine),
+    'totalAssets' : IDL.Int,
+    'totalLiabilities' : IDL.Int,
+    'assets' : IDL.Vec(BalanceSheetLine),
+    'year' : IDL.Nat,
+    'totalEquity' : IDL.Int,
+    'equity' : IDL.Vec(BalanceSheetLine),
+  });
   const BusinessRole = IDL.Variant({
     'accountant' : IDL.Null,
     'client' : IDL.Null,
@@ -220,29 +405,107 @@ export const idlFactory = ({ IDL }) => {
     'businessRole' : BusinessRole,
     'email' : IDL.Text,
   });
+  const CashFlowLine = IDL.Record({
+    'value' : IDL.Int,
+    'description' : IDL.Text,
+  });
+  const CashFlow = IDL.Record({
+    'inflows' : IDL.Vec(CashFlowLine),
+    'month' : IDL.Nat,
+    'outflows' : IDL.Vec(CashFlowLine),
+    'year' : IDL.Nat,
+    'totalOutflows' : IDL.Int,
+    'netCashFlow' : IDL.Int,
+    'totalInflows' : IDL.Int,
+  });
   const ClientBitcoinAddressResult = IDL.Record({
     'walletType' : WalletType,
     'address' : IDL.Text,
   });
+  const ImportRecord = IDL.Record({
+    'id' : IDL.Nat,
+    'importedAt' : Time,
+    'importedBy' : IDL.Principal,
+    'filename' : IDL.Text,
+    'recordCount' : IDL.Nat,
+  });
+  const IncomeStatementLine = IDL.Record({
+    'total' : IDL.Int,
+    'accountCode' : IDL.Text,
+    'accountName' : IDL.Text,
+  });
+  const IncomeStatement = IDL.Record({
+    'month' : IDL.Nat,
+    'expenses' : IDL.Vec(IncomeStatementLine),
+    'year' : IDL.Nat,
+    'totalExpenses' : IDL.Int,
+    'revenues' : IDL.Vec(IncomeStatementLine),
+    'totalRevenue' : IDL.Int,
+    'netIncome' : IDL.Int,
+  });
+  const UserApprovalStatus = IDL.Variant({
+    'pending' : IDL.Null,
+    'approved' : IDL.Null,
+    'rejected' : IDL.Null,
+  });
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'addChartAccount' : IDL.Func([ChartAccount], [AccountId], []),
+    'addJournalEntry' : IDL.Func([JournalEntry], [JournalEntryId], []),
     'addSubscription' : IDL.Func([Subscription], [SubscriptionId], []),
     'addTransaction' : IDL.Func([Transaction], [TransactionId], []),
+    'approveUser' : IDL.Func([IDL.Principal], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'deleteChartAccount' : IDL.Func([AccountId], [], []),
     'deleteClient' : IDL.Func([ClientId], [], []),
+    'editChartAccount' : IDL.Func([AccountId, ChartAccount], [], []),
     'editClient' : IDL.Func([ClientId, Client], [], []),
     'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
+    'getAllAuditLogs' : IDL.Func([], [IDL.Vec(AuditLog)], ['query']),
+    'getAllChartAccounts' : IDL.Func([], [IDL.Vec(ChartAccount)], ['query']),
     'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
+    'getAllJournalEntries' : IDL.Func([], [IDL.Vec(JournalEntry)], ['query']),
     'getAllSubscriptions' : IDL.Func([], [IDL.Vec(Subscription)], ['query']),
     'getAllTransactions' : IDL.Func([], [IDL.Vec(Transaction)], ['query']),
+    'getBalanceSheet' : IDL.Func(
+        [ClientId, IDL.Nat, IDL.Nat],
+        [BalanceSheet],
+        ['query'],
+      ),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getCashFlow' : IDL.Func(
+        [ClientId, IDL.Nat, IDL.Nat],
+        [CashFlow],
+        ['query'],
+      ),
+    'getChartAccount' : IDL.Func(
+        [AccountId],
+        [IDL.Opt(ChartAccount)],
+        ['query'],
+      ),
     'getCkBtcBalance' : IDL.Func([ClientId], [IDL.Nat], []),
     'getClient' : IDL.Func([ClientId], [IDL.Opt(Client)], ['query']),
     'getClientBitcoinAddress' : IDL.Func(
         [ClientId],
         [IDL.Opt(ClientBitcoinAddressResult)],
+        ['query'],
+      ),
+    'getImportHistory' : IDL.Func([], [IDL.Vec(ImportRecord)], ['query']),
+    'getIncomeStatement' : IDL.Func(
+        [ClientId, IDL.Nat, IDL.Nat],
+        [IncomeStatement],
+        ['query'],
+      ),
+    'getJournalEntriesByClientId' : IDL.Func(
+        [ClientId],
+        [IDL.Vec(JournalEntry)],
+        ['query'],
+      ),
+    'getPendingUsers' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Tuple(IDL.Principal, UserProfile))],
         ['query'],
       ),
     'getSubscriptionByClientId' : IDL.Func(
@@ -255,13 +518,20 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(Transaction)],
         ['query'],
       ),
+    'getUserApprovalStatus' : IDL.Func([], [UserApprovalStatus], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
+    'importTransactions' : IDL.Func(
+        [IDL.Vec(Transaction), IDL.Text],
+        [IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text })],
+        [],
+      ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'registerClient' : IDL.Func([Client], [ClientId], []),
+    'rejectUser' : IDL.Func([IDL.Principal], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'setClientBitcoinAddress' : IDL.Func(
         [ClientId, IDL.Text, WalletType],

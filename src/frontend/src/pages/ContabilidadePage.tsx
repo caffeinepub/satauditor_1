@@ -34,10 +34,15 @@ import { BookOpen, Loader2, Pencil, PlusCircle, Trash2 } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { AccountType, BusinessRole } from "../backend.d";
-import type { ChartAccount, JournalEntry, UserProfile } from "../backend.d";
 import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import {
+  AccountType,
+  BusinessRole,
+  type ChartAccount,
+  type JournalEntry,
+  type UserProfile,
+} from "../types/domain";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -248,7 +253,7 @@ function AccountDialog({ mode, account, onClose, open }: AccountDialogProps) {
                 <SelectValue placeholder="Selecione o tipo" />
               </SelectTrigger>
               <SelectContent>
-                {Object.values(AccountType).map((t) => (
+                {(Object.values(AccountType) as AccountType[]).map((t) => (
                   <SelectItem key={t} value={t}>
                     {ACCOUNT_TYPE_LABELS[t]}
                   </SelectItem>
@@ -580,6 +585,8 @@ function PlanoDeContasTab({ canEdit }: { canEdit: boolean }) {
       return (actor as any).getAllChartAccounts();
     },
     enabled: !!actor && !isFetching,
+    staleTime: 30000,
+    refetchInterval: false,
   });
 
   const deleteMutation = useMutation({
@@ -745,7 +752,7 @@ function PlanoDeContasTab({ canEdit }: { canEdit: boolean }) {
                           </Badge>
                         </TableCell>
                         <TableCell className="text-sm text-muted-foreground">
-                          {formatDate(acc.createdAt)}
+                          {formatDate(acc.createdAt ?? 0n)}
                         </TableCell>
                         {canEdit && (
                           <TableCell className="text-right">
@@ -763,7 +770,9 @@ function PlanoDeContasTab({ canEdit }: { canEdit: boolean }) {
                                 variant="ghost"
                                 size="icon"
                                 data-ocid={`contabilidade.contas.delete_button.${i + 1}`}
-                                onClick={() => deleteMutation.mutate(acc.id)}
+                                onClick={() =>
+                                  deleteMutation.mutate(BigInt(acc.id))
+                                }
                                 disabled={deleteMutation.isPending}
                                 className="h-7 w-7 text-muted-foreground hover:text-red-400"
                               >
@@ -810,9 +819,15 @@ function LancamentosTab({
       return (actor as any).getAllChartAccounts();
     },
     enabled: !!actor && !isFetching,
+    staleTime: 30000,
+    refetchInterval: false,
   });
 
-  const { data: entries = [], isLoading } = useQuery<JournalEntry[]>({
+  const {
+    data: entries = [],
+    isLoading,
+    isError,
+  } = useQuery<JournalEntry[]>({
     queryKey: isAdmin
       ? ["journalEntries"]
       : ["journalEntries", clientId.toString()],
@@ -822,9 +837,22 @@ function LancamentosTab({
       return (actor as any).getJournalEntriesByClientId(clientId);
     },
     enabled: !!actor && !isFetching,
+    staleTime: 30000,
+    refetchInterval: false,
   });
 
   const accountMap = new Map(accounts.map((a) => [a.code, a.name]));
+
+  if (isError) {
+    return (
+      <div
+        data-ocid="contabilidade.lancamentos.error_state"
+        className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive"
+      >
+        Não foi possível carregar os dados. Tente novamente.
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -932,9 +960,9 @@ function LancamentosTab({
                         <span className="font-mono text-xs">
                           {entry.debitAccountCode}
                         </span>
-                        {accountMap.has(entry.debitAccountCode) && (
+                        {accountMap.has(entry.debitAccountCode ?? "") && (
                           <span className="ml-1 text-xs">
-                            — {accountMap.get(entry.debitAccountCode)}
+                            — {accountMap.get(entry.debitAccountCode ?? "")}
                           </span>
                         )}
                       </TableCell>
@@ -942,14 +970,14 @@ function LancamentosTab({
                         <span className="font-mono text-xs">
                           {entry.creditAccountCode}
                         </span>
-                        {accountMap.has(entry.creditAccountCode) && (
+                        {accountMap.has(entry.creditAccountCode ?? "") && (
                           <span className="ml-1 text-xs">
-                            — {accountMap.get(entry.creditAccountCode)}
+                            — {accountMap.get(entry.creditAccountCode ?? "")}
                           </span>
                         )}
                       </TableCell>
                       <TableCell className="text-right font-mono text-xs text-foreground">
-                        {formatBtc(entry.value)}
+                        {formatBtc(entry.value ?? 0n)}
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
                         {entry.reference ?? "—"}
@@ -978,8 +1006,10 @@ export default function ContabilidadePage({ profile }: ContabilidadePageProps) {
     profile.businessRole === BusinessRole.admin ||
     profile.businessRole === BusinessRole.accountant;
   const isAdmin = profile.businessRole === BusinessRole.admin;
-  const clientId =
-    profile.businessRole === BusinessRole.admin ? 1n : (profile.clientId ?? 1n);
+  const clientId: bigint =
+    profile.businessRole === BusinessRole.admin
+      ? 1n
+      : BigInt(profile.clientId ?? 1);
 
   return (
     <div className="p-6 space-y-6">

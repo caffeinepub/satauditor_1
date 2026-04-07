@@ -29,14 +29,14 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
-import { BusinessRole } from "../backend.d";
-import type {
-  BalanceSheet,
-  CashFlow,
-  IncomeStatement,
-  UserProfile,
-} from "../backend.d";
 import { useActor } from "../hooks/useActor";
+import {
+  type BalanceSheet,
+  BusinessRole,
+  type CashFlow,
+  type IncomeStatement,
+  type UserProfile,
+} from "../types/domain";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -112,7 +112,7 @@ function BalancoTab({
 }) {
   const { actor, isFetching } = useActor();
 
-  const { data, isLoading } = useQuery<BalanceSheet>({
+  const { data, isLoading, isError } = useQuery<BalanceSheet>({
     queryKey: ["balanceSheet", clientId.toString(), mesIndex, ano],
     queryFn: async () => {
       if (!actor) throw new Error("actor not ready");
@@ -123,6 +123,8 @@ function BalancoTab({
       );
     },
     enabled: !!actor && !isFetching,
+    staleTime: 30000,
+    refetchInterval: false,
   });
 
   const isEmpty =
@@ -131,6 +133,17 @@ function BalancoTab({
     data.assets.length === 0 &&
     data.liabilities.length === 0 &&
     data.equity.length === 0;
+
+  if (isError) {
+    return (
+      <div
+        data-ocid="relatorios.balanco.error_state"
+        className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive"
+      >
+        Não foi possível carregar os dados. Tente novamente.
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -325,7 +338,7 @@ function DreTab({
 }) {
   const { actor, isFetching } = useActor();
 
-  const { data, isLoading } = useQuery<IncomeStatement>({
+  const { data, isLoading, isError } = useQuery<IncomeStatement>({
     queryKey: ["incomeStatement", clientId.toString(), mesIndex, ano],
     queryFn: async () => {
       if (!actor) throw new Error("actor not ready");
@@ -336,6 +349,8 @@ function DreTab({
       );
     },
     enabled: !!actor && !isFetching,
+    staleTime: 30000,
+    refetchInterval: false,
   });
 
   const isEmpty =
@@ -343,6 +358,17 @@ function DreTab({
     data &&
     data.revenues.length === 0 &&
     data.expenses.length === 0;
+
+  if (isError) {
+    return (
+      <div
+        data-ocid="relatorios.dre.error_state"
+        className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive"
+      >
+        Não foi possível carregar os dados. Tente novamente.
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -408,7 +434,7 @@ function DreTab({
                     Total Receitas
                   </TableCell>
                   <TableCell className="text-right pr-4 font-mono text-sm font-bold text-emerald-400">
-                    {formatBtc(data.totalRevenue)}
+                    {formatBtc(data.totalRevenue ?? data.totalRevenues ?? 0n)}
                   </TableCell>
                 </TableRow>
 
@@ -484,7 +510,7 @@ function FluxoTab({
 }) {
   const { actor, isFetching } = useActor();
 
-  const { data, isLoading } = useQuery<CashFlow>({
+  const { data, isLoading, isError } = useQuery<CashFlow>({
     queryKey: ["cashFlow", clientId.toString(), mesIndex, ano],
     queryFn: async () => {
       if (!actor) throw new Error("actor not ready");
@@ -495,6 +521,8 @@ function FluxoTab({
       );
     },
     enabled: !!actor && !isFetching,
+    staleTime: 30000,
+    refetchInterval: false,
   });
 
   const isEmpty =
@@ -502,6 +530,17 @@ function FluxoTab({
     data &&
     data.inflows.length === 0 &&
     data.outflows.length === 0;
+
+  if (isError) {
+    return (
+      <div
+        data-ocid="relatorios.fluxo.error_state"
+        className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive"
+      >
+        Não foi possível carregar os dados. Tente novamente.
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -638,8 +677,10 @@ export default function RelatoriosPage({ profile }: RelatoriosPageProps) {
   const [ano, setAno] = useState(String(new Date().getFullYear()));
   const [activeTab, setActiveTab] = useState("balanco");
 
-  const clientId =
-    profile.businessRole === BusinessRole.admin ? 1n : (profile.clientId ?? 1n);
+  const clientId: bigint =
+    profile.businessRole === BusinessRole.admin
+      ? 1n
+      : BigInt(profile.clientId ?? 1);
 
   const mesIndex = Number.parseInt(mes);
   const anoNum = Number.parseInt(ano);

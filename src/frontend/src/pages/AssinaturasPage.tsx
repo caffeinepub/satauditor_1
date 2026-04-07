@@ -13,9 +13,13 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Check, Crown, Star } from "lucide-react";
 import { motion } from "motion/react";
-import { BusinessRole } from "../backend.d";
-import type { Client, Subscription, UserProfile } from "../backend.d";
 import { useActor } from "../hooks/useActor";
+import {
+  BusinessRole,
+  type Client,
+  type Subscription,
+  type UserProfile,
+} from "../types/domain";
 
 interface Plano {
   id: string;
@@ -209,11 +213,11 @@ function ClientView({ profile }: { profile: UserProfile }) {
     );
   }
 
-  const planKey = Object.keys(subscription.plan)[0] as string;
+  const planKey = Object.keys(subscription.plan ?? {})[0] as string;
   const planNome = planTypeToNome[planKey] ?? planKey;
   const planId = planTypeToPlanoId[planKey] ?? "profissional";
   const clientePlano = planos.find((p) => p.id === planId) ?? planos[1];
-  const statusKey = Object.keys(subscription.status)[0] as string;
+  const statusKey = Object.keys(subscription.status ?? {})[0] as string;
   const statusLabel = statusToLabel[statusKey] ?? statusKey;
   const statusClass = statusToColors[statusKey] ?? statusToColors.inactive;
 
@@ -421,9 +425,11 @@ function AdminView() {
                     </TableRow>
                   ) : (
                     subscriptions.map((sub, i) => {
-                      const planKey = Object.keys(sub.plan)[0] as string;
+                      const planKey = Object.keys(sub.plan ?? {})[0] as string;
                       const planNome = planTypeToNome[planKey] ?? planKey;
-                      const statusKey = Object.keys(sub.status)[0] as string;
+                      const statusKey = Object.keys(
+                        sub.status ?? {},
+                      )[0] as string;
                       const statusLabel = statusToLabel[statusKey] ?? statusKey;
                       const statusClass =
                         statusToColors[statusKey] ?? statusToColors.inactive;

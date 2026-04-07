@@ -1,4 +1,3 @@
-import { BusinessRole, type UserProfile } from "@/backend.d";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { BusinessRole, type UserProfile } from "@/types/domain";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Loader2, UserCheck, X } from "lucide-react";
 import { motion } from "motion/react";
@@ -43,6 +43,8 @@ function ApprovalPanel({ actor }: { actor: any }) {
       }
     },
     enabled: !!actor,
+    staleTime: 15000,
+    refetchInterval: 30000,
   });
 
   const approveMutation = useMutation({

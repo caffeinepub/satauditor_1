@@ -2,7 +2,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/sonner";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { BusinessRole, UserApprovalStatus } from "./backend.d";
 import AppLayout from "./components/AppLayout";
 import { useActor } from "./hooks/useActor";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
@@ -15,12 +14,14 @@ import ClientesPage from "./pages/ClientesPage";
 import ConfiguracoesPage from "./pages/ConfiguracoesPage";
 import ContabilidadePage from "./pages/ContabilidadePage";
 import DashboardPage from "./pages/DashboardPage";
+import ImportarExtratoPage from "./pages/ImportarExtratoPage";
 import LoginPage from "./pages/LoginPage";
 import OnboardingPage from "./pages/OnboardingPage";
 import PendingApprovalPage from "./pages/PendingApprovalPage";
 import RejectedPage from "./pages/RejectedPage";
 import RelatoriosPage from "./pages/RelatoriosPage";
 import TransacoesPage from "./pages/TransacoesPage";
+import { BusinessRole, UserApprovalStatus } from "./types/domain";
 
 export type PageName =
   | "dashboard"
@@ -32,7 +33,8 @@ export type PageName =
   | "auditoria"
   | "assinaturas"
   | "configuracoes"
-  | "aprovacoes";
+  | "aprovacoes"
+  | "importar-extrato";
 
 export default function App() {
   const { identity, isInitializing } = useInternetIdentity();
@@ -48,6 +50,8 @@ export default function App() {
       return actor.getCallerUserProfile();
     },
     enabled: isAuthenticated && !!actor && !isFetching,
+    staleTime: 30000,
+    refetchInterval: 30000,
   });
 
   const isAdmin = profile?.businessRole === BusinessRole.admin;
@@ -72,6 +76,8 @@ export default function App() {
       }
     },
     enabled: isAuthenticated && !!actor && !isFetching && !!profile && !isAdmin,
+    staleTime: 30000,
+    refetchInterval: 30000,
   });
 
   // Redirect to dashboard if current page is not allowed for this role
@@ -160,6 +166,7 @@ export default function App() {
     assinaturas: <AssinaturasPage profile={profile} />,
     configuracoes: <ConfiguracoesPage />,
     aprovacoes: <AprovacoesPage actor={actor} />,
+    "importar-extrato": <ImportarExtratoPage />,
   };
 
   return (

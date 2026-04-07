@@ -22,13 +22,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Download, Info, Search } from "lucide-react";
 import { motion } from "motion/react";
 import { useMemo, useState } from "react";
+import { useActor } from "../hooks/useActor";
 import {
   BusinessRole,
+  type Transaction,
   TransactionCategory,
   TransactionType,
-} from "../backend.d";
-import type { Transaction, UserProfile } from "../backend.d";
-import { useActor } from "../hooks/useActor";
+  type UserProfile,
+} from "../types/domain";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -107,7 +108,7 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
       const tipo = getTransactionTypeLabel(t);
       const categoria = getCategoryLabel(t);
       const matchSearch =
-        t.hash.toLowerCase().includes(search.toLowerCase()) ||
+        (t.hash ?? "").toLowerCase().includes(search.toLowerCase()) ||
         (!isClient &&
           t.description.toLowerCase().includes(search.toLowerCase()));
       const matchTipo =
@@ -123,10 +124,10 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
   // BTC value (satoshis stored as bigint)
   const totalEntradas = filtered
     .filter((t) => t.transactionType === TransactionType.income)
-    .reduce((acc, t) => acc + Number(t.value), 0);
+    .reduce((acc, t) => acc + Number(t.value ?? 0n), 0);
   const totalSaidas = filtered
     .filter((t) => t.transactionType === TransactionType.expense)
-    .reduce((acc, t) => acc + Number(t.value), 0);
+    .reduce((acc, t) => acc + Number(t.value ?? 0n), 0);
 
   const colSpan = isClient ? 6 : 7;
 
@@ -312,9 +313,9 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
                         className="border-b border-border/50 hover:bg-muted/20 transition-colors"
                       >
                         <TableCell className="font-mono text-xs text-muted-foreground">
-                          {t.hash.length > 12
-                            ? `${t.hash.slice(0, 8)}...${t.hash.slice(-4)}`
-                            : t.hash}
+                          {(t.hash ?? "").length > 12
+                            ? `${(t.hash ?? "").slice(0, 8)}...${(t.hash ?? "").slice(-4)}`
+                            : (t.hash ?? "—")}
                         </TableCell>
                         <TableCell>
                           <Badge
@@ -329,7 +330,7 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right font-mono text-xs text-foreground">
-                          {satoshisToFloat(t.value).toFixed(6)} BTC
+                          {satoshisToFloat(t.value ?? 0n).toFixed(6)} BTC
                         </TableCell>
                         <TableCell className="text-sm text-muted-foreground">
                           {formatDate(t.date)}

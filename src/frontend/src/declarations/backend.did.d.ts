@@ -10,9 +10,58 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export type AccountId = bigint;
+export type AccountType = { 'revenue' : null } |
+  { 'liability' : null } |
+  { 'expense' : null } |
+  { 'asset' : null } |
+  { 'equity' : null };
+export interface AuditLog {
+  'id' : AuditLogId,
+  'action' : string,
+  'user' : Principal,
+  'timestamp' : Time,
+  'details' : string,
+}
+export type AuditLogId = bigint;
+export interface BalanceSheet {
+  'month' : bigint,
+  'liabilities' : Array<BalanceSheetLine>,
+  'totalAssets' : bigint,
+  'totalLiabilities' : bigint,
+  'assets' : Array<BalanceSheetLine>,
+  'year' : bigint,
+  'totalEquity' : bigint,
+  'equity' : Array<BalanceSheetLine>,
+}
+export interface BalanceSheetLine {
+  'total' : bigint,
+  'accountCode' : string,
+  'accountName' : string,
+}
 export type BusinessRole = { 'accountant' : null } |
   { 'client' : null } |
   { 'admin' : null };
+export interface CashFlow {
+  'inflows' : Array<CashFlowLine>,
+  'month' : bigint,
+  'outflows' : Array<CashFlowLine>,
+  'year' : bigint,
+  'totalOutflows' : bigint,
+  'netCashFlow' : bigint,
+  'totalInflows' : bigint,
+}
+export interface CashFlowLine { 'value' : bigint, 'description' : string }
+export interface ChartAccount {
+  'id' : AccountId,
+  'active' : boolean,
+  'code' : string,
+  'name' : string,
+  'createdAt' : Time,
+  'description' : string,
+  'accountType' : AccountType,
+  'parentCode' : [] | [string],
+}
 export interface Client {
   'id' : ClientId,
   'active' : boolean,
@@ -32,6 +81,40 @@ export interface ClientBitcoinAddressResult {
   'address' : string,
 }
 export type ClientId = bigint;
+export interface ImportRecord {
+  'id' : bigint,
+  'importedAt' : Time,
+  'importedBy' : Principal,
+  'filename' : string,
+  'recordCount' : bigint,
+}
+export interface IncomeStatement {
+  'month' : bigint,
+  'expenses' : Array<IncomeStatementLine>,
+  'year' : bigint,
+  'totalExpenses' : bigint,
+  'revenues' : Array<IncomeStatementLine>,
+  'totalRevenue' : bigint,
+  'netIncome' : bigint,
+}
+export interface IncomeStatementLine {
+  'total' : bigint,
+  'accountCode' : string,
+  'accountName' : string,
+}
+export interface JournalEntry {
+  'id' : JournalEntryId,
+  'clientId' : ClientId,
+  'value' : bigint,
+  'date' : Time,
+  'createdAt' : Time,
+  'createdBy' : Principal,
+  'reference' : [] | [string],
+  'description' : string,
+  'debitAccountCode' : string,
+  'creditAccountCode' : string,
+}
+export type JournalEntryId = bigint;
 export type PlanType = { 'enterprise' : null } |
   { 'professional' : null } |
   { 'basic' : null };
@@ -70,6 +153,9 @@ export type TransactionCategory = { 'revenue' : null } |
 export type TransactionId = bigint;
 export type TransactionType = { 'expense' : null } |
   { 'income' : null };
+export type UserApprovalStatus = { 'pending' : null } |
+  { 'approved' : null } |
+  { 'rejected' : null };
 export interface UserProfile {
   'clientId' : [] | [ClientId],
   'name' : string,
@@ -83,28 +169,53 @@ export type WalletType = { 'ckbtc' : null } |
   { 'manual' : null };
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'addChartAccount' : ActorMethod<[ChartAccount], AccountId>,
+  'addJournalEntry' : ActorMethod<[JournalEntry], JournalEntryId>,
   'addSubscription' : ActorMethod<[Subscription], SubscriptionId>,
   'addTransaction' : ActorMethod<[Transaction], TransactionId>,
+  'approveUser' : ActorMethod<[Principal], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'deleteChartAccount' : ActorMethod<[AccountId], undefined>,
   'deleteClient' : ActorMethod<[ClientId], undefined>,
+  'editChartAccount' : ActorMethod<[AccountId, ChartAccount], undefined>,
   'editClient' : ActorMethod<[ClientId, Client], undefined>,
   'generateCkBtcAddress' : ActorMethod<[ClientId], string>,
+  'getAllAuditLogs' : ActorMethod<[], Array<AuditLog>>,
+  'getAllChartAccounts' : ActorMethod<[], Array<ChartAccount>>,
   'getAllClients' : ActorMethod<[], Array<Client>>,
+  'getAllJournalEntries' : ActorMethod<[], Array<JournalEntry>>,
   'getAllSubscriptions' : ActorMethod<[], Array<Subscription>>,
   'getAllTransactions' : ActorMethod<[], Array<Transaction>>,
+  'getBalanceSheet' : ActorMethod<[ClientId, bigint, bigint], BalanceSheet>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getCashFlow' : ActorMethod<[ClientId, bigint, bigint], CashFlow>,
+  'getChartAccount' : ActorMethod<[AccountId], [] | [ChartAccount]>,
   'getCkBtcBalance' : ActorMethod<[ClientId], bigint>,
   'getClient' : ActorMethod<[ClientId], [] | [Client]>,
   'getClientBitcoinAddress' : ActorMethod<
     [ClientId],
     [] | [ClientBitcoinAddressResult]
   >,
+  'getImportHistory' : ActorMethod<[], Array<ImportRecord>>,
+  'getIncomeStatement' : ActorMethod<
+    [ClientId, bigint, bigint],
+    IncomeStatement
+  >,
+  'getJournalEntriesByClientId' : ActorMethod<[ClientId], Array<JournalEntry>>,
+  'getPendingUsers' : ActorMethod<[], Array<[Principal, UserProfile]>>,
   'getSubscriptionByClientId' : ActorMethod<[ClientId], [] | [Subscription]>,
   'getTransactionsByClientId' : ActorMethod<[ClientId], Array<Transaction>>,
+  'getUserApprovalStatus' : ActorMethod<[], UserApprovalStatus>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'importTransactions' : ActorMethod<
+    [Array<Transaction>, string],
+    { 'ok' : bigint } |
+      { 'err' : string }
+  >,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'registerClient' : ActorMethod<[Client], ClientId>,
+  'rejectUser' : ActorMethod<[Principal], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'setClientBitcoinAddress' : ActorMethod<
     [ClientId, string, WalletType],

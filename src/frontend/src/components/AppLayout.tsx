@@ -22,6 +22,7 @@ import {
   Shield,
   UserCheck,
   Users,
+  Wallet,
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -48,6 +49,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "clientes", label: "Clientes", icon: Users },
   { id: "transacoes", label: "Transações", icon: ArrowLeftRight },
+  { id: "carteira", label: "Carteira", icon: Wallet },
   { id: "contabilidade", label: "Contabilidade", icon: BookOpen },
   { id: "relatorios", label: "Relatórios", icon: FileBarChart },
   { id: "auditoria", label: "Auditoria", icon: Shield },
@@ -60,6 +62,7 @@ const PAGE_TITLES: Record<PageName, string> = {
   dashboard: "Dashboard",
   clientes: "Clientes",
   transacoes: "Transações Bitcoin",
+  carteira: "Carteira Bitcoin",
   contabilidade: "Contabilidade",
   relatorios: "Relatórios Financeiros",
   auditoria: "Auditoria",

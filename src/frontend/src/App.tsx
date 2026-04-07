@@ -10,6 +10,7 @@ import { ROLE_PERMISSIONS } from "./lib/permissions";
 import AprovacoesPage from "./pages/AprovacoesPage";
 import AssinaturasPage from "./pages/AssinaturasPage";
 import AuditoriaPage from "./pages/AuditoriaPage";
+import CarteiraPage from "./pages/CarteiraPage";
 import ClientesPage from "./pages/ClientesPage";
 import ConfiguracoesPage from "./pages/ConfiguracoesPage";
 import ContabilidadePage from "./pages/ContabilidadePage";
@@ -25,6 +26,7 @@ export type PageName =
   | "dashboard"
   | "clientes"
   | "transacoes"
+  | "carteira"
   | "contabilidade"
   | "relatorios"
   | "auditoria"
@@ -55,11 +57,9 @@ export default function App() {
     queryFn: async () => {
       if (!actor) return null;
       try {
-        // The actor type may not yet include this method — use any cast
         const result = await (actor as any).getUserApprovalStatus();
         if (result === null || result === undefined)
           return UserApprovalStatus.approved;
-        // Map Motoko variant to enum
         if (typeof result === "object") {
           if ("approved" in result) return UserApprovalStatus.approved;
           if ("pending" in result) return UserApprovalStatus.pending;
@@ -68,7 +68,6 @@ export default function App() {
         if (typeof result === "string") return result as UserApprovalStatus;
         return UserApprovalStatus.approved;
       } catch {
-        // If method doesn't exist yet, default to approved (backward compat)
         return UserApprovalStatus.approved;
       }
     },
@@ -154,6 +153,7 @@ export default function App() {
     dashboard: <DashboardPage profile={profile} />,
     clientes: <ClientesPage />,
     transacoes: <TransacoesPage profile={profile} />,
+    carteira: <CarteiraPage profile={profile} />,
     contabilidade: <ContabilidadePage profile={profile} />,
     relatorios: <RelatoriosPage profile={profile} />,
     auditoria: <AuditoriaPage />,

@@ -38,6 +38,14 @@ export default function LoginPage() {
     login();
   };
 
+  const handleEmpresaWhatsapp = () => {
+    localStorage.setItem(
+      "satauditor_interest_requested",
+      Date.now().toString(),
+    );
+    window.open(empresaWhatsappUrl, "_blank");
+  };
+
   const features = [
     {
       icon: Bitcoin,
@@ -444,21 +452,15 @@ export default function LoginPage() {
                 </ul>
 
                 {/* CTA Button */}
-                <a
-                  href={empresaWhatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Button
                   data-ocid="plans.empresa.button"
-                  className="block"
+                  onClick={handleEmpresaWhatsapp}
+                  className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base rounded-2xl shadow-btc transition-all hover:scale-[1.01] hover:shadow-[0_0_30px_oklch(0.72_0.19_55/40%)]"
+                  size="lg"
                 >
-                  <Button
-                    className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base rounded-2xl shadow-btc transition-all hover:scale-[1.01] hover:shadow-[0_0_30px_oklch(0.72_0.19_55/40%)]"
-                    size="lg"
-                  >
-                    <MessageCircle className="h-5 w-5 mr-2" />
-                    Falar no WhatsApp
-                  </Button>
-                </a>
+                  <MessageCircle className="h-5 w-5 mr-2" />
+                  Falar no WhatsApp
+                </Button>
               </CardContent>
             </Card>
           </motion.div>

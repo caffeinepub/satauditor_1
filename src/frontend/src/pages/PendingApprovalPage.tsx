@@ -90,11 +90,17 @@ export default function PendingApprovalPage() {
           </div>
 
           {/* Status badge */}
-          <div className="flex items-center justify-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-lg px-4 py-3">
-            <div className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-sm font-medium text-amber-400">
-              Análise em andamento
-            </span>
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-lg px-4 py-3 w-full justify-center">
+              <div className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
+              <span className="text-sm font-medium text-amber-400">
+                Análise em andamento
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground text-center leading-relaxed">
+              A análise é realizada em até 24 horas úteis. Caso não receba
+              retorno, entre em contato pelo WhatsApp abaixo.
+            </p>
           </div>
 
           {/* WhatsApp contact */}

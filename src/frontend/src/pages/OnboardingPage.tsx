@@ -77,6 +77,25 @@ export default function OnboardingPage() {
         businessRole: finalRole,
       });
       toast.success("Perfil criado com sucesso!");
+
+      // Se o usuário demonstrou interesse pelo plano na landing page,
+      // envia mensagem automática no WhatsApp com os dados cadastrais
+      const interestFlag = localStorage.getItem(
+        "satauditor_interest_requested",
+      );
+      if (interestFlag) {
+        localStorage.removeItem("satauditor_interest_requested");
+        const finalRoleName = adminUnlocked
+          ? "Administrador"
+          : role === BusinessRole.accountant
+            ? "Contador"
+            : "Cliente";
+        const msg = encodeURIComponent(
+          `Olá! Acabei de me cadastrar no SatAuditor.\n\nNome: ${name.trim()}\nE-mail: ${email.trim()}\nPerfil: ${finalRoleName}\n\nEstou aguardando a aprovação para acessar a plataforma.`,
+        );
+        window.open(`https://wa.me/5516994410284?text=${msg}`, "_blank");
+      }
+
       queryClient.invalidateQueries({
         queryKey: ["userProfile", identity?.getPrincipal().toString()],
       });

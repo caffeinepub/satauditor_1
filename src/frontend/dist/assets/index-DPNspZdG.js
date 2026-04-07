@@ -76415,6 +76415,13 @@ function LoginPage() {
     setClicked(true);
     login();
   };
+  const handleEmpresaWhatsapp = () => {
+    localStorage.setItem(
+      "satauditor_interest_requested",
+      Date.now().toString()
+    );
+    window.open(empresaWhatsappUrl, "_blank");
+  };
   const features = [
     {
       icon: Bitcoin,
@@ -76756,25 +76763,17 @@ function LoginPage() {
                             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-0.5 h-5 w-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center flex-shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-3 w-3 text-primary" }) }),
                             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-foreground/90 leading-snug font-medium", children: recurso })
                           ] }, recurso)) }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx(
-                            "a",
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                            Button,
                             {
-                              href: empresaWhatsappUrl,
-                              target: "_blank",
-                              rel: "noopener noreferrer",
                               "data-ocid": "plans.empresa.button",
-                              className: "block",
-                              children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                                Button,
-                                {
-                                  className: "w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base rounded-2xl shadow-btc transition-all hover:scale-[1.01] hover:shadow-[0_0_30px_oklch(0.72_0.19_55/40%)]",
-                                  size: "lg",
-                                  children: [
-                                    /* @__PURE__ */ jsxRuntimeExports.jsx(MessageCircle, { className: "h-5 w-5 mr-2" }),
-                                    "Falar no WhatsApp"
-                                  ]
-                                }
-                              )
+                              onClick: handleEmpresaWhatsapp,
+                              className: "w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base rounded-2xl shadow-btc transition-all hover:scale-[1.01] hover:shadow-[0_0_30px_oklch(0.72_0.19_55/40%)]",
+                              size: "lg",
+                              children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(MessageCircle, { className: "h-5 w-5 mr-2" }),
+                                "Falar no WhatsApp"
+                              ]
                             }
                           )
                         ] })
@@ -76862,6 +76861,23 @@ function OnboardingPage() {
         businessRole: finalRole
       });
       ue.success("Perfil criado com sucesso!");
+      const interestFlag = localStorage.getItem(
+        "satauditor_interest_requested"
+      );
+      if (interestFlag) {
+        localStorage.removeItem("satauditor_interest_requested");
+        const finalRoleName = adminUnlocked ? "Administrador" : role === BusinessRole$1.accountant ? "Contador" : "Cliente";
+        const msg = encodeURIComponent(
+          `Olá! Acabei de me cadastrar no SatAuditor.
+
+Nome: ${name.trim()}
+E-mail: ${email.trim()}
+Perfil: ${finalRoleName}
+
+Estou aguardando a aprovação para acessar a plataforma.`
+        );
+        window.open(`https://wa.me/5516994410284?text=${msg}`, "_blank");
+      }
       queryClient2.invalidateQueries({
         queryKey: ["userProfile", identity3 == null ? void 0 : identity3.getPrincipal().toString()]
       });
@@ -77141,9 +77157,12 @@ function PendingApprovalPage() {
                   /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-xl font-semibold text-foreground", children: "Aguardando aprovação" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-muted-foreground leading-relaxed", children: "Seu cadastro foi recebido e está sendo analisado pelo administrador. Você receberá acesso assim que sua conta for aprovada." })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-lg px-4 py-3", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-2 w-2 rounded-full bg-amber-400 animate-pulse" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium text-amber-400", children: "Análise em andamento" })
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-lg px-4 py-3 w-full justify-center", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-2 w-2 rounded-full bg-amber-400 animate-pulse" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium text-amber-400", children: "Análise em andamento" })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground text-center leading-relaxed", children: "A análise é realizada em até 24 horas úteis. Caso não receba retorno, entre em contato pelo WhatsApp abaixo." })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded-lg bg-muted/30 border border-border px-4 py-3 space-y-2", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground text-center", children: "Dúvidas? Entre em contato pelo WhatsApp:" }),

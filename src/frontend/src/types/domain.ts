@@ -14,7 +14,6 @@ export enum UserApprovalStatus {
 
 export enum WalletType {
   ckbtc = "ckbtc",
-  cold = "cold",
   manual = "manual",
 }
 

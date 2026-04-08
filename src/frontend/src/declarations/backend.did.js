@@ -109,6 +109,13 @@ export const Client = IDL.Record({
   'bitcoinAddress' : IDL.Opt(IDL.Text),
   'phone' : IDL.Text,
 });
+export const AccessRequest = IDL.Record({
+  'expiresAt' : IDL.Int,
+  'clientName' : IDL.Text,
+  'clientEmail' : IDL.Text,
+  'clientPrincipal' : IDL.Principal,
+  'requestedAt' : IDL.Int,
+});
 export const AuditLogId = IDL.Nat;
 export const AuditLog = IDL.Record({
   'id' : AuditLogId,
@@ -200,6 +207,7 @@ export const idlService = IDL.Service({
   'editChartAccount' : IDL.Func([AccountId, ChartAccount], [], []),
   'editClient' : IDL.Func([ClientId, Client], [], []),
   'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
+  'getAccessRequests' : IDL.Func([], [IDL.Vec(AccessRequest)], ['query']),
   'getAllAuditLogs' : IDL.Func([], [IDL.Vec(AuditLog)], ['query']),
   'getAllChartAccounts' : IDL.Func([], [IDL.Vec(ChartAccount)], ['query']),
   'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
@@ -260,6 +268,7 @@ export const idlService = IDL.Service({
       [],
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'registerAccessRequest' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
   'registerClient' : IDL.Func([Client], [ClientId], []),
   'rejectUser' : IDL.Func([IDL.Principal], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
@@ -371,6 +380,13 @@ export const idlFactory = ({ IDL }) => {
     'bitcoinAddress' : IDL.Opt(IDL.Text),
     'phone' : IDL.Text,
   });
+  const AccessRequest = IDL.Record({
+    'expiresAt' : IDL.Int,
+    'clientName' : IDL.Text,
+    'clientEmail' : IDL.Text,
+    'clientPrincipal' : IDL.Principal,
+    'requestedAt' : IDL.Int,
+  });
   const AuditLogId = IDL.Nat;
   const AuditLog = IDL.Record({
     'id' : AuditLogId,
@@ -462,6 +478,7 @@ export const idlFactory = ({ IDL }) => {
     'editChartAccount' : IDL.Func([AccountId, ChartAccount], [], []),
     'editClient' : IDL.Func([ClientId, Client], [], []),
     'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
+    'getAccessRequests' : IDL.Func([], [IDL.Vec(AccessRequest)], ['query']),
     'getAllAuditLogs' : IDL.Func([], [IDL.Vec(AuditLog)], ['query']),
     'getAllChartAccounts' : IDL.Func([], [IDL.Vec(ChartAccount)], ['query']),
     'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
@@ -530,6 +547,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'registerAccessRequest' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
     'registerClient' : IDL.Func([Client], [ClientId], []),
     'rejectUser' : IDL.Func([IDL.Principal], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),

@@ -10,6 +10,13 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface AccessRequest {
+  'expiresAt' : bigint,
+  'clientName' : string,
+  'clientEmail' : string,
+  'clientPrincipal' : Principal,
+  'requestedAt' : bigint,
+}
 export type AccountId = bigint;
 export type AccountType = { 'revenue' : null } |
   { 'liability' : null } |
@@ -180,6 +187,7 @@ export interface _SERVICE {
   'editChartAccount' : ActorMethod<[AccountId, ChartAccount], undefined>,
   'editClient' : ActorMethod<[ClientId, Client], undefined>,
   'generateCkBtcAddress' : ActorMethod<[ClientId], string>,
+  'getAccessRequests' : ActorMethod<[], Array<AccessRequest>>,
   'getAllAuditLogs' : ActorMethod<[], Array<AuditLog>>,
   'getAllChartAccounts' : ActorMethod<[], Array<ChartAccount>>,
   'getAllClients' : ActorMethod<[], Array<Client>>,
@@ -214,6 +222,7 @@ export interface _SERVICE {
       { 'err' : string }
   >,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'registerAccessRequest' : ActorMethod<[string, string], boolean>,
   'registerClient' : ActorMethod<[Client], ClientId>,
   'rejectUser' : ActorMethod<[Principal], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,

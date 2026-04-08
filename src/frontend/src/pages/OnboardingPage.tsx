@@ -75,6 +75,7 @@ export default function OnboardingPage() {
         name: name.trim(),
         email: email.trim(),
         businessRole: finalRole,
+        clientId: undefined,
       });
       toast.success("Perfil criado com sucesso!");
 

@@ -859,6 +859,7 @@ actor {
       Runtime.trap("Unauthorized: Only admins can approve users");
     };
     userApprovalStatus.add(user, #approved);
+    accessRequests.remove(user);
   };
 
   public shared ({ caller }) func rejectUser(user : Principal) : async () {
@@ -866,6 +867,7 @@ actor {
       Runtime.trap("Unauthorized: Only admins can reject users");
     };
     userApprovalStatus.add(user, #rejected);
+    accessRequests.remove(user);
   };
 
   public query ({ caller }) func getPendingUsers() : async [(Principal, UserProfile)] {
@@ -885,6 +887,48 @@ actor {
   };
 
   // ── END USER APPROVAL ──────────────────────────────────────────────────────
+
+  // ── ACCESS REQUESTS ───────────────────────────────────────────────────────
+
+  public type AccessRequest = {
+    clientPrincipal : Principal;
+    clientName : Text;
+    clientEmail : Text;
+    requestedAt : Int;
+    expiresAt : Int;
+  };
+
+  var accessRequests = Map.empty<Principal, AccessRequest>();
+
+  // Any authenticated user (non-admin) can register an access request.
+  // Overwrites any previous request from the same caller.
+  public shared ({ caller }) func registerAccessRequest(name : Text, email : Text) : async Bool {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only authenticated users can register access requests");
+    };
+    let now = Time.now();
+    let twentyFourHours : Int = 24 * 60 * 60 * 1_000_000_000;
+    let req : AccessRequest = {
+      clientPrincipal = caller;
+      clientName = name;
+      clientEmail = email;
+      requestedAt = now;
+      expiresAt = now + twentyFourHours;
+    };
+    accessRequests.add(caller, req);
+    true;
+  };
+
+  // Admin-only: returns all non-expired access requests.
+  public query ({ caller }) func getAccessRequests() : async [AccessRequest] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can view access requests");
+    };
+    let now = Time.now();
+    accessRequests.values().filter(func(req) { req.expiresAt > now }).toArray();
+  };
+
+  // ── END ACCESS REQUESTS ───────────────────────────────────────────────────
 
   // ── IMPORTAÇÃO DE EXTRATOS ────────────────────────────────────────────────
 

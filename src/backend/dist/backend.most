@@ -1,4 +1,12 @@
 // Version: 1.0.0
+type AccessRequest__631173075 =
+  {
+    clientEmail : Text;
+    clientName : Text;
+    clientPrincipal : Principal;
+    expiresAt : Int;
+    requestedAt : Int
+  };
 type AccountId__765643564 = Nat;
 type AccountType__448164167 =
   {#asset; #equity; #expense; #liability; #revenue};
@@ -138,6 +146,11 @@ actor {
     {
       var adminAssigned : Bool;
       userRoles : Map__605269027<Principal, UserRole__521596351>
+    };
+  stable var accessRequests :
+    {
+      var root : Node__46230540<Principal, AccessRequest__631173075>;
+      var size : Nat__490723111
     };
   stable var accounts :
     {

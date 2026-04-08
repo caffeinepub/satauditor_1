@@ -99,6 +99,7 @@ export default function ConfiguracoesPage() {
         name: name.trim() || "Administrador",
         email: email.trim(),
         businessRole: BusinessRole.admin,
+        clientId: undefined,
       });
 
       await queryClient.invalidateQueries({
@@ -140,6 +141,7 @@ export default function ConfiguracoesPage() {
         name: name.trim(),
         email: email.trim(),
         businessRole: finalRole,
+        clientId: undefined,
       });
       toast.success("Perfil atualizado com sucesso!");
       queryClient.invalidateQueries({

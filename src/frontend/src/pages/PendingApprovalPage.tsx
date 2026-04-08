@@ -6,12 +6,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Clock, LogOut, MessageCircle, RefreshCw, Send } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function PendingApprovalPage() {
   const { clear, identity } = useInternetIdentity();
   const { actor, isFetching } = useActor();
   const queryClient = useQueryClient();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRequestingAccess, setIsRequestingAccess] = useState(false);
 
   const principal = identity?.getPrincipal().toString() ?? "";
 
@@ -37,17 +39,40 @@ export default function PendingApprovalPage() {
     setTimeout(() => setIsRefreshing(false), 1200);
   };
 
-  const handleRequestAccess = () => {
-    const name = profile?.name ?? "Não informado";
-    const email = profile?.email ?? "Não informado";
+  const handleRequestAccess = async () => {
+    const name = profile?.name || "Não informado";
+    const email = profile?.email || "Não informado";
     const shortPrincipal = principal
       ? `${principal.slice(0, 12)}...${principal.slice(-6)}`
       : "Não disponível";
 
+    setIsRequestingAccess(true);
+
+    // Register access request in the backend before opening WhatsApp
+    try {
+      if (actor) {
+        await (actor as any).registerAccessRequest(
+          profile?.name || "",
+          profile?.email || "",
+        );
+        toast.success("Solicitação enviada ao administrador!");
+        // Invalidate access requests cache so admin sees it immediately
+        await queryClient.invalidateQueries({ queryKey: ["accessRequests"] });
+        await queryClient.invalidateQueries({ queryKey: ["pendingUsers"] });
+      }
+    } catch {
+      // Graceful degradation — still open WhatsApp even if backend call fails
+      toast.error(
+        "Não foi possível registrar a solicitação, mas o WhatsApp será aberto.",
+      );
+    } finally {
+      setIsRequestingAccess(false);
+    }
+
+    // Open WhatsApp regardless of backend success/failure
     const message = encodeURIComponent(
       `Olá! Estou solicitando acesso ao SatAuditor.\n\n📋 *Dados cadastrais:*\n• Nome: ${name}\n• E-mail: ${email}\n• ID: ${shortPrincipal}\n\nPor favor, aprove meu acesso à plataforma. Obrigado!`,
     );
-
     window.open(`https://wa.me/5516994410284?text=${message}`, "_blank");
   };
 
@@ -149,8 +174,9 @@ export default function PendingApprovalPage() {
                 Envie sua solicitação de acesso
               </p>
               <p className="text-xs text-muted-foreground text-center leading-relaxed">
-                Para liberar seu acesso, clique abaixo para enviar sua
-                solicitação diretamente ao administrador via WhatsApp.
+                Clique abaixo para enviar sua solicitação ao administrador. Ela
+                será registrada no painel de aprovações e você será notificado
+                quando aprovada.
               </p>
             </div>
 
@@ -161,10 +187,40 @@ export default function PendingApprovalPage() {
                 type="button"
                 data-ocid="pending_approval.request_access_button"
                 onClick={handleRequestAccess}
-                className="w-full flex items-center justify-center gap-2 h-12 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-emerald-900/30"
+                disabled={isRequestingAccess}
+                className="w-full flex items-center justify-center gap-2 h-12 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-emerald-900/30"
               >
-                <Send className="h-4 w-4" />
-                Solicitar Acesso pelo WhatsApp
+                {isRequestingAccess ? (
+                  <>
+                    <svg
+                      className="animate-spin h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                      />
+                    </svg>
+                    Enviando solicitação...
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4" />
+                    Solicitar Acesso pelo WhatsApp
+                  </>
+                )}
               </button>
             )}
           </motion.div>

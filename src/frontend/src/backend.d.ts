@@ -24,6 +24,13 @@ export interface AuditLog {
     details: string;
 }
 export type Time = bigint;
+export interface AccessRequest {
+    expiresAt: bigint;
+    clientName: string;
+    clientEmail: string;
+    clientPrincipal: Principal;
+    requestedAt: bigint;
+}
 export interface CashFlow {
     inflows: Array<CashFlowLine>;
     month: bigint;
@@ -190,6 +197,7 @@ export interface backendInterface {
     editChartAccount(accountId: AccountId, updated: ChartAccount): Promise<void>;
     editClient(clientId: ClientId, updatedClient: Client): Promise<void>;
     generateCkBtcAddress(clientId: ClientId): Promise<string>;
+    getAccessRequests(): Promise<Array<AccessRequest>>;
     getAllAuditLogs(): Promise<Array<AuditLog>>;
     getAllChartAccounts(): Promise<Array<ChartAccount>>;
     getAllClients(): Promise<Array<Client>>;
@@ -220,6 +228,7 @@ export interface backendInterface {
         err: string;
     }>;
     isCallerAdmin(): Promise<boolean>;
+    registerAccessRequest(name: string, email: string): Promise<boolean>;
     registerClient(newClient: Client): Promise<ClientId>;
     rejectUser(user: Principal): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;

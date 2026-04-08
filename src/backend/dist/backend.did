@@ -200,6 +200,14 @@ type AccountType =
    revenue;
  };
 type AccountId = nat;
+type AccessRequest = 
+ record {
+   clientEmail: text;
+   clientName: text;
+   clientPrincipal: principal;
+   expiresAt: int;
+   requestedAt: int;
+ };
 service : {
   _initializeAccessControlWithSecret: (userSecret: text) -> ();
   addChartAccount: (account: ChartAccount) -> (AccountId);
@@ -213,6 +221,7 @@ service : {
   editChartAccount: (accountId: AccountId, updated: ChartAccount) -> ();
   editClient: (clientId: ClientId, updatedClient: Client) -> ();
   generateCkBtcAddress: (clientId: ClientId) -> (text);
+  getAccessRequests: () -> (vec AccessRequest) query;
   getAllAuditLogs: () -> (vec AuditLog) query;
   getAllChartAccounts: () -> (vec ChartAccount) query;
   getAllClients: () -> (vec Client) query;
@@ -249,6 +258,7 @@ service : {
       ok: nat;
     });
   isCallerAdmin: () -> (bool) query;
+  registerAccessRequest: (name: text, email: text) -> (bool);
   registerClient: (newClient: Client) -> (ClientId);
   rejectUser: (user: principal) -> ();
   saveCallerUserProfile: (profile: UserProfile) -> ();

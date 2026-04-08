@@ -82,9 +82,18 @@ export default function ImportarExtratoPage() {
     queryKey: ["importHistory"],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getImportHistory() as Promise<ImportRecord[]>;
+      try {
+        const result = await (actor.getImportHistory() as Promise<
+          ImportRecord[]
+        >);
+        return result ?? [];
+      } catch {
+        return [];
+      }
     },
     enabled: !!actor && !isFetching,
+    staleTime: 30000,
+    retry: 1,
   });
 
   // ── Import mutation ────────────────────────────────────────────────────────

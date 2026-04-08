@@ -155,19 +155,34 @@ export default function App() {
     }
   }
 
-  const pageComponents: Record<PageName, React.ReactNode> = {
-    dashboard: <DashboardPage profile={profile} />,
-    clientes: <ClientesPage />,
-    transacoes: <TransacoesPage profile={profile} />,
-    carteira: <CarteiraPage profile={profile} />,
-    contabilidade: <ContabilidadePage profile={profile} />,
-    relatorios: <RelatoriosPage profile={profile} />,
-    auditoria: <AuditoriaPage />,
-    assinaturas: <AssinaturasPage profile={profile} />,
-    configuracoes: <ConfiguracoesPage />,
-    aprovacoes: <AprovacoesPage actor={actor} />,
-    "importar-extrato": <ImportarExtratoPage />,
-  };
+  function renderPage() {
+    switch (currentPage) {
+      case "dashboard":
+        return <DashboardPage profile={profile} />;
+      case "clientes":
+        return <ClientesPage />;
+      case "transacoes":
+        return <TransacoesPage profile={profile} />;
+      case "carteira":
+        return <CarteiraPage profile={profile} />;
+      case "contabilidade":
+        return <ContabilidadePage profile={profile} />;
+      case "relatorios":
+        return <RelatoriosPage profile={profile} />;
+      case "auditoria":
+        return <AuditoriaPage />;
+      case "assinaturas":
+        return <AssinaturasPage profile={profile} />;
+      case "configuracoes":
+        return <ConfiguracoesPage />;
+      case "aprovacoes":
+        return <AprovacoesPage actor={actor} />;
+      case "importar-extrato":
+        return <ImportarExtratoPage />;
+      default:
+        return <DashboardPage profile={profile} />;
+    }
+  }
 
   return (
     <>
@@ -176,7 +191,7 @@ export default function App() {
         onNavigate={setCurrentPage}
         profile={profile}
       >
-        {pageComponents[currentPage]}
+        {renderPage()}
       </AppLayout>
       <Toaster />
     </>

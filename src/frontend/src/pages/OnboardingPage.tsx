@@ -9,11 +9,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Toaster } from "@/components/ui/sonner";
-import { useQueryClient } from "@tanstack/react-query";
 import { KeyRound, Loader2, UserCircle2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useProfile } from "../context/ProfileContext";
 import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { checkAdminPassword } from "../lib/adminPassword";
@@ -22,7 +22,7 @@ import { BusinessRole } from "../types/domain";
 export default function OnboardingPage() {
   const { identity } = useInternetIdentity();
   const { actor } = useActor();
-  const queryClient = useQueryClient();
+  const { setProfile } = useProfile();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -71,35 +71,25 @@ export default function OnboardingPage() {
 
     setSaving(true);
     try {
-      await actor.saveCallerUserProfile({
+      // demoMode must be explicitly set to false for new profiles.
+      // NOTE: The bindgen encodes booleans with truthiness check (`value.demoMode ? some : none`),
+      // so we must NOT pass `false` directly — instead we omit demoMode here and call
+      // setCallerDemoMode(false) separately so the backend stores the correct value.
+      const profileToSave = {
         name: name.trim(),
         email: email.trim(),
         businessRole: finalRole,
-        clientId: undefined,
-      });
+        // clientId left undefined — bindgen converts undefined → [] (Candid None)
+      };
+
+      await actor.saveCallerUserProfile(profileToSave);
+      // Explicitly set demo mode to false so new users don't end up in demo
+      await actor.setCallerDemoMode(false);
       toast.success("Perfil criado com sucesso!");
 
-      // Se o usuário demonstrou interesse pelo plano na landing page,
-      // envia mensagem automática no WhatsApp com os dados cadastrais
-      const interestFlag = localStorage.getItem(
-        "satauditor_interest_requested",
-      );
-      if (interestFlag) {
-        localStorage.removeItem("satauditor_interest_requested");
-        const finalRoleName = adminUnlocked
-          ? "Administrador"
-          : role === BusinessRole.accountant
-            ? "Contador"
-            : "Cliente";
-        const msg = encodeURIComponent(
-          `Olá! Acabei de me cadastrar no SatAuditor.\n\nNome: ${name.trim()}\nE-mail: ${email.trim()}\nPerfil: ${finalRoleName}\n\nEstou aguardando a aprovação para acessar a plataforma.`,
-        );
-        window.open(`https://wa.me/5516994410284?text=${msg}`, "_blank");
-      }
-
-      queryClient.invalidateQueries({
-        queryKey: ["userProfile", identity?.getPrincipal().toString()],
-      });
+      // Fetch updated profile and push into context — no page reload needed
+      const updated = await actor.getCallerUserProfile();
+      setProfile(updated);
     } catch (err) {
       console.error(err);
       toast.error("Erro ao salvar perfil. Tente novamente.");
@@ -107,6 +97,9 @@ export default function OnboardingPage() {
       setSaving(false);
     }
   };
+
+  // Suppress unused variable warning — identity is available for future use
+  void identity;
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">

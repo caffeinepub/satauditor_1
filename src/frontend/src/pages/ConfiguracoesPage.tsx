@@ -10,7 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { useQueryClient } from "@tanstack/react-query";
 import {
   Bell,
   KeyRound,
@@ -23,6 +22,7 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useProfile } from "../context/ProfileContext";
 import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { checkAdminPassword } from "../lib/adminPassword";
@@ -37,7 +37,7 @@ const roleLabels: Record<BusinessRole, string> = {
 export default function ConfiguracoesPage() {
   const { actor } = useActor();
   const { identity } = useInternetIdentity();
-  const queryClient = useQueryClient();
+  const { profile, setProfile } = useProfile();
 
   const principal = identity?.getPrincipal().toString();
 
@@ -54,32 +54,36 @@ export default function ConfiguracoesPage() {
   const [passwordError, setPasswordError] = useState(false);
   const [adminSaving, setAdminSaving] = useState(false);
 
+  // Populate form from ProfileContext (no extra backend call needed)
   useEffect(() => {
-    if (!actor) return;
-    let cancelled = false;
-    actor
-      .getCallerUserProfile()
-      .then((profile) => {
-        if (cancelled || !profile) return;
-        setName(profile.name);
-        setEmail(profile.email);
-        setRole(profile.businessRole);
-        // Se o perfil já é admin, marca como desbloqueado visualmente
-        if (profile.businessRole === BusinessRole.admin) {
-          setAdminUnlocked(true);
-        }
-      })
-      .catch((err: unknown) => {
-        console.error(err);
-        toast.error("Erro ao carregar perfil.");
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [actor]);
+    if (profile) {
+      setName(profile.name);
+      setEmail(profile.email);
+      setRole(profile.businessRole);
+      if (profile.businessRole === BusinessRole.admin) {
+        setAdminUnlocked(true);
+      }
+      setLoading(false);
+    } else if (actor) {
+      // Fallback: fetch directly if context not populated yet
+      actor
+        .getCallerUserProfile()
+        .then((p) => {
+          if (!p) return;
+          setName(p.name);
+          setEmail(p.email);
+          setRole(p.businessRole);
+          if (p.businessRole === BusinessRole.admin) {
+            setAdminUnlocked(true);
+          }
+        })
+        .catch((err: unknown) => {
+          console.error(err);
+          toast.error("Erro ao carregar perfil.");
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [profile, actor]);
 
   const handleAdminPasswordSubmit = async () => {
     if (!checkAdminPassword(adminPasswordInput)) {
@@ -95,27 +99,24 @@ export default function ConfiguracoesPage() {
 
     setAdminSaving(true);
     try {
-      await actor.saveCallerUserProfile({
+      const adminProfile = {
         name: name.trim() || "Administrador",
         email: email.trim(),
         businessRole: BusinessRole.admin,
-        clientId: undefined,
-      });
+        // clientId left undefined — bindgen converts undefined → [] (Candid None)
+      };
 
-      await queryClient.invalidateQueries({
-        queryKey: ["userProfile", identity?.getPrincipal().toString()],
-      });
+      await actor.saveCallerUserProfile(adminProfile);
 
+      // Immediately update context so sidebar badge changes without reload
+      setProfile({ ...adminProfile, demoMode: profile?.demoMode });
       setAdminUnlocked(true);
       setRole(BusinessRole.admin);
       setShowAdminModal(false);
       setPasswordError(false);
       setAdminPasswordInput("");
 
-      toast.success("Acesso administrativo ativado! Recarregando...");
-
-      // Reload so the sidebar re-reads the profile from the backend
-      setTimeout(() => window.location.reload(), 1200);
+      toast.success("Acesso administrativo ativado!");
     } catch (err) {
       console.error(err);
       toast.error("Erro ao ativar acesso administrativo. Tente novamente.");
@@ -137,16 +138,22 @@ export default function ConfiguracoesPage() {
 
     setSaving(true);
     try {
-      await actor.saveCallerUserProfile({
+      const updatedProfile = {
         name: name.trim(),
         email: email.trim(),
         businessRole: finalRole,
-        clientId: undefined,
+        // clientId left undefined — bindgen converts undefined → [] (Candid None)
+      };
+
+      await actor.saveCallerUserProfile(updatedProfile);
+
+      // Update context immediately — sidebar badge updates without reload
+      // Preserve existing optional fields (demoMode, companyName, etc.) from current profile
+      setProfile({
+        ...(profile ?? { name: "", email: "", businessRole: finalRole }),
+        ...updatedProfile,
       });
       toast.success("Perfil atualizado com sucesso!");
-      queryClient.invalidateQueries({
-        queryKey: ["userProfile", identity?.getPrincipal().toString()],
-      });
     } catch (err) {
       console.error(err);
       toast.error("Erro ao salvar perfil. Tente novamente.");

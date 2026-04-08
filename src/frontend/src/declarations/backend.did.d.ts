@@ -10,13 +10,6 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface AccessRequest {
-  'expiresAt' : bigint,
-  'clientName' : string,
-  'clientEmail' : string,
-  'clientPrincipal' : Principal,
-  'requestedAt' : bigint,
-}
 export type AccountId = bigint;
 export type AccountType = { 'revenue' : null } |
   { 'liability' : null } |
@@ -160,14 +153,19 @@ export type TransactionCategory = { 'revenue' : null } |
 export type TransactionId = bigint;
 export type TransactionType = { 'expense' : null } |
   { 'income' : null };
-export type UserApprovalStatus = { 'pending' : null } |
-  { 'approved' : null } |
-  { 'rejected' : null };
 export interface UserProfile {
   'clientId' : [] | [ClientId],
+  'cnpj' : [] | [string],
   'name' : string,
   'businessRole' : BusinessRole,
+  'companyEmail' : [] | [string],
+  'responsibleName' : [] | [string],
   'email' : string,
+  'demoMode' : [] | [boolean],
+  'companyWallet' : [] | [string],
+  'segment' : [] | [string],
+  'companyName' : [] | [string],
+  'companyPhone' : [] | [string],
 }
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
@@ -180,14 +178,12 @@ export interface _SERVICE {
   'addJournalEntry' : ActorMethod<[JournalEntry], JournalEntryId>,
   'addSubscription' : ActorMethod<[Subscription], SubscriptionId>,
   'addTransaction' : ActorMethod<[Transaction], TransactionId>,
-  'approveUser' : ActorMethod<[Principal], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'deleteChartAccount' : ActorMethod<[AccountId], undefined>,
   'deleteClient' : ActorMethod<[ClientId], undefined>,
   'editChartAccount' : ActorMethod<[AccountId, ChartAccount], undefined>,
   'editClient' : ActorMethod<[ClientId, Client], undefined>,
   'generateCkBtcAddress' : ActorMethod<[ClientId], string>,
-  'getAccessRequests' : ActorMethod<[], Array<AccessRequest>>,
   'getAllAuditLogs' : ActorMethod<[], Array<AuditLog>>,
   'getAllChartAccounts' : ActorMethod<[], Array<ChartAccount>>,
   'getAllClients' : ActorMethod<[], Array<Client>>,
@@ -195,6 +191,7 @@ export interface _SERVICE {
   'getAllSubscriptions' : ActorMethod<[], Array<Subscription>>,
   'getAllTransactions' : ActorMethod<[], Array<Transaction>>,
   'getBalanceSheet' : ActorMethod<[ClientId, bigint, bigint], BalanceSheet>,
+  'getCallerDemoMode' : ActorMethod<[], boolean>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getCashFlow' : ActorMethod<[ClientId, bigint, bigint], CashFlow>,
@@ -211,10 +208,8 @@ export interface _SERVICE {
     IncomeStatement
   >,
   'getJournalEntriesByClientId' : ActorMethod<[ClientId], Array<JournalEntry>>,
-  'getPendingUsers' : ActorMethod<[], Array<[Principal, UserProfile]>>,
   'getSubscriptionByClientId' : ActorMethod<[ClientId], [] | [Subscription]>,
   'getTransactionsByClientId' : ActorMethod<[ClientId], Array<Transaction>>,
-  'getUserApprovalStatus' : ActorMethod<[], UserApprovalStatus>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'importTransactions' : ActorMethod<
     [Array<Transaction>, string],
@@ -222,10 +217,13 @@ export interface _SERVICE {
       { 'err' : string }
   >,
   'isCallerAdmin' : ActorMethod<[], boolean>,
-  'registerAccessRequest' : ActorMethod<[string, string], boolean>,
   'registerClient' : ActorMethod<[Client], ClientId>,
-  'rejectUser' : ActorMethod<[Principal], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'saveCompanyProfile' : ActorMethod<
+    [string, string, string, string, string, string, string],
+    undefined
+  >,
+  'setCallerDemoMode' : ActorMethod<[boolean], undefined>,
   'setClientBitcoinAddress' : ActorMethod<
     [ClientId, string, WalletType],
     undefined

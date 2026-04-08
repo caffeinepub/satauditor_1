@@ -228,17 +228,33 @@ actor {
     #client;
   };
 
-  public type UserApprovalStatus = {
-    #pending;
-    #approved;
-    #rejected;
+  // Legacy UserProfile shape — used only for stable migration from previous deployment.
+  // This matches the on-disk type that was stored before company/demo fields were added.
+  type UserProfileLegacy = {
+    name : Text;
+    email : Text;
+    businessRole : BusinessRole;
+    clientId : ?ClientId;
   };
 
+  // Current UserProfile — all new fields are optional for forward compatibility.
+  // demoMode: null means not set → defaults to true (new user in demo)
+  // Company fields are all optional for gradual activation
   public type UserProfile = {
     name : Text;
     email : Text;
     businessRole : BusinessRole;
     clientId : ?ClientId;
+    // Demo mode flag — null = not set (default true for new/existing users)
+    demoMode : ?Bool;
+    // Company activation fields
+    companyName : ?Text;
+    cnpj : ?Text;
+    segment : ?Text;
+    responsibleName : ?Text;
+    companyEmail : ?Text;
+    companyPhone : ?Text;
+    companyWallet : ?Text;
   };
 
   type ClientBitcoinAddressResult = {
@@ -280,8 +296,61 @@ actor {
   var complianceAlerts = Map.empty<Nat, ComplianceAlert>();
   var nextAlertId = 1;
 
-  var userProfiles = Map.empty<Principal, UserProfile>();
-  var userApprovalStatus = Map.empty<Principal, UserApprovalStatus>();
+  // Stable migration store — uses the legacy shape (without company/demo fields).
+  // Keeps the original variable name 'userProfiles' to preserve stable data across upgrade.
+  // After postupgrade, data is migrated to the transient userProfilesNew working map.
+  var userProfiles = Map.empty<Principal, UserProfileLegacy>();
+
+  // Transient working map — holds the current UserProfile shape with all new fields.
+  // Populated from userProfiles in postupgrade. Serialized back to userProfiles in preupgrade.
+  transient var userProfilesNew = Map.empty<Principal, UserProfile>();
+
+  system func preupgrade() {
+    // Serialize current userProfilesNew back into the legacy stable store for persistence.
+    userProfiles := Map.empty<Principal, UserProfileLegacy>();
+    for ((principal, profile) in userProfilesNew.entries()) {
+      userProfiles.add(principal, {
+        name = profile.name;
+        email = profile.email;
+        businessRole = profile.businessRole;
+        clientId = profile.clientId;
+      });
+    };
+  };
+
+  system func postupgrade() {
+    // Migrate legacy stable entries to full UserProfile with null for new optional fields.
+    for ((principal, legacy) in userProfiles.entries()) {
+      let migrated : UserProfile = {
+        name = legacy.name;
+        email = legacy.email;
+        businessRole = legacy.businessRole;
+        clientId = legacy.clientId;
+        demoMode = null; // null → defaults to true (demo mode on for migrated users)
+        companyName = null;
+        cnpj = null;
+        segment = null;
+        responsibleName = null;
+        companyEmail = null;
+        companyPhone = null;
+        companyWallet = null;
+      };
+      userProfilesNew.add(principal, migrated);
+    };
+  };
+
+  // ── DEPRECATED: approval workflow removed — kept for stable upgrade compatibility ──
+  type _UserApprovalStatus = { #pending; #approved; #rejected };
+  type _AccessRequest = {
+    clientPrincipal : Principal;
+    clientEmail : Text;
+    clientName : Text;
+    requestedAt : Time.Time;
+    expiresAt : Time.Time;
+  };
+  var userApprovalStatus = Map.empty<Principal, _UserApprovalStatus>();
+  var accessRequests = Map.empty<Principal, _AccessRequest>();
+  // ── END DEPRECATED ────────────────────────────────────────────────────────
 
   // ── ACCOUNTING STATE ──────────────────────────────────────────────────────
   var chartAccounts = Map.empty<AccountId, ChartAccount>();
@@ -291,10 +360,26 @@ actor {
   var nextJournalEntryId = 1;
   // ── END ACCOUNTING STATE ──────────────────────────────────────────────────
 
+  // Helper: resolve demoMode from profile (null → true = demo by default)
+  private func isDemoMode(profile : UserProfile) : Bool {
+    switch (profile.demoMode) {
+      case (?v) { v };
+      case (null) { true };
+    };
+  };
+
+  // Helper: check if caller is in demo mode
+  private func callerIsInDemoMode(caller : Principal) : Bool {
+    switch (userProfilesNew.get(caller)) {
+      case (?profile) { isDemoMode(profile) };
+      case (null) { true };
+    };
+  };
+
   // Helper: check if caller is admin or accountant
   private func isAdminOrAccountant(caller : Principal) : Bool {
     if (AccessControl.isAdmin(accessControlState, caller)) { return true };
-    switch (userProfiles.get(caller)) {
+    switch (userProfilesNew.get(caller)) {
       case (?p) { p.businessRole == #accountant };
       case (null) { false };
     };
@@ -302,7 +387,7 @@ actor {
 
   // Helper function to check if caller owns the client
   private func callerOwnsClient(caller : Principal, clientId : ClientId) : Bool {
-    switch (userProfiles.get(caller)) {
+    switch (userProfilesNew.get(caller)) {
       case (null) { false };
       case (?profile) {
         switch (profile.clientId) {
@@ -371,32 +456,227 @@ actor {
   };
   // ── END AUDIT LOG HELPER ──────────────────────────────────────────────────
 
+  // ── MOCK DATA HELPERS ─────────────────────────────────────────────────────
+
+  // Reference time: use a fixed past timestamp for mock data (Jan 2026 in nanoseconds)
+  // We compute relative offsets from a base so mocks have realistic recent dates.
+  private func mockTime(daysAgo : Nat) : Time.Time {
+    // 1735689600 seconds = 2026-01-01 00:00:00 UTC
+    let baseSeconds : Int = 1735689600;
+    let offsetSeconds : Int = -(daysAgo.toInt() * 86400);
+    (baseSeconds + offsetSeconds) * 1_000_000_000;
+  };
+
+  private func mockTransactions() : [Transaction] {
+    [
+      { id = 9001; hash = "mock-001"; transactionType = #income; value = 15000_00; date = mockTime(5); category = #revenue; description = "Receita de serviços"; clientId = 0; confirmed = true; createdAt = mockTime(5); updatedAt = mockTime(5) },
+      { id = 9002; hash = "mock-002"; transactionType = #expense; value = 3500_00; date = mockTime(8); category = #expense; description = "Pagamento de fornecedor"; clientId = 0; confirmed = true; createdAt = mockTime(8); updatedAt = mockTime(8) },
+      { id = 9003; hash = "mock-003"; transactionType = #expense; value = 2800_00; date = mockTime(12); category = #expense; description = "Aluguel"; clientId = 0; confirmed = true; createdAt = mockTime(12); updatedAt = mockTime(12) },
+      { id = 9004; hash = "mock-004"; transactionType = #expense; value = 12000_00; date = mockTime(15); category = #expense; description = "Salários"; clientId = 0; confirmed = true; createdAt = mockTime(15); updatedAt = mockTime(15) },
+      { id = 9005; hash = "mock-005"; transactionType = #income; value = 25000_00; date = mockTime(20); category = #revenue; description = "Vendas do mês"; clientId = 0; confirmed = true; createdAt = mockTime(20); updatedAt = mockTime(20) },
+      { id = 9006; hash = "mock-006"; transactionType = #expense; value = 4200_00; date = mockTime(22); category = #expense; description = "Impostos"; clientId = 0; confirmed = true; createdAt = mockTime(22); updatedAt = mockTime(22) },
+      { id = 9007; hash = "mock-007"; transactionType = #expense; value = 650_00; date = mockTime(28); category = #expense; description = "Energia elétrica"; clientId = 0; confirmed = true; createdAt = mockTime(28); updatedAt = mockTime(28) },
+      { id = 9008; hash = "mock-008"; transactionType = #income; value = 8500_00; date = mockTime(35); category = #revenue; description = "Receita de serviços"; clientId = 0; confirmed = true; createdAt = mockTime(35); updatedAt = mockTime(35) },
+      { id = 9009; hash = "mock-009"; transactionType = #expense; value = 1200_00; date = mockTime(42); category = #expense; description = "Manutenção de equipamentos"; clientId = 0; confirmed = true; createdAt = mockTime(42); updatedAt = mockTime(42) },
+      { id = 9010; hash = "mock-010"; transactionType = #income; value = 18000_00; date = mockTime(50); category = #revenue; description = "Contrato de consultoria"; clientId = 0; confirmed = true; createdAt = mockTime(50); updatedAt = mockTime(50) },
+      { id = 9011; hash = "mock-011"; transactionType = #expense; value = 500_00; date = mockTime(60); category = #expense; description = "Material de escritório"; clientId = 0; confirmed = true; createdAt = mockTime(60); updatedAt = mockTime(60) },
+      { id = 9012; hash = "mock-012"; transactionType = #income; value = 6300_00; date = mockTime(75); category = #revenue; description = "Prestação de serviços avulsos"; clientId = 0; confirmed = true; createdAt = mockTime(75); updatedAt = mockTime(75) },
+    ];
+  };
+
+  private func mockChartAccounts() : [ChartAccount] {
+    [
+      { id = 9001; code = "1.1.01"; name = "Caixa"; accountType = #asset; parentCode = ?"1.1"; description = "Numerário em caixa"; active = true; createdAt = mockTime(90) },
+      { id = 9002; code = "1.1.02"; name = "Bancos"; accountType = #asset; parentCode = ?"1.1"; description = "Saldos em contas bancárias"; active = true; createdAt = mockTime(90) },
+      { id = 9003; code = "1.2.01"; name = "Clientes"; accountType = #asset; parentCode = ?"1.2"; description = "Contas a receber de clientes"; active = true; createdAt = mockTime(90) },
+      { id = 9004; code = "2.1.01"; name = "Fornecedores"; accountType = #liability; parentCode = ?"2.1"; description = "Contas a pagar a fornecedores"; active = true; createdAt = mockTime(90) },
+      { id = 9005; code = "3.1.01"; name = "Receita de Serviços"; accountType = #revenue; parentCode = ?"3.1"; description = "Receitas provenientes de serviços prestados"; active = true; createdAt = mockTime(90) },
+      { id = 9006; code = "3.1.02"; name = "Receita de Vendas"; accountType = #revenue; parentCode = ?"3.1"; description = "Receitas provenientes de vendas de produtos"; active = true; createdAt = mockTime(90) },
+      { id = 9007; code = "4.1.01"; name = "Despesas Operacionais"; accountType = #expense; parentCode = ?"4.1"; description = "Despesas gerais de operação"; active = true; createdAt = mockTime(90) },
+      { id = 9008; code = "4.1.02"; name = "Salários"; accountType = #expense; parentCode = ?"4.1"; description = "Folha de pagamento"; active = true; createdAt = mockTime(90) },
+      { id = 9009; code = "4.1.03"; name = "Impostos"; accountType = #expense; parentCode = ?"4.1"; description = "Tributos e contribuições"; active = true; createdAt = mockTime(90) },
+      { id = 9010; code = "5.1.01"; name = "Capital Social"; accountType = #equity; parentCode = ?"5.1"; description = "Capital integralizado pelos sócios"; active = true; createdAt = mockTime(90) },
+    ];
+  };
+
+  private func mockJournalEntries() : [JournalEntry] {
+    let demoCreator = Principal.fromText("aaaaa-aa");
+    [
+      { id = 9001; date = mockTime(5); description = "Receita de serviços — NF 1001"; clientId = 0; debitAccountCode = "1.1.02"; creditAccountCode = "3.1.01"; value = 15000_00; reference = ?"NF-1001"; createdBy = demoCreator; createdAt = mockTime(5) },
+      { id = 9002; date = mockTime(8); description = "Pagamento de fornecedor"; clientId = 0; debitAccountCode = "2.1.01"; creditAccountCode = "1.1.02"; value = 3500_00; reference = null; createdBy = demoCreator; createdAt = mockTime(8) },
+      { id = 9003; date = mockTime(12); description = "Pagamento de aluguel"; clientId = 0; debitAccountCode = "4.1.01"; creditAccountCode = "1.1.02"; value = 2800_00; reference = null; createdBy = demoCreator; createdAt = mockTime(12) },
+      { id = 9004; date = mockTime(15); description = "Folha de pagamento"; clientId = 0; debitAccountCode = "4.1.02"; creditAccountCode = "1.1.02"; value = 12000_00; reference = null; createdBy = demoCreator; createdAt = mockTime(15) },
+      { id = 9005; date = mockTime(20); description = "Vendas à vista"; clientId = 0; debitAccountCode = "1.1.01"; creditAccountCode = "3.1.02"; value = 25000_00; reference = null; createdBy = demoCreator; createdAt = mockTime(20) },
+      { id = 9006; date = mockTime(22); description = "Recolhimento de impostos"; clientId = 0; debitAccountCode = "4.1.03"; creditAccountCode = "1.1.02"; value = 4200_00; reference = null; createdBy = demoCreator; createdAt = mockTime(22) },
+      { id = 9007; date = mockTime(35); description = "Receita de consultoria — NF 1002"; clientId = 0; debitAccountCode = "1.2.01"; creditAccountCode = "3.1.01"; value = 8500_00; reference = ?"NF-1002"; createdBy = demoCreator; createdAt = mockTime(35) },
+      { id = 9008; date = mockTime(50); description = "Contrato de consultoria mensal"; clientId = 0; debitAccountCode = "1.1.02"; creditAccountCode = "3.1.01"; value = 18000_00; reference = ?"CT-2026-01"; createdBy = demoCreator; createdAt = mockTime(50) },
+    ];
+  };
+
+  private func mockBalanceSheet(month : Nat, year : Nat) : BalanceSheet {
+    {
+      assets = [
+        { accountCode = "1.1.01"; accountName = "Caixa"; total = 18500_00 },
+        { accountCode = "1.1.02"; accountName = "Bancos"; total = 42300_00 },
+        { accountCode = "1.2.01"; accountName = "Clientes"; total = 23500_00 },
+      ];
+      liabilities = [
+        { accountCode = "2.1.01"; accountName = "Fornecedores"; total = 8700_00 },
+      ];
+      equity = [
+        { accountCode = "5.1.01"; accountName = "Capital Social"; total = 50000_00 },
+        { accountCode = "5.2.01"; accountName = "Lucros Acumulados"; total = 25600_00 },
+      ];
+      totalAssets = 84300_00;
+      totalLiabilities = 8700_00;
+      totalEquity = 75600_00;
+      month;
+      year;
+    };
+  };
+
+  private func mockIncomeStatement(month : Nat, year : Nat) : IncomeStatement {
+    {
+      revenues = [
+        { accountCode = "3.1.01"; accountName = "Receita de Serviços"; total = 41500_00 },
+        { accountCode = "3.1.02"; accountName = "Receita de Vendas"; total = 25000_00 },
+      ];
+      expenses = [
+        { accountCode = "4.1.01"; accountName = "Despesas Operacionais"; total = 4450_00 },
+        { accountCode = "4.1.02"; accountName = "Salários"; total = 12000_00 },
+        { accountCode = "4.1.03"; accountName = "Impostos"; total = 4200_00 },
+      ];
+      totalRevenue = 66500_00;
+      totalExpenses = 20650_00;
+      netIncome = 45850_00;
+      month;
+      year;
+    };
+  };
+
+  private func mockCashFlow(month : Nat, year : Nat) : CashFlow {
+    {
+      inflows = [
+        { description = "Receita de serviços"; value = 41500_00 },
+        { description = "Receita de vendas"; value = 25000_00 },
+      ];
+      outflows = [
+        { description = "Pagamento de salários"; value = 12000_00 },
+        { description = "Impostos pagos"; value = 4200_00 },
+        { description = "Aluguel"; value = 2800_00 },
+        { description = "Fornecedores"; value = 3500_00 },
+        { description = "Energia elétrica"; value = 650_00 },
+      ];
+      totalInflows = 66500_00;
+      totalOutflows = 23150_00;
+      netCashFlow = 43350_00;
+      month;
+      year;
+    };
+  };
+
+  // ── END MOCK DATA HELPERS ─────────────────────────────────────────────────
+
   // User profile management
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view profiles");
     };
-    userProfiles.get(caller);
+    userProfilesNew.get(caller);
   };
 
   public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
     if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized: Can only view your own profile");
     };
-    userProfiles.get(user);
+    userProfilesNew.get(user);
   };
 
   public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can save profiles");
     };
-    // Register as pending on first save if no status exists yet
-    switch (userApprovalStatus.get(caller)) {
-      case (null) { userApprovalStatus.add(caller, #pending) };
-      case (?_) {};
+    // Preserve existing demoMode if incoming profile doesn't set it (migration safety)
+    let existing = userProfilesNew.get(caller);
+    let resolvedDemoMode : ?Bool = switch (profile.demoMode) {
+      case (?v) { ?v };
+      case (null) {
+        switch (existing) {
+          case (?e) { ?isDemoMode(e) };
+          case (null) { ?true }; // new profile → demo mode on
+        };
+      };
     };
-    userProfiles.add(caller, profile);
+    userProfilesNew.add(caller, { profile with demoMode = resolvedDemoMode });
   };
+
+  // ── DEMO MODE FUNCTIONS ───────────────────────────────────────────────────
+
+  public shared ({ caller }) func setCallerDemoMode(demoMode : Bool) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can change demo mode");
+    };
+    switch (userProfilesNew.get(caller)) {
+      case (null) { Runtime.trap("Perfil não encontrado") };
+      case (?profile) {
+        userProfilesNew.add(caller, { profile with demoMode = ?demoMode });
+      };
+    };
+  };
+
+  public query ({ caller }) func getCallerDemoMode() : async Bool {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can query demo mode");
+    };
+    callerIsInDemoMode(caller);
+  };
+
+  // saveCompanyProfile: saves all company fields and sets demoMode = false atomically
+  public shared ({ caller }) func saveCompanyProfile(
+    companyName : Text,
+    cnpj : Text,
+    segment : Text,
+    responsibleName : Text,
+    companyEmail : Text,
+    companyPhone : Text,
+    companyWallet : Text,
+  ) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can save company profiles");
+    };
+    let base : UserProfile = switch (userProfilesNew.get(caller)) {
+      case (?p) { p };
+      case (null) {
+        {
+          name = "";
+          email = "";
+          businessRole = #client;
+          clientId = null;
+          demoMode = ?false;
+          companyName = null;
+          cnpj = null;
+          segment = null;
+          responsibleName = null;
+          companyEmail = null;
+          companyPhone = null;
+          companyWallet = null;
+        }
+      };
+    };
+    userProfilesNew.add(caller, {
+      base with
+      demoMode = ?false;
+      companyName = ?companyName;
+      cnpj = ?cnpj;
+      segment = ?segment;
+      responsibleName = ?responsibleName;
+      companyEmail = ?companyEmail;
+      companyPhone = ?companyPhone;
+      companyWallet = ?companyWallet;
+    });
+  };
+
+  // ── END DEMO MODE FUNCTIONS ───────────────────────────────────────────────
 
   // Bitcoin wallet management
   public shared ({ caller }) func generateCkBtcAddress(clientId : ClientId) : async Text {
@@ -535,7 +815,7 @@ actor {
     if (AccessControl.isAdmin(accessControlState, caller)) {
       return clients.values().toArray();
     };
-    switch (userProfiles.get(caller)) {
+    switch (userProfilesNew.get(caller)) {
       case (null) { [] };
       case (?profile) {
         switch (profile.clientId) {
@@ -557,10 +837,14 @@ actor {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view transactions");
     };
+    // Demo mode: return mock data
+    if (callerIsInDemoMode(caller)) {
+      return mockTransactions();
+    };
     if (AccessControl.isAdmin(accessControlState, caller)) {
       return transactions.values().toArray();
     };
-    switch (userProfiles.get(caller)) {
+    switch (userProfilesNew.get(caller)) {
       case (null) { [] };
       case (?profile) {
         switch (profile.clientId) {
@@ -579,6 +863,10 @@ actor {
     };
     if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
       Runtime.trap("Unauthorized: Can only view your own transactions");
+    };
+    // Demo mode: return mock data
+    if (callerIsInDemoMode(caller)) {
+      return mockTransactions();
     };
     transactions.values().filter(func(t) { t.clientId == clientId }).toArray();
   };
@@ -671,6 +959,10 @@ actor {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized");
     };
+    // Demo mode: return mock data
+    if (callerIsInDemoMode(caller)) {
+      return mockChartAccounts();
+    };
     chartAccounts.values().toArray();
   };
 
@@ -692,6 +984,10 @@ actor {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can view all journal entries");
     };
+    // Demo mode: return mock data
+    if (callerIsInDemoMode(caller)) {
+      return mockJournalEntries();
+    };
     journalEntries.values().toArray();
   };
 
@@ -701,6 +997,10 @@ actor {
     };
     if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
       Runtime.trap("Unauthorized: Can only view your own journal entries");
+    };
+    // Demo mode: return mock data
+    if (callerIsInDemoMode(caller)) {
+      return mockJournalEntries();
     };
     journalEntries.values().filter(func(e) { e.clientId == clientId }).toArray();
   };
@@ -726,6 +1026,10 @@ actor {
     };
     if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
       Runtime.trap("Unauthorized: Can only view your own reports");
+    };
+    // Demo mode: return mock data
+    if (callerIsInDemoMode(caller)) {
+      return mockBalanceSheet(month, year);
     };
 
     let entries = journalEntries.values().filter(func(e) {
@@ -779,6 +1083,10 @@ actor {
     if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
       Runtime.trap("Unauthorized: Can only view your own reports");
     };
+    // Demo mode: return mock data
+    if (callerIsInDemoMode(caller)) {
+      return mockIncomeStatement(month, year);
+    };
 
     let entries = journalEntries.values().filter(func(e) {
       let (m, y) = timestampToMonthYear(e.date);
@@ -820,6 +1128,10 @@ actor {
     if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
       Runtime.trap("Unauthorized: Can only view your own reports");
     };
+    // Demo mode: return mock data
+    if (callerIsInDemoMode(caller)) {
+      return mockCashFlow(month, year);
+    };
 
     let entries = journalEntries.values().filter(func(e) {
       let (m, y) = timestampToMonthYear(e.date);
@@ -841,94 +1153,6 @@ actor {
 
     { inflows; outflows; totalInflows; totalOutflows; netCashFlow = totalInflows - totalOutflows; month; year };
   };
-
-  // ── USER APPROVAL ─────────────────────────────────────────────────────────
-
-  public query ({ caller }) func getUserApprovalStatus() : async UserApprovalStatus {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized");
-    };
-    switch (userApprovalStatus.get(caller)) {
-      case (?status) { status };
-      case (null) { #pending };
-    };
-  };
-
-  public shared ({ caller }) func approveUser(user : Principal) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can approve users");
-    };
-    userApprovalStatus.add(user, #approved);
-    accessRequests.remove(user);
-  };
-
-  public shared ({ caller }) func rejectUser(user : Principal) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can reject users");
-    };
-    userApprovalStatus.add(user, #rejected);
-    accessRequests.remove(user);
-  };
-
-  public query ({ caller }) func getPendingUsers() : async [(Principal, UserProfile)] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can view pending users");
-    };
-    let result = userProfiles.entries().filter(func((principal, _profile)) {
-      switch (userApprovalStatus.get(principal)) {
-        case (?#pending) { true };
-        case (null) { true };
-        case (_) { false };
-      };
-    }).map(func((principal, profile)) : (Principal, UserProfile) {
-      (principal, profile);
-    }).toArray();
-    result;
-  };
-
-  // ── END USER APPROVAL ──────────────────────────────────────────────────────
-
-  // ── ACCESS REQUESTS ───────────────────────────────────────────────────────
-
-  public type AccessRequest = {
-    clientPrincipal : Principal;
-    clientName : Text;
-    clientEmail : Text;
-    requestedAt : Int;
-    expiresAt : Int;
-  };
-
-  var accessRequests = Map.empty<Principal, AccessRequest>();
-
-  // Any authenticated user (non-admin) can register an access request.
-  // Overwrites any previous request from the same caller.
-  public shared ({ caller }) func registerAccessRequest(name : Text, email : Text) : async Bool {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only authenticated users can register access requests");
-    };
-    let now = Time.now();
-    let twentyFourHours : Int = 24 * 60 * 60 * 1_000_000_000;
-    let req : AccessRequest = {
-      clientPrincipal = caller;
-      clientName = name;
-      clientEmail = email;
-      requestedAt = now;
-      expiresAt = now + twentyFourHours;
-    };
-    accessRequests.add(caller, req);
-    true;
-  };
-
-  // Admin-only: returns all non-expired access requests.
-  public query ({ caller }) func getAccessRequests() : async [AccessRequest] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can view access requests");
-    };
-    let now = Time.now();
-    accessRequests.values().filter(func(req) { req.expiresAt > now }).toArray();
-  };
-
-  // ── END ACCESS REQUESTS ───────────────────────────────────────────────────
 
   // ── IMPORTAÇÃO DE EXTRATOS ────────────────────────────────────────────────
 
@@ -974,4 +1198,5 @@ actor {
   };
 
   // ── END IMPORTAÇÃO DE EXTRATOS ────────────────────────────────────────────
+
 };

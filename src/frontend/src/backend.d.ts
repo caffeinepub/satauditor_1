@@ -24,13 +24,6 @@ export interface AuditLog {
     details: string;
 }
 export type Time = bigint;
-export interface AccessRequest {
-    expiresAt: bigint;
-    clientName: string;
-    clientEmail: string;
-    clientPrincipal: Principal;
-    requestedAt: bigint;
-}
 export interface CashFlow {
     inflows: Array<CashFlowLine>;
     month: bigint;
@@ -141,9 +134,17 @@ export interface BalanceSheet {
 }
 export interface UserProfile {
     clientId?: ClientId;
+    cnpj?: string;
     name: string;
     businessRole: BusinessRole;
+    companyEmail?: string;
+    responsibleName?: string;
     email: string;
+    demoMode?: boolean;
+    companyWallet?: string;
+    segment?: string;
+    companyName?: string;
+    companyPhone?: string;
 }
 export enum AccountType {
     revenue = "revenue",
@@ -171,11 +172,6 @@ export enum TransactionType {
     expense = "expense",
     income = "income"
 }
-export enum UserApprovalStatus {
-    pending = "pending",
-    approved = "approved",
-    rejected = "rejected"
-}
 export enum UserRole {
     admin = "admin",
     user = "user",
@@ -190,14 +186,12 @@ export interface backendInterface {
     addJournalEntry(entry: JournalEntry): Promise<JournalEntryId>;
     addSubscription(newSub: Subscription): Promise<SubscriptionId>;
     addTransaction(newTx: Transaction): Promise<TransactionId>;
-    approveUser(user: Principal): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     deleteChartAccount(accountId: AccountId): Promise<void>;
     deleteClient(clientId: ClientId): Promise<void>;
     editChartAccount(accountId: AccountId, updated: ChartAccount): Promise<void>;
     editClient(clientId: ClientId, updatedClient: Client): Promise<void>;
     generateCkBtcAddress(clientId: ClientId): Promise<string>;
-    getAccessRequests(): Promise<Array<AccessRequest>>;
     getAllAuditLogs(): Promise<Array<AuditLog>>;
     getAllChartAccounts(): Promise<Array<ChartAccount>>;
     getAllClients(): Promise<Array<Client>>;
@@ -205,6 +199,7 @@ export interface backendInterface {
     getAllSubscriptions(): Promise<Array<Subscription>>;
     getAllTransactions(): Promise<Array<Transaction>>;
     getBalanceSheet(clientId: ClientId, month: bigint, year: bigint): Promise<BalanceSheet>;
+    getCallerDemoMode(): Promise<boolean>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getCashFlow(clientId: ClientId, month: bigint, year: bigint): Promise<CashFlow>;
@@ -215,10 +210,8 @@ export interface backendInterface {
     getImportHistory(): Promise<Array<ImportRecord>>;
     getIncomeStatement(clientId: ClientId, month: bigint, year: bigint): Promise<IncomeStatement>;
     getJournalEntriesByClientId(clientId: ClientId): Promise<Array<JournalEntry>>;
-    getPendingUsers(): Promise<Array<[Principal, UserProfile]>>;
     getSubscriptionByClientId(clientId: ClientId): Promise<Subscription | null>;
     getTransactionsByClientId(clientId: ClientId): Promise<Array<Transaction>>;
-    getUserApprovalStatus(): Promise<UserApprovalStatus>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     importTransactions(txs: Array<Transaction>, filename: string): Promise<{
         __kind__: "ok";
@@ -228,9 +221,9 @@ export interface backendInterface {
         err: string;
     }>;
     isCallerAdmin(): Promise<boolean>;
-    registerAccessRequest(name: string, email: string): Promise<boolean>;
     registerClient(newClient: Client): Promise<ClientId>;
-    rejectUser(user: Principal): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
+    saveCompanyProfile(companyName: string, cnpj: string, segment: string, responsibleName: string, companyEmail: string, companyPhone: string, companyWallet: string): Promise<void>;
+    setCallerDemoMode(demoMode: boolean): Promise<void>;
     setClientBitcoinAddress(clientId: ClientId, address: string, walletType: WalletType): Promise<void>;
 }

@@ -1,12 +1,4 @@
 // Version: 1.0.0
-type AccessRequest__631173075 =
-  {
-    clientEmail : Text;
-    clientName : Text;
-    clientPrincipal : Principal;
-    expiresAt : Int;
-    requestedAt : Int
-  };
 type AccountId__765643564 = Nat;
 type AccountType__448164167 =
   {#asset; #equity; #expense; #liability; #revenue};
@@ -131,8 +123,7 @@ type Transaction__865268250 =
     updatedAt : Time__900049286;
     value : Nat
   };
-type UserApprovalStatus__753286710 = {#approved; #pending; #rejected};
-type UserProfile__491224006 =
+type UserProfileLegacy__431634065 =
   {
     businessRole : BusinessRole__1046892676;
     clientId : ?ClientId__894050839;
@@ -141,6 +132,15 @@ type UserProfile__491224006 =
   };
 type UserRole__521596351 = {#admin; #guest; #user};
 type WalletType__701049132 = {#ckbtc; #manual};
+type _AccessRequest__893430498 =
+  {
+    clientEmail : Text;
+    clientName : Text;
+    clientPrincipal : Principal;
+    expiresAt : Time__900049286;
+    requestedAt : Time__900049286
+  };
+type _UserApprovalStatus__282455758 = {#approved; #pending; #rejected};
 actor {
   stable var accessControlState :
     {
@@ -149,7 +149,7 @@ actor {
     };
   stable var accessRequests :
     {
-      var root : Node__46230540<Principal, AccessRequest__631173075>;
+      var root : Node__46230540<Principal, _AccessRequest__893430498>;
       var size : Nat__490723111
     };
   stable var accounts :
@@ -214,12 +214,12 @@ actor {
     };
   stable var userApprovalStatus :
     {
-      var root : Node__46230540<Principal, UserApprovalStatus__753286710>;
+      var root : Node__46230540<Principal, _UserApprovalStatus__282455758>;
       var size : Nat__490723111
     };
   stable var userProfiles :
     {
-      var root : Node__46230540<Principal, UserProfile__491224006>;
+      var root : Node__46230540<Principal, UserProfileLegacy__431634065>;
       var size : Nat__490723111
     }
 };

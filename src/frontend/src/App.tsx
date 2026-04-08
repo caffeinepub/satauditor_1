@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/sonner";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import AppLayout from "./components/AppLayout";
+import { ProfileProvider, useProfile } from "./context/ProfileContext";
 import { useActor } from "./hooks/useActor";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
 import { ROLE_PERMISSIONS } from "./lib/permissions";
-import AprovacoesPage from "./pages/AprovacoesPage";
 import AssinaturasPage from "./pages/AssinaturasPage";
+import AtivarServicoPage from "./pages/AtivarServicoPage";
 import AuditoriaPage from "./pages/AuditoriaPage";
 import CarteiraPage from "./pages/CarteiraPage";
 import ClientesPage from "./pages/ClientesPage";
@@ -18,11 +19,9 @@ import DashboardPage from "./pages/DashboardPage";
 import ImportarExtratoPage from "./pages/ImportarExtratoPage";
 import LoginPage from "./pages/LoginPage";
 import OnboardingPage from "./pages/OnboardingPage";
-import PendingApprovalPage from "./pages/PendingApprovalPage";
-import RejectedPage from "./pages/RejectedPage";
 import RelatoriosPage from "./pages/RelatoriosPage";
 import TransacoesPage from "./pages/TransacoesPage";
-import { BusinessRole, UserApprovalStatus } from "./types/domain";
+import { BusinessRole, type UserProfile } from "./types/domain";
 
 export type PageName =
   | "dashboard"
@@ -34,115 +33,112 @@ export type PageName =
   | "auditoria"
   | "assinaturas"
   | "configuracoes"
-  | "aprovacoes"
-  | "importar-extrato";
+  | "importar-extrato"
+  | "ativar-servico";
 
-export default function App() {
+// Inner component that has access to ProfileContext
+function AppInner() {
   const { identity, isInitializing } = useInternetIdentity();
   const { actor, isFetching } = useActor();
+  const queryClient = useQueryClient();
+  const { profile, setProfile } = useProfile();
   const [currentPage, setCurrentPage] = useState<PageName>("dashboard");
 
-  // profileSettled tracks whether the profile query has completed at least once
+  // profileSettled tracks whether the profile fetch has completed at least once
   const [profileSettled, setProfileSettled] = useState(false);
   // timedOut is the hard fallback — forces exit from loading after 10 seconds
   const [timedOut, setTimedOut] = useState(false);
+  // retried tracks whether we already attempted an auto-retry after timeout
+  const [retried, setRetried] = useState(false);
   const hardTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isAuthenticated = !!identity;
+  const actorReady = !!actor && !isFetching;
 
-  const {
-    data: profile,
-    isLoading: profileLoading,
-    isSuccess: profileSuccess,
-    isError: profileError,
-  } = useQuery({
-    queryKey: ["userProfile", identity?.getPrincipal().toString()],
-    queryFn: async () => {
-      if (!actor) return null;
-      try {
-        return await actor.getCallerUserProfile();
-      } catch {
-        return null;
-      }
-    },
-    enabled: isAuthenticated && !!actor && !isFetching,
-    staleTime: 30000,
-    refetchInterval: 30000,
-  });
+  // Fetch profile ONCE when actor becomes ready after auth.
+  // Deps intentionally limited to [isAuthenticated, actorReady] — we only want
+  // to re-fetch when auth or actor readiness changes, not on every render.
+  // actor, queryClient, setProfile and identity are stable refs.
+  const actorRef = useRef(actor);
+  actorRef.current = actor;
+  const setProfileRef = useRef(setProfile);
+  setProfileRef.current = setProfile;
+  const queryClientRef = useRef(queryClient);
+  queryClientRef.current = queryClient;
+  const identityRef = useRef(identity);
+  identityRef.current = identity;
 
-  // Mark profile as settled once the query completes (success or error)
   useEffect(() => {
-    if (profileSuccess || profileError) {
-      setProfileSettled(true);
-    }
-  }, [profileSuccess, profileError]);
+    if (!isAuthenticated || !actorReady) return;
+    if (!actorRef.current) return;
 
-  // Also settle when profileLoading transitions false while query was enabled
+    let cancelled = false;
+
+    actorRef.current
+      .getCallerUserProfile()
+      .then((result: UserProfile | null) => {
+        if (cancelled) return;
+        setProfileRef.current(result);
+        setProfileSettled(true);
+        // Seed React Query cache so other pages can read without another call
+        queryClientRef.current.setQueryData(
+          ["userProfile", identityRef.current?.getPrincipal().toString()],
+          result,
+        );
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setProfileRef.current(null);
+        setProfileSettled(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthenticated, actorReady]);
+
+  // Reset settled state when identity changes (logout / re-login)
   useEffect(() => {
-    if (!profileLoading && isAuthenticated && !!actor && !isFetching) {
-      setProfileSettled(true);
+    if (!isAuthenticated) {
+      setProfile(null);
+      setProfileSettled(false);
+      setTimedOut(false);
+      setRetried(false);
     }
-  }, [profileLoading, isAuthenticated, actor, isFetching]);
-
-  // Derive isAdmin ONLY after profile has settled — prevents premature evaluation
-  const isAdmin = profileSettled
-    ? profile?.businessRole === BusinessRole.admin
-    : false;
-
-  // Approval query: only after profile settled, profile exists, and user is NOT admin
-  const { data: approvalStatus, isLoading: approvalLoading } = useQuery({
-    queryKey: ["approvalStatus", identity?.getPrincipal().toString()],
-    queryFn: async () => {
-      if (!actor) return null;
-      try {
-        const result = await (
-          actor as {
-            getUserApprovalStatus: () => Promise<unknown>;
-          }
-        ).getUserApprovalStatus();
-        if (result === null || result === undefined)
-          return UserApprovalStatus.approved;
-        if (typeof result === "object") {
-          if ("approved" in (result as object))
-            return UserApprovalStatus.approved;
-          if ("pending" in (result as object))
-            return UserApprovalStatus.pending;
-          if ("rejected" in (result as object))
-            return UserApprovalStatus.rejected;
-        }
-        if (typeof result === "string") return result as UserApprovalStatus;
-        return UserApprovalStatus.approved;
-      } catch {
-        return UserApprovalStatus.approved;
-      }
-    },
-    enabled:
-      isAuthenticated &&
-      !!actor &&
-      !isFetching &&
-      profileSettled &&
-      !!profile &&
-      !isAdmin,
-    staleTime: 30000,
-    refetchInterval: 30000,
-  });
+  }, [isAuthenticated, setProfile]);
 
   // Determine whether we're still in the initial loading phase
-  // isFetching from useActor is a background refresh indicator — does NOT block loading
-  const needsApprovalCheck = profileSettled && !!profile && !isAdmin;
   const isLoading =
     !timedOut &&
-    (isInitializing ||
-      (isAuthenticated &&
-        (profileLoading ||
-          !profileSettled ||
-          (needsApprovalCheck && approvalLoading))));
+    (isInitializing || (isAuthenticated && (!actorReady || !profileSettled)));
 
-  // Hard timeout: force-exit loading after 10 seconds in case backend hangs
+  // Hard timeout: force-exit loading after 10 seconds in case backend hangs.
+  // On first timeout, attempt an automatic re-fetch before giving up.
   useEffect(() => {
     if (isLoading && !timedOut) {
       hardTimeoutRef.current = setTimeout(() => {
-        setTimedOut(true);
+        if (!retried && actorRef.current) {
+          // Attempt one automatic re-fetch before showing the reload button
+          setRetried(true);
+          actorRef.current
+            .getCallerUserProfile()
+            .then((result: UserProfile | null) => {
+              setProfileRef.current(result);
+              setProfileSettled(true);
+              queryClientRef.current.setQueryData(
+                ["userProfile", identityRef.current?.getPrincipal().toString()],
+                result,
+              );
+            })
+            .catch(() => {
+              // Auto-retry failed — surface the reload button
+              setTimedOut(true);
+              setProfileSettled(true);
+            });
+        } else {
+          setTimedOut(true);
+          setProfileSettled(true); // unblock rendering
+        }
       }, 10000);
     } else if (!isLoading && hardTimeoutRef.current) {
       clearTimeout(hardTimeoutRef.current);
@@ -154,12 +150,12 @@ export default function App() {
         hardTimeoutRef.current = null;
       }
     };
-  }, [isLoading, timedOut]);
+  }, [isLoading, timedOut, retried]);
 
   // Redirect to dashboard if current page is not allowed for this role
   useEffect(() => {
     if (!profile) return;
-    const role = profile.businessRole ?? BusinessRole.client;
+    const role = profile?.businessRole ?? BusinessRole.client;
     const allowed =
       ROLE_PERMISSIONS[role] ?? ROLE_PERMISSIONS[BusinessRole.client];
     if (!allowed.includes(currentPage)) {
@@ -187,7 +183,7 @@ export default function App() {
   }
 
   // Timeout fallback — backend did not respond in time, show reload option
-  if (timedOut && isAuthenticated && !profileSettled) {
+  if (timedOut && isAuthenticated && !profile) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-6 text-center px-4">
@@ -228,53 +224,35 @@ export default function App() {
     );
   }
 
-  // Skip approval check for admin — always has access
-  if (!isAdmin) {
-    if (approvalStatus === UserApprovalStatus.pending) {
-      return (
-        <>
-          <PendingApprovalPage />
-          <Toaster />
-        </>
-      );
-    }
-
-    if (approvalStatus === UserApprovalStatus.rejected) {
-      return (
-        <>
-          <RejectedPage />
-          <Toaster />
-        </>
-      );
-    }
-  }
+  // At this point profile is guaranteed non-null (guarded above)
+  const safeProfile = profile!;
 
   function renderPage() {
     switch (currentPage) {
       case "dashboard":
-        return <DashboardPage profile={profile} />;
+        return <DashboardPage profile={safeProfile} />;
       case "clientes":
         return <ClientesPage />;
       case "transacoes":
-        return <TransacoesPage profile={profile} />;
+        return <TransacoesPage profile={safeProfile} />;
       case "carteira":
-        return <CarteiraPage profile={profile} />;
+        return <CarteiraPage profile={safeProfile} />;
       case "contabilidade":
-        return <ContabilidadePage profile={profile} />;
+        return <ContabilidadePage profile={safeProfile} />;
       case "relatorios":
-        return <RelatoriosPage profile={profile} />;
+        return <RelatoriosPage profile={safeProfile} />;
       case "auditoria":
         return <AuditoriaPage />;
       case "assinaturas":
-        return <AssinaturasPage profile={profile} />;
+        return <AssinaturasPage profile={safeProfile} />;
       case "configuracoes":
         return <ConfiguracoesPage />;
-      case "aprovacoes":
-        return <AprovacoesPage actor={actor} />;
       case "importar-extrato":
         return <ImportarExtratoPage />;
+      case "ativar-servico":
+        return <AtivarServicoPage onNavigate={setCurrentPage} />;
       default:
-        return <DashboardPage profile={profile} />;
+        return <DashboardPage profile={safeProfile} />;
     }
   }
 
@@ -283,11 +261,19 @@ export default function App() {
       <AppLayout
         currentPage={currentPage}
         onNavigate={setCurrentPage}
-        profile={profile}
+        profile={safeProfile}
       >
         {renderPage()}
       </AppLayout>
       <Toaster />
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <ProfileProvider>
+      <AppInner />
+    </ProfileProvider>
   );
 }

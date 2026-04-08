@@ -6,12 +6,6 @@ export enum BusinessRole {
   client = "client",
 }
 
-export enum UserApprovalStatus {
-  pending = "pending",
-  approved = "approved",
-  rejected = "rejected",
-}
-
 export enum WalletType {
   ckbtc = "ckbtc",
   manual = "manual",
@@ -51,6 +45,16 @@ export interface UserProfile {
   email: string;
   businessRole: BusinessRole;
   clientId?: number | bigint;
+  // Demo mode flag — true until company profile is activated
+  demoMode?: boolean;
+  // Company profile fields (filled after activation)
+  companyName?: string;
+  cnpj?: string;
+  segment?: string;
+  responsibleName?: string;
+  companyEmail?: string;
+  companyPhone?: string;
+  companyWallet?: string;
 }
 
 export interface Client {

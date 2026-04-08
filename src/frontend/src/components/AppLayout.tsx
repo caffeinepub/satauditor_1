@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
+  AlertTriangle,
   ArrowLeftRight,
   Bitcoin,
   BookOpen,
@@ -21,15 +22,16 @@ import {
   Settings,
   Shield,
   Upload,
-  UserCheck,
   Users,
   Wallet,
   X,
+  Zap,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import type { PageName } from "../App";
+import { useProfile } from "../context/ProfileContext";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { usePWAInstall } from "../hooks/usePWAInstall";
 import {
@@ -43,6 +45,7 @@ interface NavItem {
   id: PageName;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
+  demoOnly?: boolean;
 }
 
 const NAV_ITEMS: NavItem[] = [
@@ -55,8 +58,13 @@ const NAV_ITEMS: NavItem[] = [
   { id: "relatorios", label: "Relatórios", icon: FileBarChart },
   { id: "auditoria", label: "Auditoria", icon: Shield },
   { id: "assinaturas", label: "Assinaturas", icon: CreditCard },
-  { id: "aprovacoes", label: "Aprovações", icon: UserCheck },
   { id: "configuracoes", label: "Configurações", icon: Settings },
+  {
+    id: "ativar-servico",
+    label: "Ativar Serviço",
+    icon: Zap,
+    demoOnly: true,
+  },
 ];
 
 const PAGE_TITLES: Record<PageName, string> = {
@@ -70,7 +78,7 @@ const PAGE_TITLES: Record<PageName, string> = {
   auditoria: "Auditoria",
   assinaturas: "Assinaturas",
   configuracoes: "Configurações",
-  aprovacoes: "Gerenciamento de Aprovações",
+  "ativar-servico": "Ativar Serviço",
 };
 
 interface AppLayoutProps {
@@ -89,13 +97,18 @@ export default function AppLayout({
   const { clear } = useInternetIdentity();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { canInstall, install } = usePWAInstall();
+  const { isDemoMode } = useProfile();
 
   const role = profile.businessRole ?? BusinessRole.client;
   const allowedPages =
     ROLE_PERMISSIONS[role] ?? ROLE_PERMISSIONS[BusinessRole.client];
-  const visibleNavItems = NAV_ITEMS.filter((item) =>
-    allowedPages.includes(item.id),
-  );
+
+  const visibleNavItems = NAV_ITEMS.filter((item) => {
+    if (!allowedPages.includes(item.id)) return false;
+    // "ativar-servico" is only shown when isDemoMode = true
+    if (item.demoOnly && !isDemoMode) return false;
+    return true;
+  });
 
   const initials = profile.name
     .split(" ")
@@ -128,6 +141,7 @@ export default function AppLayout({
         <nav className="px-3 space-y-1">
           {visibleNavItems.map((item) => {
             const active = currentPage === item.id;
+            const isActivate = item.id === "ativar-servico";
             return (
               <button
                 type="button"
@@ -138,21 +152,32 @@ export default function AppLayout({
                   setSidebarOpen(false);
                 }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 group ${
-                  active
-                    ? "bg-primary/15 text-primary border border-primary/25"
-                    : "text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent"
+                  isActivate
+                    ? active
+                      ? "bg-amber-500/20 text-amber-600 border border-amber-500/40"
+                      : "text-amber-600 hover:bg-amber-500/10 border border-amber-500/20"
+                    : active
+                      ? "bg-primary/15 text-primary border border-primary/25"
+                      : "text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent"
                 }`}
               >
                 <item.icon
                   className={`h-4 w-4 flex-shrink-0 transition-colors ${
-                    active
-                      ? "text-primary"
-                      : "text-muted-foreground group-hover:text-sidebar-foreground"
+                    isActivate
+                      ? "text-amber-500"
+                      : active
+                        ? "text-primary"
+                        : "text-muted-foreground group-hover:text-sidebar-foreground"
                   }`}
                 />
                 <span className="flex-1 text-left">{item.label}</span>
-                {active && (
+                {active && !isActivate && (
                   <ChevronRight className="h-3.5 w-3.5 text-primary" />
+                )}
+                {isActivate && (
+                  <span className="text-[9px] font-bold px-1 py-0.5 rounded bg-amber-500/20 text-amber-600 uppercase tracking-wide leading-none">
+                    Demo
+                  </span>
                 )}
               </button>
             );
@@ -204,6 +229,15 @@ export default function AppLayout({
                 >
                   {ROLE_LABELS[role]}
                 </span>
+                {/* Demo mode badge */}
+                {isDemoMode && (
+                  <span
+                    data-ocid="nav.demo_mode.badge"
+                    className="inline-block ml-1 mt-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full leading-none bg-amber-500/20 text-amber-600 border border-amber-500/30"
+                  >
+                    Modo Demo
+                  </span>
+                )}
               </div>
             </button>
           </DropdownMenuTrigger>
@@ -262,6 +296,30 @@ export default function AppLayout({
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Demo mode banner — full width, above everything else */}
+        {isDemoMode && (
+          <div
+            data-ocid="demo.mode.banner"
+            className="w-full bg-amber-400 text-amber-950 flex items-center justify-between px-4 py-2 gap-3 flex-shrink-0 z-10"
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+              <span className="text-sm font-semibold truncate">
+                Você está no modo demonstração — Ative sua conta para usar dados
+                reais
+              </span>
+            </div>
+            <button
+              type="button"
+              data-ocid="demo.banner.activate_btn"
+              onClick={() => onNavigate("ativar-servico")}
+              className="flex-shrink-0 bg-amber-950 text-amber-50 text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-amber-900 transition-colors whitespace-nowrap"
+            >
+              Ativar Agora
+            </button>
+          </div>
+        )}
+
         {/* Top header */}
         <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-card/50 backdrop-blur-sm flex-shrink-0">
           <div className="flex items-center gap-4">

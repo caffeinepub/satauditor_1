@@ -109,13 +109,6 @@ export const Client = IDL.Record({
   'bitcoinAddress' : IDL.Opt(IDL.Text),
   'phone' : IDL.Text,
 });
-export const AccessRequest = IDL.Record({
-  'expiresAt' : IDL.Int,
-  'clientName' : IDL.Text,
-  'clientEmail' : IDL.Text,
-  'clientPrincipal' : IDL.Principal,
-  'requestedAt' : IDL.Int,
-});
 export const AuditLogId = IDL.Nat;
 export const AuditLog = IDL.Record({
   'id' : AuditLogId,
@@ -146,9 +139,17 @@ export const BusinessRole = IDL.Variant({
 });
 export const UserProfile = IDL.Record({
   'clientId' : IDL.Opt(ClientId),
+  'cnpj' : IDL.Opt(IDL.Text),
   'name' : IDL.Text,
   'businessRole' : BusinessRole,
+  'companyEmail' : IDL.Opt(IDL.Text),
+  'responsibleName' : IDL.Opt(IDL.Text),
   'email' : IDL.Text,
+  'demoMode' : IDL.Opt(IDL.Bool),
+  'companyWallet' : IDL.Opt(IDL.Text),
+  'segment' : IDL.Opt(IDL.Text),
+  'companyName' : IDL.Opt(IDL.Text),
+  'companyPhone' : IDL.Opt(IDL.Text),
 });
 export const CashFlowLine = IDL.Record({
   'value' : IDL.Int,
@@ -188,11 +189,6 @@ export const IncomeStatement = IDL.Record({
   'totalRevenue' : IDL.Int,
   'netIncome' : IDL.Int,
 });
-export const UserApprovalStatus = IDL.Variant({
-  'pending' : IDL.Null,
-  'approved' : IDL.Null,
-  'rejected' : IDL.Null,
-});
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
@@ -200,14 +196,12 @@ export const idlService = IDL.Service({
   'addJournalEntry' : IDL.Func([JournalEntry], [JournalEntryId], []),
   'addSubscription' : IDL.Func([Subscription], [SubscriptionId], []),
   'addTransaction' : IDL.Func([Transaction], [TransactionId], []),
-  'approveUser' : IDL.Func([IDL.Principal], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'deleteChartAccount' : IDL.Func([AccountId], [], []),
   'deleteClient' : IDL.Func([ClientId], [], []),
   'editChartAccount' : IDL.Func([AccountId, ChartAccount], [], []),
   'editClient' : IDL.Func([ClientId, Client], [], []),
   'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
-  'getAccessRequests' : IDL.Func([], [IDL.Vec(AccessRequest)], ['query']),
   'getAllAuditLogs' : IDL.Func([], [IDL.Vec(AuditLog)], ['query']),
   'getAllChartAccounts' : IDL.Func([], [IDL.Vec(ChartAccount)], ['query']),
   'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
@@ -219,6 +213,7 @@ export const idlService = IDL.Service({
       [BalanceSheet],
       ['query'],
     ),
+  'getCallerDemoMode' : IDL.Func([], [IDL.Bool], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getCashFlow' : IDL.Func([ClientId, IDL.Nat, IDL.Nat], [CashFlow], ['query']),
@@ -241,11 +236,6 @@ export const idlService = IDL.Service({
       [IDL.Vec(JournalEntry)],
       ['query'],
     ),
-  'getPendingUsers' : IDL.Func(
-      [],
-      [IDL.Vec(IDL.Tuple(IDL.Principal, UserProfile))],
-      ['query'],
-    ),
   'getSubscriptionByClientId' : IDL.Func(
       [ClientId],
       [IDL.Opt(Subscription)],
@@ -256,7 +246,6 @@ export const idlService = IDL.Service({
       [IDL.Vec(Transaction)],
       ['query'],
     ),
-  'getUserApprovalStatus' : IDL.Func([], [UserApprovalStatus], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
@@ -268,10 +257,14 @@ export const idlService = IDL.Service({
       [],
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
-  'registerAccessRequest' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
   'registerClient' : IDL.Func([Client], [ClientId], []),
-  'rejectUser' : IDL.Func([IDL.Principal], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'saveCompanyProfile' : IDL.Func(
+      [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+      [],
+      [],
+    ),
+  'setCallerDemoMode' : IDL.Func([IDL.Bool], [], []),
   'setClientBitcoinAddress' : IDL.Func(
       [ClientId, IDL.Text, WalletType],
       [],
@@ -380,13 +373,6 @@ export const idlFactory = ({ IDL }) => {
     'bitcoinAddress' : IDL.Opt(IDL.Text),
     'phone' : IDL.Text,
   });
-  const AccessRequest = IDL.Record({
-    'expiresAt' : IDL.Int,
-    'clientName' : IDL.Text,
-    'clientEmail' : IDL.Text,
-    'clientPrincipal' : IDL.Principal,
-    'requestedAt' : IDL.Int,
-  });
   const AuditLogId = IDL.Nat;
   const AuditLog = IDL.Record({
     'id' : AuditLogId,
@@ -417,9 +403,17 @@ export const idlFactory = ({ IDL }) => {
   });
   const UserProfile = IDL.Record({
     'clientId' : IDL.Opt(ClientId),
+    'cnpj' : IDL.Opt(IDL.Text),
     'name' : IDL.Text,
     'businessRole' : BusinessRole,
+    'companyEmail' : IDL.Opt(IDL.Text),
+    'responsibleName' : IDL.Opt(IDL.Text),
     'email' : IDL.Text,
+    'demoMode' : IDL.Opt(IDL.Bool),
+    'companyWallet' : IDL.Opt(IDL.Text),
+    'segment' : IDL.Opt(IDL.Text),
+    'companyName' : IDL.Opt(IDL.Text),
+    'companyPhone' : IDL.Opt(IDL.Text),
   });
   const CashFlowLine = IDL.Record({
     'value' : IDL.Int,
@@ -459,11 +453,6 @@ export const idlFactory = ({ IDL }) => {
     'totalRevenue' : IDL.Int,
     'netIncome' : IDL.Int,
   });
-  const UserApprovalStatus = IDL.Variant({
-    'pending' : IDL.Null,
-    'approved' : IDL.Null,
-    'rejected' : IDL.Null,
-  });
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
@@ -471,14 +460,12 @@ export const idlFactory = ({ IDL }) => {
     'addJournalEntry' : IDL.Func([JournalEntry], [JournalEntryId], []),
     'addSubscription' : IDL.Func([Subscription], [SubscriptionId], []),
     'addTransaction' : IDL.Func([Transaction], [TransactionId], []),
-    'approveUser' : IDL.Func([IDL.Principal], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'deleteChartAccount' : IDL.Func([AccountId], [], []),
     'deleteClient' : IDL.Func([ClientId], [], []),
     'editChartAccount' : IDL.Func([AccountId, ChartAccount], [], []),
     'editClient' : IDL.Func([ClientId, Client], [], []),
     'generateCkBtcAddress' : IDL.Func([ClientId], [IDL.Text], []),
-    'getAccessRequests' : IDL.Func([], [IDL.Vec(AccessRequest)], ['query']),
     'getAllAuditLogs' : IDL.Func([], [IDL.Vec(AuditLog)], ['query']),
     'getAllChartAccounts' : IDL.Func([], [IDL.Vec(ChartAccount)], ['query']),
     'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
@@ -490,6 +477,7 @@ export const idlFactory = ({ IDL }) => {
         [BalanceSheet],
         ['query'],
       ),
+    'getCallerDemoMode' : IDL.Func([], [IDL.Bool], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getCashFlow' : IDL.Func(
@@ -520,11 +508,6 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(JournalEntry)],
         ['query'],
       ),
-    'getPendingUsers' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Tuple(IDL.Principal, UserProfile))],
-        ['query'],
-      ),
     'getSubscriptionByClientId' : IDL.Func(
         [ClientId],
         [IDL.Opt(Subscription)],
@@ -535,7 +518,6 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(Transaction)],
         ['query'],
       ),
-    'getUserApprovalStatus' : IDL.Func([], [UserApprovalStatus], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
@@ -547,10 +529,14 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
-    'registerAccessRequest' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
     'registerClient' : IDL.Func([Client], [ClientId], []),
-    'rejectUser' : IDL.Func([IDL.Principal], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'saveCompanyProfile' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+        [],
+        [],
+      ),
+    'setCallerDemoMode' : IDL.Func([IDL.Bool], [], []),
     'setClientBitcoinAddress' : IDL.Func(
         [ClientId, IDL.Text, WalletType],
         [],

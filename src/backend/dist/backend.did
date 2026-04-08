@@ -13,14 +13,16 @@ type UserProfile =
  record {
    businessRole: BusinessRole;
    clientId: opt ClientId;
+   cnpj: opt text;
+   companyEmail: opt text;
+   companyName: opt text;
+   companyPhone: opt text;
+   companyWallet: opt text;
+   demoMode: opt bool;
    email: text;
    name: text;
- };
-type UserApprovalStatus = 
- variant {
-   approved;
-   pending;
-   rejected;
+   responsibleName: opt text;
+   segment: opt text;
  };
 type TransactionType = 
  variant {
@@ -200,28 +202,18 @@ type AccountType =
    revenue;
  };
 type AccountId = nat;
-type AccessRequest = 
- record {
-   clientEmail: text;
-   clientName: text;
-   clientPrincipal: principal;
-   expiresAt: int;
-   requestedAt: int;
- };
 service : {
   _initializeAccessControlWithSecret: (userSecret: text) -> ();
   addChartAccount: (account: ChartAccount) -> (AccountId);
   addJournalEntry: (entry: JournalEntry) -> (JournalEntryId);
   addSubscription: (newSub: Subscription) -> (SubscriptionId);
   addTransaction: (newTx: Transaction) -> (TransactionId);
-  approveUser: (user: principal) -> ();
   assignCallerUserRole: (user: principal, role: UserRole) -> ();
   deleteChartAccount: (accountId: AccountId) -> ();
   deleteClient: (clientId: ClientId) -> ();
   editChartAccount: (accountId: AccountId, updated: ChartAccount) -> ();
   editClient: (clientId: ClientId, updatedClient: Client) -> ();
   generateCkBtcAddress: (clientId: ClientId) -> (text);
-  getAccessRequests: () -> (vec AccessRequest) query;
   getAllAuditLogs: () -> (vec AuditLog) query;
   getAllChartAccounts: () -> (vec ChartAccount) query;
   getAllClients: () -> (vec Client) query;
@@ -230,6 +222,7 @@ service : {
   getAllTransactions: () -> (vec Transaction) query;
   getBalanceSheet: (clientId: ClientId, month: nat, year: nat) ->
    (BalanceSheet) query;
+  getCallerDemoMode: () -> (bool) query;
   getCallerUserProfile: () -> (opt UserProfile) query;
   getCallerUserRole: () -> (UserRole) query;
   getCashFlow: (clientId: ClientId, month: nat, year: nat) ->
@@ -244,13 +237,8 @@ service : {
    (IncomeStatement) query;
   getJournalEntriesByClientId: (clientId: ClientId) ->
    (vec JournalEntry) query;
-  getPendingUsers: () -> (vec record {
-                                principal;
-                                UserProfile;
-                              }) query;
   getSubscriptionByClientId: (clientId: ClientId) -> (opt Subscription) query;
   getTransactionsByClientId: (clientId: ClientId) -> (vec Transaction) query;
-  getUserApprovalStatus: () -> (UserApprovalStatus) query;
   getUserProfile: (user: principal) -> (opt UserProfile) query;
   importTransactions: (txs: vec Transaction, filename: text) ->
    (variant {
@@ -258,10 +246,12 @@ service : {
       ok: nat;
     });
   isCallerAdmin: () -> (bool) query;
-  registerAccessRequest: (name: text, email: text) -> (bool);
   registerClient: (newClient: Client) -> (ClientId);
-  rejectUser: (user: principal) -> ();
   saveCallerUserProfile: (profile: UserProfile) -> ();
+  saveCompanyProfile: (companyName: text, cnpj: text, segment: text,
+   responsibleName: text, companyEmail: text, companyPhone: text,
+   companyWallet: text) -> ();
+  setCallerDemoMode: (demoMode: bool) -> ();
   setClientBitcoinAddress: (clientId: ClientId, address: text, walletType:
    WalletType) -> ();
 }

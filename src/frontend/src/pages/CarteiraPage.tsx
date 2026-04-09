@@ -8,6 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   AlertCircle,
   Bitcoin,
+  Building2,
   CheckCircle,
   Copy,
   HardDrive,
@@ -17,11 +18,13 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import type { PageName } from "../App";
 import { useActor } from "../hooks/useActor";
 import { type UserProfile, WalletType } from "../types/domain";
 
 interface CarteiraPageProps {
   profile: UserProfile;
+  onNavigate?: (page: PageName) => void;
 }
 
 function satsToBtc(sats: bigint): string {
@@ -33,17 +36,25 @@ function isValidBitcoinAddress(addr: string): boolean {
   return addr.startsWith("1") || addr.startsWith("3") || addr.startsWith("bc1");
 }
 
-export default function CarteiraPage({ profile }: CarteiraPageProps) {
+export default function CarteiraPage({
+  profile,
+  onNavigate,
+}: CarteiraPageProps) {
   const { actor, isFetching } = useActor();
   const queryClient = useQueryClient();
   const [manualAddress, setManualAddress] = useState("");
   const [addressError, setAddressError] = useState("");
   const [copied, setCopied] = useState(false);
+  // For users without clientId — store directly on profile
+  const [profileWallet, setProfileWallet] = useState(
+    profile.companyWallet ?? "",
+  );
+  const [profileWalletError, setProfileWalletError] = useState("");
 
   const clientId = profile.clientId;
   const hasClient = clientId !== undefined && clientId !== null;
 
-  // Fetch ckBTC address
+  // Fetch ckBTC address (only when clientId exists)
   const {
     data: bitcoinAddressResult,
     isLoading: addressLoading,
@@ -59,7 +70,7 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
     refetchInterval: false,
   });
 
-  // Fetch ckBTC balance
+  // Fetch ckBTC balance (only when clientId exists)
   const { data: balance, isLoading: balanceLoading } = useQuery({
     queryKey: ["ckbtcBalance", clientId?.toString()],
     queryFn: async () => {
@@ -71,7 +82,7 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
     refetchInterval: false,
   });
 
-  // Generate ckBTC address mutation
+  // Generate ckBTC address mutation (requires clientId)
   const generateMutation = useMutation({
     mutationFn: async () => {
       if (!actor || !hasClient)
@@ -105,7 +116,7 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
     },
   });
 
-  // Save manual address mutation
+  // Save manual address mutation (requires clientId)
   const saveManualMutation = useMutation({
     mutationFn: async (address: string) => {
       if (!actor || !hasClient)
@@ -123,6 +134,24 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
         queryKey: ["clientBitcoinAddress", clientId?.toString()],
       });
       refetchAddress();
+    },
+    onError: () => {
+      toast.error("Erro ao salvar endereço. Tente novamente.");
+    },
+  });
+
+  // Save wallet directly on profile (for users without clientId)
+  const saveProfileWalletMutation = useMutation({
+    mutationFn: async (address: string) => {
+      if (!actor) throw new Error("Actor não disponível");
+      return actor.saveCallerUserProfile({
+        ...profile,
+        companyWallet: address,
+      });
+    },
+    onSuccess: () => {
+      toast.success("Endereço Bitcoin salvo no seu perfil!");
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
     },
     onError: () => {
       toast.error("Erro ao salvar endereço. Tente novamente.");
@@ -153,6 +182,19 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
     saveManualMutation.mutate(manualAddress.trim());
   };
 
+  const handleSaveProfileWallet = () => {
+    setProfileWalletError("");
+    if (!profileWallet.trim()) {
+      setProfileWalletError("Insira um endereço Bitcoin válido.");
+      return;
+    }
+    if (!isValidBitcoinAddress(profileWallet.trim())) {
+      setProfileWalletError("Endereço inválido. Deve começar com 1, 3 ou bc1.");
+      return;
+    }
+    saveProfileWalletMutation.mutate(profileWallet.trim());
+  };
+
   const ckbtcAddress =
     bitcoinAddressResult?.walletType === WalletType.ckbtc
       ? bitcoinAddressResult.address
@@ -163,28 +205,155 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
       ? bitcoinAddressResult.address
       : null;
 
+  // No clientId: show profile-level wallet management
   if (!hasClient) {
     return (
-      <div className="p-6">
-        <div
-          data-ocid="carteira.empty_state"
-          className="flex flex-col items-center justify-center py-20 text-center"
-        >
-          <div className="w-16 h-16 rounded-2xl bg-muted/30 border border-border flex items-center justify-center mb-4">
-            <Wallet className="h-8 w-8 text-muted-foreground/50" />
+      <div className="p-6 space-y-6 max-w-3xl">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center flex-shrink-0">
+            <Bitcoin className="h-5 w-5 text-primary" />
           </div>
-          <h3 className="text-lg font-display font-semibold text-foreground mb-2">
-            Nenhuma empresa vinculada
-          </h3>
-          <p className="text-sm text-muted-foreground max-w-sm">
-            Nenhuma empresa está vinculada ao seu perfil. Entre em contato com o
-            administrador para solicitar o acesso.
+          <div>
+            <h2 className="font-display text-xl font-bold text-foreground">
+              Carteira Bitcoin
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Gerencie seu endereço Bitcoin pessoal
+            </p>
+          </div>
+        </div>
+
+        {/* Info banner about registering company */}
+        <div
+          data-ocid="carteira.no_client.banner"
+          className="flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-xl border border-blue-500/20 bg-blue-500/5 p-4"
+        >
+          <div className="flex items-start gap-3 flex-1 min-w-0">
+            <Building2 className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-blue-300">
+                Para funcionalidades completas de carteira
+              </p>
+              <p className="text-xs text-blue-400/80 mt-0.5">
+                Cadastre os dados da sua empresa para gerar endereços ckBTC e
+                monitorar saldo automaticamente.
+              </p>
+            </div>
+          </div>
+          {onNavigate && (
+            <Button
+              size="sm"
+              variant="outline"
+              data-ocid="carteira.register_company_btn"
+              onClick={() => onNavigate("minha-empresa")}
+              className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10 shrink-0"
+            >
+              Cadastrar Empresa
+            </Button>
+          )}
+        </div>
+
+        {/* Profile-level wallet (manual entry) */}
+        <Card
+          data-ocid="carteira.profile_wallet.card"
+          className="bg-card border-border shadow-card"
+        >
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <Wallet className="h-4 w-4" />
+              Endereço Bitcoin Pessoal
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {profile.companyWallet && (
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">
+                  Endereço atual
+                </Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    data-ocid="carteira.profile_wallet.current_input"
+                    value={profile.companyWallet}
+                    readOnly
+                    className="font-mono text-xs bg-muted/30 border-border text-foreground"
+                  />
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleCopy(profile.companyWallet!)}
+                    className="flex-shrink-0 border-border hover:border-primary/50"
+                  >
+                    {copied ? (
+                      <CheckCircle className="h-4 w-4 text-emerald-400" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="profile-wallet"
+                className="text-sm text-foreground"
+              >
+                {profile.companyWallet
+                  ? "Atualizar endereço"
+                  : "Adicionar endereço Bitcoin"}
+              </Label>
+              <Input
+                id="profile-wallet"
+                data-ocid="carteira.profile_wallet.input"
+                placeholder="bc1q... ou 1A1zP... ou 3J98t..."
+                value={profileWallet}
+                onChange={(e) => {
+                  setProfileWallet(e.target.value);
+                  setProfileWalletError("");
+                }}
+                className="font-mono text-xs bg-muted/30 border-border"
+              />
+              {profileWalletError && (
+                <p className="text-xs text-destructive flex items-center gap-1.5">
+                  <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
+                  {profileWalletError}
+                </p>
+              )}
+            </div>
+
+            <Button
+              data-ocid="carteira.profile_wallet.save_btn"
+              onClick={handleSaveProfileWallet}
+              disabled={
+                saveProfileWalletMutation.isPending || !profileWallet.trim()
+              }
+              className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              {saveProfileWalletMutation.isPending ? (
+                <RefreshCw className="h-4 w-4 animate-spin" />
+              ) : (
+                <Wallet className="h-4 w-4" />
+              )}
+              {saveProfileWalletMutation.isPending
+                ? "Salvando..."
+                : "Salvar endereço"}
+            </Button>
+          </CardContent>
+        </Card>
+
+        <div className="flex items-start gap-2 px-1 py-2 rounded-lg bg-amber-500/5 border border-amber-500/20">
+          <AlertCircle className="h-4 w-4 text-amber-400 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-amber-400/90">
+            <span className="font-semibold">Atenção:</span> Para gerar endereços
+            ckBTC e monitorar saldo automaticamente, cadastre os dados da sua
+            empresa.
           </p>
         </div>
       </div>
     );
   }
 
+  // Has clientId: full wallet management
   return (
     <div className="p-6 space-y-6 max-w-3xl">
       <div className="flex items-center gap-3">
@@ -226,7 +395,6 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
 
         {/* ckBTC Tab */}
         <TabsContent value="ckbtc" className="space-y-4">
-          {/* Balance Card */}
           <Card
             data-ocid="carteira.ckbtc.card"
             className="bg-card border-border shadow-card"
@@ -261,7 +429,6 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
             </CardContent>
           </Card>
 
-          {/* Address Card */}
           <Card className="bg-card border-border shadow-card">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -306,9 +473,7 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
                     className="border-primary/30 text-primary hover:bg-primary/10 hover:text-primary gap-2"
                   >
                     <RefreshCw
-                      className={`h-3.5 w-3.5 ${
-                        generateMutation.isPending ? "animate-spin" : ""
-                      }`}
+                      className={`h-3.5 w-3.5 ${generateMutation.isPending ? "animate-spin" : ""}`}
                     />
                     {generateMutation.isPending
                       ? "Gerando..."
@@ -337,9 +502,7 @@ export default function CarteiraPage({ profile }: CarteiraPageProps) {
                     className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
                     <Bitcoin
-                      className={`h-4 w-4 ${
-                        generateMutation.isPending ? "animate-pulse" : ""
-                      }`}
+                      className={`h-4 w-4 ${generateMutation.isPending ? "animate-pulse" : ""}`}
                     />
                     {generateMutation.isPending
                       ? "Gerando endereço..."

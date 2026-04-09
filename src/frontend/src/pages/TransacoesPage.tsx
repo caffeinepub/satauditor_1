@@ -19,14 +19,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
-import { Download, Info, Search } from "lucide-react";
+import { ArrowLeftRight, Download, Info, Search } from "lucide-react";
 import { motion } from "motion/react";
 import { useMemo, useState } from "react";
+import type { PageName } from "../App";
 import { useActor } from "../hooks/useActor";
 import {
   BusinessRole,
   type Transaction,
-  TransactionCategory,
   TransactionType,
   type UserProfile,
 } from "../types/domain";
@@ -71,11 +71,16 @@ const categoryColors: Record<string, string> = {
 
 interface TransacoesPageProps {
   profile: UserProfile;
+  onNavigate?: (page: PageName) => void;
 }
 
-export default function TransacoesPage({ profile }: TransacoesPageProps) {
+export default function TransacoesPage({
+  profile,
+  onNavigate,
+}: TransacoesPageProps) {
   const { actor, isFetching } = useActor();
   const isClient = profile.businessRole === BusinessRole.client;
+  const isDemoMode = profile.demoMode === true;
 
   const [search, setSearch] = useState("");
   const [filterTipo, setFilterTipo] = useState("todos");
@@ -94,10 +99,9 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
       }
       return actor.getAllTransactions();
     },
-    enabled: !!actor && !isFetching,
+    enabled: !!actor && !isFetching && !isDemoMode,
   });
 
-  // Derive unique categories from real data
   const categorias = useMemo(() => {
     const set = new Set(transactions.map(getCategoryLabel));
     return Array.from(set);
@@ -121,7 +125,6 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
     });
   }, [transactions, search, filterTipo, filterCategoria, isClient]);
 
-  // BTC value (satoshis stored as bigint)
   const totalEntradas = filtered
     .filter((t) => t.transactionType === TransactionType.income)
     .reduce((acc, t) => acc + Number(t.value ?? 0n), 0);
@@ -131,10 +134,53 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
 
   const colSpan = isClient ? 6 : 7;
 
+  // Demo mode: show prompt to activate company
+  if (isDemoMode) {
+    return (
+      <div className="p-6 space-y-6">
+        <div
+          data-ocid="transacoes.demo.banner"
+          className="flex flex-col sm:flex-row items-start sm:items-center gap-4 px-5 py-4 rounded-xl bg-amber-500/10 border border-amber-500/25"
+        >
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <ArrowLeftRight className="h-5 w-5 text-amber-400 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-amber-400">
+                Você está no modo demonstração
+              </p>
+              <p className="text-xs text-amber-400/80 mt-0.5">
+                Cadastre os dados da sua empresa para ver suas transações reais.
+              </p>
+            </div>
+          </div>
+          {onNavigate && (
+            <Button
+              size="sm"
+              data-ocid="transacoes.demo.activate_btn"
+              onClick={() => onNavigate("minha-empresa")}
+              className="bg-amber-500 hover:bg-amber-400 text-amber-950 font-semibold shrink-0"
+            >
+              Cadastrar Empresa
+            </Button>
+          )}
+        </div>
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <ArrowLeftRight className="h-12 w-12 text-muted-foreground/20 mb-4" />
+          <p className="text-base font-medium text-muted-foreground">
+            Nenhuma transação disponível no modo demonstração.
+          </p>
+          <p className="text-sm text-muted-foreground/60 mt-1">
+            Ative sua conta para começar a registrar transações reais.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 space-y-6">
-      {/* Client-only banner */}
-      {isClient && (
+      {/* Client-only banner — only when there are real transactions */}
+      {isClient && transactions.length > 0 && (
         <div
           data-ocid="transacoes.client.panel"
           className="flex items-center gap-2 px-4 py-3 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-sm"
@@ -296,7 +342,10 @@ export default function TransacoesPage({ profile }: TransacoesPageProps) {
                       colSpan={colSpan}
                       className="text-center text-muted-foreground py-12"
                     >
-                      Nenhuma transação encontrada.
+                      <div className="flex flex-col items-center gap-2">
+                        <ArrowLeftRight className="h-8 w-8 text-muted-foreground/30" />
+                        <span>Nenhuma transação encontrada.</span>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ) : (

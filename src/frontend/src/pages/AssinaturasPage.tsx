@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
-import { Check, Crown, Star } from "lucide-react";
+import { Check, Crown, ExternalLink, Star } from "lucide-react";
 import { motion } from "motion/react";
 import { useActor } from "../hooks/useActor";
 import {
@@ -21,79 +21,22 @@ import {
   type UserProfile,
 } from "../types/domain";
 
-interface Plano {
-  id: string;
-  nome: string;
-  descricao: string;
-  destaque: boolean;
-  recursos: string[];
-  cor: string;
-}
+// ─── Plan data ────────────────────────────────────────────────────────────────
 
-const planos: Plano[] = [
-  {
-    id: "basico",
-    nome: "Básico",
-    descricao: "Para pequenas empresas começando com Bitcoin",
-    destaque: false,
-    cor: "slate",
-    recursos: [
-      "Até 50 transações/mês",
-      "1 endereço Bitcoin",
-      "Relatórios Básicos (DRE, Balanço)",
-      "Dashboard simples",
-      "Suporte por e-mail",
-      "Exportação PDF",
-    ],
-  },
-  {
-    id: "profissional",
-    nome: "Profissional",
-    descricao: "Para empresas em crescimento com múltiplas contas",
-    destaque: true,
-    cor: "amber",
-    recursos: [
-      "Até 500 transações/mês",
-      "5 endereços Bitcoin",
-      "Todos os relatórios financeiros",
-      "Auditoria automática",
-      "Dashboard avançado com gráficos",
-      "Plano de Contas personalizável",
-      "API de integração",
-      "Suporte prioritário",
-    ],
-  },
-  {
-    id: "enterprise",
-    nome: "Enterprise",
-    descricao: "Para grandes empresas com volume alto de transações",
-    destaque: false,
-    cor: "purple",
-    recursos: [
-      "Transações ilimitadas",
-      "Endereços Bitcoin ilimitados",
-      "Todos os recursos do Profissional",
-      "Conformidade e compliance avançado",
-      "Auditoria em tempo real",
-      "Relatórios personalizados",
-      "SLA garantido 99.9%",
-      "Suporte dedicado 24/7",
-      "Treinamento e onboarding",
-    ],
-  },
+const PARA_EMPRESAS_RECURSOS = [
+  "Transações ilimitadas",
+  "Endereços Bitcoin ilimitados",
+  "Recursos avançados de blockchain",
+  "Conformidade e auditoria em tempo real",
+  "Relatórios personalizados",
+  "SLA garantido",
+  "Suporte 24/7",
+  "Onboarding e treinamento",
+  "Importação de extratos bancários (CSV/OFX)",
 ];
 
-const planTypeToNome: Record<string, string> = {
-  basic: "Básico",
-  professional: "Profissional",
-  enterprise: "Enterprise",
-};
-
-const planTypeToPlanoId: Record<string, string> = {
-  basic: "basico",
-  professional: "profissional",
-  enterprise: "enterprise",
-};
+const WHATSAPP_URL =
+  "https://wa.me/5516994410284?text=Ol%C3%A1%2C+gostaria+de+saber+mais+sobre+o+plano+Para+Empresas+do+SatAuditor";
 
 const statusToLabel: Record<string, string> = {
   active: "Ativo",
@@ -103,23 +46,22 @@ const statusToLabel: Record<string, string> = {
 
 const statusToColors: Record<string, string> = {
   active: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  inactive: "bg-slate-500/20 text-slate-400 border-slate-500/30",
+  inactive: "bg-muted/20 text-muted-foreground border-border",
   suspended: "bg-red-500/20 text-red-400 border-red-500/30",
 };
 
-const planColors: Record<string, string> = {
-  Básico: "bg-slate-500/20 text-slate-300 border-slate-500/30",
-  Profissional: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  Enterprise: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+const planTypeToNome: Record<string, string> = {
+  basic: "Básico",
+  professional: "Profissional",
+  enterprise: "Para Empresas",
 };
 
-const SKELETON_CARD_FIELDS = [
-  "status",
-  "renovacao",
-  "inicio",
-  "plano",
-] as const;
-const SKELETON_RECURSOS = ["r1", "r2", "r3", "r4"] as const;
+const planColors: Record<string, string> = {
+  Básico: "bg-muted/20 text-muted-foreground border-border",
+  Profissional: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+  "Para Empresas": "bg-primary/20 text-primary border-primary/30",
+};
+
 const SKELETON_TABLE_ROWS = ["sk1", "sk2", "sk3", "sk4", "sk5"] as const;
 
 function formatDate(ns: bigint): string {
@@ -141,7 +83,6 @@ interface AssinaturasPageProps {
 // ─── Client View ─────────────────────────────────────────────────────────────
 function ClientView({ profile }: { profile: UserProfile }) {
   const { actor, isFetching } = useActor();
-
   const clientId = profile.clientId;
 
   const { data: subscription, isLoading } = useQuery<Subscription | null>({
@@ -171,16 +112,16 @@ function ClientView({ profile }: { profile: UserProfile }) {
                 className="grid grid-cols-2 gap-3 p-3 rounded-lg bg-muted/20 border border-border"
                 data-ocid="assinaturas.loading_state"
               >
-                {SKELETON_CARD_FIELDS.map((key) => (
-                  <div key={key}>
+                {(["s1", "s2", "s3", "s4"] as const).map((k) => (
+                  <div key={k}>
                     <Skeleton className="h-3 w-16 mb-2" />
                     <Skeleton className="h-5 w-24" />
                   </div>
                 ))}
               </div>
               <div className="space-y-2">
-                {SKELETON_RECURSOS.map((key) => (
-                  <Skeleton key={key} className="h-4 w-full" />
+                {(["r1", "r2", "r3", "r4"] as const).map((k) => (
+                  <Skeleton key={k} className="h-4 w-full" />
                 ))}
               </div>
             </CardContent>
@@ -190,36 +131,24 @@ function ClientView({ profile }: { profile: UserProfile }) {
     );
   }
 
-  if (!subscription) {
-    return (
-      <div className="p-6">
-        <div className="max-w-xl mx-auto space-y-6">
-          <div className="text-center space-y-1">
-            <h2 className="font-display text-2xl font-bold text-foreground">
-              Seu Plano Atual
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Detalhes da sua assinatura ativa no SatAuditor
-            </p>
-          </div>
-          <div
-            data-ocid="assinaturas.empty_state"
-            className="text-center py-12 text-muted-foreground"
-          >
-            Nenhuma assinatura ativa encontrada.
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Determine display data — use backend subscription if available, else default plan
+  const hasSubscription = !!subscription;
+  const planKey = hasSubscription
+    ? (Object.keys(subscription!.plan ?? {})[0] as string)
+    : "enterprise";
+  const planNome = planTypeToNome[planKey] ?? "Para Empresas";
+  const statusKey = hasSubscription
+    ? (Object.keys(subscription!.status ?? {})[0] as string)
+    : "active";
+  const statusLabel = statusToLabel[statusKey] ?? "Ativo";
+  const statusClass = statusToColors[statusKey] ?? statusToColors.active;
 
-  const planKey = Object.keys(subscription.plan ?? {})[0] as string;
-  const planNome = planTypeToNome[planKey] ?? planKey;
-  const planId = planTypeToPlanoId[planKey] ?? "profissional";
-  const clientePlano = planos.find((p) => p.id === planId) ?? planos[1];
-  const statusKey = Object.keys(subscription.status ?? {})[0] as string;
-  const statusLabel = statusToLabel[statusKey] ?? statusKey;
-  const statusClass = statusToColors[statusKey] ?? statusToColors.inactive;
+  const startDateDisplay = hasSubscription
+    ? formatDate(subscription!.startDate)
+    : "—";
+  const renewalDisplay = hasSubscription
+    ? addOneYear(subscription!.startDate)
+    : "—";
 
   return (
     <div className="p-6 space-y-6">
@@ -241,7 +170,7 @@ function ClientView({ profile }: { profile: UserProfile }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
           className="relative"
-          data-ocid={`assinaturas.${clientePlano.id}.card`}
+          data-ocid="assinaturas.para_empresas.card"
         >
           <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
             <Badge className="bg-emerald-500 text-white px-3 py-1 text-xs font-bold">
@@ -254,17 +183,16 @@ function ClientView({ profile }: { profile: UserProfile }) {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="font-display text-2xl">
-                  {clientePlano.nome}
+                  Para Empresas
                 </CardTitle>
-                {clientePlano.destaque && (
-                  <Badge className="bg-primary/20 text-primary border border-primary/30 text-xs">
-                    <Crown className="h-3 w-3 mr-1" />
-                    Mais Popular
-                  </Badge>
-                )}
+                <Badge className="bg-primary/20 text-primary border border-primary/30 text-xs">
+                  <Crown className="h-3 w-3 mr-1" />
+                  Completo
+                </Badge>
               </div>
               <p className="text-sm text-muted-foreground">
-                {clientePlano.descricao}
+                Solução completa de contabilidade e auditoria on-chain para PMEs
+                brasileiras
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -281,20 +209,20 @@ function ClientView({ profile }: { profile: UserProfile }) {
                 <div>
                   <p className="text-xs text-muted-foreground">Renovação</p>
                   <p className="text-sm font-medium text-foreground mt-1">
-                    {addOneYear(subscription.startDate)}
+                    {renewalDisplay}
                   </p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Início</p>
                   <p className="text-sm font-medium text-foreground mt-1">
-                    {formatDate(subscription.startDate)}
+                    {startDateDisplay}
                   </p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Plano</p>
                   <Badge
                     variant="outline"
-                    className={`text-xs mt-1 ${planColors[planNome]}`}
+                    className={`text-xs mt-1 ${planColors[planNome] ?? planColors["Para Empresas"]}`}
                   >
                     {planNome}
                   </Badge>
@@ -302,7 +230,7 @@ function ClientView({ profile }: { profile: UserProfile }) {
               </div>
 
               <ul className="space-y-2">
-                {clientePlano.recursos.map((r) => (
+                {PARA_EMPRESAS_RECURSOS.map((r) => (
                   <li key={r} className="flex items-start gap-2">
                     <Check className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <span className="text-sm text-muted-foreground">{r}</span>
@@ -311,11 +239,12 @@ function ClientView({ profile }: { profile: UserProfile }) {
               </ul>
 
               <Button
-                data-ocid="assinaturas.client.button"
-                variant="outline"
-                className="w-full border-primary/30 hover:border-primary/60 text-primary"
+                data-ocid="assinaturas.client.whatsapp_btn"
+                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold gap-2"
+                onClick={() => window.open(WHATSAPP_URL, "_blank")}
               >
-                Consultar Upgrade de Plano
+                <ExternalLink className="h-4 w-4" />
+                Falar pelo WhatsApp
               </Button>
             </CardContent>
           </Card>
@@ -360,7 +289,6 @@ function AdminView() {
 
   return (
     <div className="p-6 space-y-8">
-      {/* Subscriptions table */}
       <div>
         <h2 className="font-display text-lg font-bold text-foreground mb-4">
           Assinaturas dos Clientes
@@ -449,7 +377,7 @@ function AdminView() {
                           <TableCell>
                             <Badge
                               variant="outline"
-                              className={`text-xs ${planColors[planNome]}`}
+                              className={`text-xs ${planColors[planNome] ?? planColors["Para Empresas"]}`}
                             >
                               {planNome}
                             </Badge>
@@ -485,10 +413,6 @@ function AdminView() {
 // ─── Page Entry Point ─────────────────────────────────────────────────────────
 export default function AssinaturasPage({ profile }: AssinaturasPageProps) {
   const isClient = profile.businessRole === BusinessRole.client;
-
-  if (isClient) {
-    return <ClientView profile={profile} />;
-  }
-
+  if (isClient) return <ClientView profile={profile} />;
   return <AdminView />;
 }

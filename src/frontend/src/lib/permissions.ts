@@ -14,6 +14,7 @@ export const ROLE_PERMISSIONS: Record<BusinessRole, PageName[]> = {
     "configuracoes",
     "importar-extrato",
     "ativar-servico",
+    "minha-empresa",
   ],
   [BusinessRole.accountant]: [
     "dashboard",
@@ -25,6 +26,7 @@ export const ROLE_PERMISSIONS: Record<BusinessRole, PageName[]> = {
     "configuracoes",
     "importar-extrato",
     "ativar-servico",
+    "minha-empresa",
   ],
   [BusinessRole.client]: [
     "dashboard",
@@ -34,6 +36,7 @@ export const ROLE_PERMISSIONS: Record<BusinessRole, PageName[]> = {
     "assinaturas",
     "configuracoes",
     "ativar-servico",
+    "minha-empresa",
   ],
 };
 

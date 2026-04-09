@@ -376,9 +376,17 @@ actor {
     };
   };
 
+  // Helper: check if caller has admin role via UserProfile (primary source of truth for businessRole)
+  private func isProfileAdmin(caller : Principal) : Bool {
+    switch (userProfilesNew.get(caller)) {
+      case (?p) { p.businessRole == #admin };
+      case (null) { false };
+    };
+  };
+
   // Helper: check if caller is admin or accountant
   private func isAdminOrAccountant(caller : Principal) : Bool {
-    if (AccessControl.isAdmin(accessControlState, caller)) { return true };
+    if (isProfileAdmin(caller)) { return true };
     switch (userProfilesNew.get(caller)) {
       case (?p) { p.businessRole == #accountant };
       case (null) { false };
@@ -608,6 +616,12 @@ actor {
       };
     };
     userProfilesNew.add(caller, { profile with demoMode = resolvedDemoMode });
+    // Sync AccessControl role so both systems stay consistent.
+    // When a profile is saved as admin, elevate the AccessControl role to #admin.
+    if (profile.businessRole == #admin) {
+      accessControlState.userRoles.add(caller, #admin);
+      accessControlState.adminAssigned := true;
+    };
   };
 
   // ── DEMO MODE FUNCTIONS ───────────────────────────────────────────────────
@@ -1159,21 +1173,21 @@ actor {
   var authorizedEmails = Map.empty<Text, Bool>();
 
   public shared ({ caller }) func addAuthorizedEmail(email : Text) : async () {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isProfileAdmin(caller)) {
       Runtime.trap("Não autorizado: apenas administradores podem adicionar e-mails autorizados");
     };
     authorizedEmails.add(email, true);
   };
 
   public shared ({ caller }) func removeAuthorizedEmail(email : Text) : async () {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isProfileAdmin(caller)) {
       Runtime.trap("Não autorizado: apenas administradores podem remover e-mails autorizados");
     };
     authorizedEmails.remove(email);
   };
 
   public query ({ caller }) func getAuthorizedEmails() : async [Text] {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isProfileAdmin(caller)) {
       Runtime.trap("Não autorizado: apenas administradores podem listar e-mails autorizados");
     };
     authorizedEmails.keys().toArray();

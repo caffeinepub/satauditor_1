@@ -19,6 +19,7 @@ import ContabilidadePage from "./pages/ContabilidadePage";
 import DashboardPage from "./pages/DashboardPage";
 import ImportarExtratoPage from "./pages/ImportarExtratoPage";
 import LoginPage from "./pages/LoginPage";
+import MinhaEmpresaPage from "./pages/MinhaEmpresaPage";
 import OnboardingPage from "./pages/OnboardingPage";
 import RelatoriosPage from "./pages/RelatoriosPage";
 import TransacoesPage from "./pages/TransacoesPage";
@@ -35,7 +36,8 @@ export type PageName =
   | "assinaturas"
   | "configuracoes"
   | "importar-extrato"
-  | "ativar-servico";
+  | "ativar-servico"
+  | "minha-empresa";
 
 // Actor extended type for email authorization methods (optional — may not be deployed yet)
 type ActorWithEmailCheck = {
@@ -287,13 +289,19 @@ function AppInner() {
   function renderPage() {
     switch (currentPage) {
       case "dashboard":
-        return <DashboardPage profile={safeProfile} />;
+        return (
+          <DashboardPage profile={safeProfile} onNavigate={setCurrentPage} />
+        );
       case "clientes":
         return <ClientesPage />;
       case "transacoes":
-        return <TransacoesPage profile={safeProfile} />;
+        return (
+          <TransacoesPage profile={safeProfile} onNavigate={setCurrentPage} />
+        );
       case "carteira":
-        return <CarteiraPage profile={safeProfile} />;
+        return (
+          <CarteiraPage profile={safeProfile} onNavigate={setCurrentPage} />
+        );
       case "contabilidade":
         return <ContabilidadePage profile={safeProfile} />;
       case "relatorios":
@@ -308,8 +316,12 @@ function AppInner() {
         return <ImportarExtratoPage />;
       case "ativar-servico":
         return <AtivarServicoPage onNavigate={setCurrentPage} />;
+      case "minha-empresa":
+        return <MinhaEmpresaPage onNavigate={setCurrentPage} />;
       default:
-        return <DashboardPage profile={safeProfile} />;
+        return (
+          <DashboardPage profile={safeProfile} onNavigate={setCurrentPage} />
+        );
     }
   }
 

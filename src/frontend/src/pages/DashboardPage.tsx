@@ -1,8 +1,9 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeftRight, Bitcoin, TrendingUp, Users } from "lucide-react";
+import { ArrowLeftRight, Bitcoin, Building2, TrendingUp } from "lucide-react";
 import { motion } from "motion/react";
 import {
   Area,
@@ -16,6 +17,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import type { PageName } from "../App";
 import { useActor } from "../hooks/useActor";
 import {
   BusinessRole,
@@ -25,6 +27,7 @@ import {
 
 interface DashboardPageProps {
   profile: UserProfile;
+  onNavigate?: (page: PageName) => void;
 }
 
 const PT_MONTHS = [
@@ -124,20 +127,12 @@ function isCurrentMonth(nanos: bigint): boolean {
   );
 }
 
-export default function DashboardPage({ profile }: DashboardPageProps) {
+export default function DashboardPage({
+  profile,
+  onNavigate,
+}: DashboardPageProps) {
   const { actor, isFetching } = useActor();
-  const isAdmin = profile.businessRole === BusinessRole.admin;
   const isClient = profile.businessRole === BusinessRole.client;
-
-  // Total clients — admin only
-  const { data: clients, isLoading: clientsLoading } = useQuery({
-    queryKey: ["allClients"],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.getAllClients();
-    },
-    enabled: !!actor && !isFetching && isAdmin,
-  });
 
   // Transactions — all or by client
   const { data: transactions, isLoading: txLoading } = useQuery({
@@ -162,60 +157,73 @@ export default function DashboardPage({ profile }: DashboardPageProps) {
     .sort((a, b) => Number(b.date - a.date))
     .slice(0, 5);
 
-  // Derived chart data (no effects needed)
   const cashFlowData = txLoading ? [] : buildCashFlowData(txList);
   const categoryData = txLoading ? [] : buildCategoryData(txList);
   const hasTransactions = txList.length > 0;
+
+  // Company card — shown for all roles
+  const hasCompany = !!profile.companyName;
+  const empresaCard = (
+    <Card
+      data-ocid="dashboard.empresa.card"
+      className="bg-card border-border hover:border-primary/30 transition-colors shadow-card"
+    >
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
+            Sua Empresa
+          </CardTitle>
+          <div className="p-2 rounded-lg bg-primary/10">
+            <Building2 className="h-4 w-4 text-primary" />
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {hasCompany ? (
+          <>
+            <div className="text-base font-display font-bold text-foreground truncate">
+              {profile.companyName}
+            </div>
+            <p className="text-xs mt-1 text-muted-foreground">
+              {profile.segment ?? "Empresa cadastrada"}
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="text-sm font-medium text-muted-foreground mb-2">
+              Nenhuma empresa
+            </div>
+            {onNavigate && (
+              <Button
+                variant="outline"
+                size="sm"
+                data-ocid="dashboard.empresa.register_btn"
+                onClick={() => onNavigate("minha-empresa")}
+                className="text-xs border-primary/30 text-primary hover:bg-primary/10 h-7 px-2"
+              >
+                Cadastrar empresa
+              </Button>
+            )}
+          </>
+        )}
+      </CardContent>
+    </Card>
+  );
 
   return (
     <div className="p-6 space-y-6">
       {/* Metric cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        {/* Total Clientes */}
+        {/* First card — company info for all roles */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0 }}
         >
-          <Card
-            data-ocid="dashboard.total_clientes.card"
-            className="bg-card border-border hover:border-primary/30 transition-colors shadow-card"
-          >
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Total Clientes
-                </CardTitle>
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <Users className="h-4 w-4 text-primary" />
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {isAdmin ? (
-                clientsLoading ? (
-                  <Skeleton
-                    className="h-8 w-16"
-                    data-ocid="dashboard.total_clientes.loading_state"
-                  />
-                ) : (
-                  <div className="text-2xl font-display font-bold text-foreground">
-                    {clients?.length ?? 0}
-                  </div>
-                )
-              ) : (
-                <div className="text-2xl font-display font-bold text-muted-foreground">
-                  —
-                </div>
-              )}
-              <p className="text-xs mt-1 text-muted-foreground">
-                {isAdmin ? "Total cadastrado" : "Não disponível"}
-              </p>
-            </CardContent>
-          </Card>
+          {empresaCard}
         </motion.div>
 
-        {/* Volume BTC — static placeholder */}
+        {/* Volume BTC */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -280,7 +288,7 @@ export default function DashboardPage({ profile }: DashboardPageProps) {
           </Card>
         </motion.div>
 
-        {/* Receita Líquida — static placeholder */}
+        {/* Receita Líquida */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -663,7 +671,7 @@ export default function DashboardPage({ profile }: DashboardPageProps) {
                             </Badge>
                           </td>
                           <td className="px-4 py-3 text-right font-mono text-xs text-foreground">
-                            {formatBtc(tx.value)}
+                            {formatBtc(tx.value ?? 0n)}
                           </td>
                           <td className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground">
                             R$ —

@@ -38,7 +38,6 @@ import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import {
   AccountType,
-  BusinessRole,
   type ChartAccount,
   type JournalEntry,
   type UserProfile,
@@ -1002,14 +1001,10 @@ interface ContabilidadePageProps {
 
 export default function ContabilidadePage({ profile }: ContabilidadePageProps) {
   const { identity } = useInternetIdentity();
-  const canEdit =
-    profile.businessRole === BusinessRole.admin ||
-    profile.businessRole === BusinessRole.accountant;
-  const isAdmin = profile.businessRole === BusinessRole.admin;
-  const clientId: bigint =
-    profile.businessRole === BusinessRole.admin
-      ? 1n
-      : BigInt(profile.clientId ?? 1);
+  // All users have full edit access
+  const canEdit = true;
+  const isAdmin = true;
+  const clientId: bigint = BigInt(profile.clientId ?? 1);
 
   return (
     <div className="p-6 space-y-6">

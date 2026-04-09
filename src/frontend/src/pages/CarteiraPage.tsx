@@ -205,10 +205,13 @@ export default function CarteiraPage({
       ? bitcoinAddressResult.address
       : null;
 
-  // No clientId: show profile-level wallet management
+  const hasCompanyRegistered = !!(profile.companyName && profile.cnpj);
+
+  // No clientId: show guidance depending on whether company is registered
   if (!hasClient) {
     return (
       <div className="p-6 space-y-6 max-w-3xl">
+        {/* Page header */}
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center flex-shrink-0">
             <Bitcoin className="h-5 w-5 text-primary" />
@@ -218,61 +221,163 @@ export default function CarteiraPage({
               Carteira Bitcoin
             </h2>
             <p className="text-sm text-muted-foreground">
-              Gerencie seu endereço Bitcoin pessoal
+              Gerencie seu endereço Bitcoin
             </p>
           </div>
         </div>
 
-        {/* Info banner about registering company */}
-        <div
-          data-ocid="carteira.no_client.banner"
-          className="flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-xl border border-blue-500/20 bg-blue-500/5 p-4"
-        >
-          <div className="flex items-start gap-3 flex-1 min-w-0">
-            <Building2 className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm font-semibold text-blue-300">
-                Para funcionalidades completas de carteira
-              </p>
-              <p className="text-xs text-blue-400/80 mt-0.5">
-                Cadastre os dados da sua empresa para gerar endereços ckBTC e
-                monitorar saldo automaticamente.
-              </p>
-            </div>
-          </div>
-          {onNavigate && (
-            <Button
-              size="sm"
-              variant="outline"
-              data-ocid="carteira.register_company_btn"
-              onClick={() => onNavigate("minha-empresa")}
-              className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10 shrink-0"
+        {/* Branch A: Company NOT yet registered — prompt to register */}
+        {!hasCompanyRegistered && (
+          <>
+            <div
+              data-ocid="carteira.no_company.banner"
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-xl border border-blue-500/20 bg-blue-500/5 p-4"
             >
-              Cadastrar Empresa
-            </Button>
-          )}
-        </div>
+              <div className="flex items-start gap-3 flex-1 min-w-0">
+                <Building2 className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-blue-300">
+                    Cadastre sua empresa primeiro
+                  </p>
+                  <p className="text-xs text-blue-400/80 mt-0.5">
+                    Para gerar endereços ckBTC e monitorar saldo
+                    automaticamente, você precisa cadastrar os dados da sua
+                    empresa no SatAuditor.
+                  </p>
+                </div>
+              </div>
+              {onNavigate && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  data-ocid="carteira.register_company_btn"
+                  onClick={() => onNavigate("minha-empresa")}
+                  className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10 shrink-0 gap-2"
+                >
+                  <Building2 className="h-3.5 w-3.5" />
+                  Cadastrar Minha Empresa
+                </Button>
+              )}
+            </div>
 
-        {/* Profile-level wallet (manual entry) */}
-        <Card
-          data-ocid="carteira.profile_wallet.card"
-          className="bg-card border-border shadow-card"
-        >
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <Wallet className="h-4 w-4" />
-              Endereço Bitcoin Pessoal
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {profile.companyWallet && (
+            {/* Still allow manual profile-level wallet entry */}
+            <Card
+              data-ocid="carteira.profile_wallet.card"
+              className="bg-card border-border shadow-card"
+            >
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                  <Wallet className="h-4 w-4" />
+                  Endereço Bitcoin (Temporário)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {profile.companyWallet && (
+                  <div className="space-y-2">
+                    <Label className="text-xs text-muted-foreground">
+                      Endereço atual
+                    </Label>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        data-ocid="carteira.profile_wallet.current_input"
+                        value={profile.companyWallet}
+                        readOnly
+                        className="font-mono text-xs bg-muted/30 border-border text-foreground"
+                      />
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => handleCopy(profile.companyWallet!)}
+                        className="flex-shrink-0 border-border hover:border-primary/50"
+                      >
+                        {copied ? (
+                          <CheckCircle className="h-4 w-4 text-emerald-400" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="profile-wallet"
+                    className="text-sm text-foreground"
+                  >
+                    {profile.companyWallet
+                      ? "Atualizar endereço"
+                      : "Adicionar endereço Bitcoin"}
+                  </Label>
+                  <Input
+                    id="profile-wallet"
+                    data-ocid="carteira.profile_wallet.input"
+                    placeholder="bc1q... ou 1A1zP... ou 3J98t..."
+                    value={profileWallet}
+                    onChange={(e) => {
+                      setProfileWallet(e.target.value);
+                      setProfileWalletError("");
+                    }}
+                    className="font-mono text-xs bg-muted/30 border-border"
+                  />
+                  {profileWalletError && (
+                    <p className="text-xs text-destructive flex items-center gap-1.5">
+                      <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
+                      {profileWalletError}
+                    </p>
+                  )}
+                </div>
+                <Button
+                  data-ocid="carteira.profile_wallet.save_btn"
+                  onClick={handleSaveProfileWallet}
+                  disabled={
+                    saveProfileWalletMutation.isPending || !profileWallet.trim()
+                  }
+                  className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
+                >
+                  {saveProfileWalletMutation.isPending ? (
+                    <RefreshCw className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Wallet className="h-4 w-4" />
+                  )}
+                  {saveProfileWalletMutation.isPending
+                    ? "Salvando..."
+                    : "Salvar endereço"}
+                </Button>
+              </CardContent>
+            </Card>
+          </>
+        )}
+
+        {/* Branch B: Company IS registered but no clientId linked yet */}
+        {hasCompanyRegistered && (
+          <div
+            data-ocid="carteira.company_registered.banner"
+            className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5 space-y-4"
+          >
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
+                <Building2 className="h-5 w-5 text-emerald-400" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-emerald-300">
+                  Empresa cadastrada: {profile.companyName}
+                </p>
+                <p className="text-xs text-emerald-400/80 mt-1">
+                  Sua empresa está registrada no SatAuditor. Para vincular
+                  carteiras Bitcoin e gerar endereços ckBTC, o administrador
+                  precisa associar sua conta ao cadastro de cliente no sistema.
+                </p>
+              </div>
+            </div>
+
+            {profile.companyWallet ? (
               <div className="space-y-2">
                 <Label className="text-xs text-muted-foreground">
-                  Endereço atual
+                  Endereço Bitcoin vinculado à empresa
                 </Label>
                 <div className="flex items-center gap-2">
                   <Input
-                    data-ocid="carteira.profile_wallet.current_input"
+                    data-ocid="carteira.company_wallet.display"
                     value={profile.companyWallet}
                     readOnly
                     className="font-mono text-xs bg-muted/30 border-border text-foreground"
@@ -291,62 +396,49 @@ export default function CarteiraPage({
                   </Button>
                 </div>
               </div>
+            ) : (
+              <div className="flex items-center gap-2 py-2 text-muted-foreground">
+                <AlertCircle className="h-4 w-4 flex-shrink-0 text-amber-400" />
+                <span className="text-xs text-amber-400/90">
+                  Nenhum endereço Bitcoin vinculado à empresa ainda. Edite os
+                  dados em{" "}
+                  {onNavigate ? (
+                    <button
+                      type="button"
+                      onClick={() => onNavigate("minha-empresa")}
+                      className="underline hover:text-amber-300 transition-colors"
+                    >
+                      Minha Empresa
+                    </button>
+                  ) : (
+                    "Minha Empresa"
+                  )}{" "}
+                  para adicionar um.
+                </span>
+              </div>
             )}
 
-            <div className="space-y-2">
-              <Label
-                htmlFor="profile-wallet"
-                className="text-sm text-foreground"
+            {onNavigate && (
+              <Button
+                variant="outline"
+                size="sm"
+                data-ocid="carteira.edit_company_btn"
+                onClick={() => onNavigate("minha-empresa")}
+                className="border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 gap-2"
               >
-                {profile.companyWallet
-                  ? "Atualizar endereço"
-                  : "Adicionar endereço Bitcoin"}
-              </Label>
-              <Input
-                id="profile-wallet"
-                data-ocid="carteira.profile_wallet.input"
-                placeholder="bc1q... ou 1A1zP... ou 3J98t..."
-                value={profileWallet}
-                onChange={(e) => {
-                  setProfileWallet(e.target.value);
-                  setProfileWalletError("");
-                }}
-                className="font-mono text-xs bg-muted/30 border-border"
-              />
-              {profileWalletError && (
-                <p className="text-xs text-destructive flex items-center gap-1.5">
-                  <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
-                  {profileWalletError}
-                </p>
-              )}
-            </div>
-
-            <Button
-              data-ocid="carteira.profile_wallet.save_btn"
-              onClick={handleSaveProfileWallet}
-              disabled={
-                saveProfileWalletMutation.isPending || !profileWallet.trim()
-              }
-              className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
-              {saveProfileWalletMutation.isPending ? (
-                <RefreshCw className="h-4 w-4 animate-spin" />
-              ) : (
-                <Wallet className="h-4 w-4" />
-              )}
-              {saveProfileWalletMutation.isPending
-                ? "Salvando..."
-                : "Salvar endereço"}
-            </Button>
-          </CardContent>
-        </Card>
+                <Building2 className="h-3.5 w-3.5" />
+                Ver / Editar Empresa
+              </Button>
+            )}
+          </div>
+        )}
 
         <div className="flex items-start gap-2 px-1 py-2 rounded-lg bg-amber-500/5 border border-amber-500/20">
           <AlertCircle className="h-4 w-4 text-amber-400 flex-shrink-0 mt-0.5" />
           <p className="text-xs text-amber-400/90">
-            <span className="font-semibold">Atenção:</span> Para gerar endereços
-            ckBTC e monitorar saldo automaticamente, cadastre os dados da sua
-            empresa.
+            <span className="font-semibold">Atenção:</span> Endereços ckBTC e
+            monitoramento automático de saldo ficam disponíveis após o
+            administrador vincular sua conta ao cadastro de cliente.
           </p>
         </div>
       </div>

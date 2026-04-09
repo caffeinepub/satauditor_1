@@ -1,6 +1,6 @@
-// Senha de 4 dígitos para acesso administrativo
-export const ADMIN_PASSWORD = "2891";
+// PIN system removed — all users have full access automatically
+export const ADMIN_PASSWORD = "";
 
-export function checkAdminPassword(input: string): boolean {
-  return input === ADMIN_PASSWORD;
+export function checkAdminPassword(_input: string): boolean {
+  return true;
 }

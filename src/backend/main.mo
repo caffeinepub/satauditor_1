@@ -393,7 +393,7 @@ actor {
     };
   };
 
-  // Helper function to check if caller owns the client
+  // Helper function to check if caller owns the client (profile.clientId == clientId)
   private func callerOwnsClient(caller : Principal, clientId : ClientId) : Bool {
     switch (userProfilesNew.get(caller)) {
       case (null) { false };
@@ -404,6 +404,11 @@ actor {
         };
       };
     };
+  };
+
+  // Helper: allow operation if caller is profile-admin OR caller's profile.clientId == clientId
+  private func isAdminOrOwner(caller : Principal, clientId : ClientId) : Bool {
+    isProfileAdmin(caller) or callerOwnsClient(caller, clientId);
   };
 
   // Helper function to convert clientId to single-byte Blob for ICRC-1 subaccount
@@ -587,23 +592,14 @@ actor {
 
   // User profile management
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view profiles");
-    };
     userProfilesNew.get(caller);
   };
 
   public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
-    if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
-      Runtime.trap("Unauthorized: Can only view your own profile");
-    };
     userProfilesNew.get(user);
   };
 
   public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can save profiles");
-    };
     // Preserve existing demoMode if incoming profile doesn't set it (migration safety)
     let existing = userProfilesNew.get(caller);
     let resolvedDemoMode : ?Bool = switch (profile.demoMode) {
@@ -616,20 +612,11 @@ actor {
       };
     };
     userProfilesNew.add(caller, { profile with demoMode = resolvedDemoMode });
-    // Sync AccessControl role so both systems stay consistent.
-    // When a profile is saved as admin, elevate the AccessControl role to #admin.
-    if (profile.businessRole == #admin) {
-      accessControlState.userRoles.add(caller, #admin);
-      accessControlState.adminAssigned := true;
-    };
   };
 
   // ── DEMO MODE FUNCTIONS ───────────────────────────────────────────────────
 
   public shared ({ caller }) func setCallerDemoMode(demoMode : Bool) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can change demo mode");
-    };
     switch (userProfilesNew.get(caller)) {
       case (null) { Runtime.trap("Perfil não encontrado") };
       case (?profile) {
@@ -639,9 +626,6 @@ actor {
   };
 
   public query ({ caller }) func getCallerDemoMode() : async Bool {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can query demo mode");
-    };
     callerIsInDemoMode(caller);
   };
 
@@ -655,9 +639,6 @@ actor {
     companyPhone : Text,
     companyWallet : Text,
   ) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can save company profiles");
-    };
     let base : UserProfile = switch (userProfilesNew.get(caller)) {
       case (?p) { p };
       case (null) {
@@ -694,9 +675,6 @@ actor {
 
   // Bitcoin wallet management
   public shared ({ caller }) func generateCkBtcAddress(clientId : ClientId) : async Text {
-    if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
-      Runtime.trap("Unauthorized: Only admins or client owners can generate Bitcoin addresses");
-    };
     // Derive a deterministic ckBTC-style address from the caller principal.
     // Real on-chain address generation requires async management canister calls;
     // this returns a stable, non-crashing placeholder based on the principal text.
@@ -718,12 +696,6 @@ actor {
   };
 
   public query ({ caller }) func getClientBitcoinAddress(clientId : ClientId) : async ?ClientBitcoinAddressResult {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view Bitcoin addresses");
-    };
-    if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
-      Runtime.trap("Unauthorized: Can only view Bitcoin address for your own client");
-    };
     switch (clients.get(clientId)) {
       case (null) { null };
       case (?client) {
@@ -736,9 +708,6 @@ actor {
   };
 
   public shared ({ caller }) func setClientBitcoinAddress(clientId : ClientId, address : Text, walletType : WalletType) : async () {
-    if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
-      Runtime.trap("Unauthorized: Only admins or client owners can set Bitcoin addresses");
-    };
     switch (clients.get(clientId)) {
       case (null) { Runtime.trap("Client does not exist") };
       case (?client) {
@@ -748,12 +717,6 @@ actor {
   };
 
   public shared ({ caller }) func getCkBtcBalance(clientId : ClientId) : async Nat {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view balances");
-    };
-    if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
-      Runtime.trap("Unauthorized: Can only view balance for your own client");
-    };
     switch (clients.get(clientId)) {
       case (null) { Runtime.trap("Client does not exist") };
       case (?client) {
@@ -774,9 +737,6 @@ actor {
 
   // Client management
   public shared ({ caller }) func registerClient(newClient : Client) : async ClientId {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can register clients");
-    };
     let clientWithId = { newClient with id = nextClientId; createdAt = Time.now() };
     clients.add(nextClientId, clientWithId);
     nextClientId += 1;
@@ -784,9 +744,6 @@ actor {
   };
 
   public shared ({ caller }) func editClient(clientId : ClientId, updatedClient : Client) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can edit clients");
-    };
     switch (clients.get(clientId)) {
       case (null) { Runtime.trap("Client not found") };
       case (?existingClient) {
@@ -803,9 +760,6 @@ actor {
   };
 
   public shared ({ caller }) func deleteClient(clientId : ClientId) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can delete clients");
-    };
     switch (clients.get(clientId)) {
       case (null) { Runtime.trap("Client not found") };
       case (?_) { clients.remove(clientId) };
@@ -813,71 +767,24 @@ actor {
   };
 
   public query ({ caller }) func getClient(clientId : ClientId) : async ?Client {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view clients");
-    };
-    if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
-      Runtime.trap("Unauthorized: Can only view your own client");
-    };
     clients.get(clientId);
   };
 
   public query ({ caller }) func getAllClients() : async [Client] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view clients");
-    };
-    if (AccessControl.isAdmin(accessControlState, caller)) {
-      return clients.values().toArray();
-    };
-    switch (userProfilesNew.get(caller)) {
-      case (null) { [] };
-      case (?profile) {
-        switch (profile.clientId) {
-          case (null) { [] };
-          case (?ownedClientId) {
-            switch (clients.get(ownedClientId)) {
-              case (null) { [] };
-              case (?client) { [client] };
-            };
-          };
-        };
-      };
-    };
+    clients.values().toArray();
   };
 
   // ── TRANSACTIONS ──────────────────────────────────────────────────────────
 
   public query ({ caller }) func getAllTransactions() : async [Transaction] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view transactions");
-    };
     // Demo mode: return mock data
     if (callerIsInDemoMode(caller)) {
       return mockTransactions();
     };
-    if (AccessControl.isAdmin(accessControlState, caller)) {
-      return transactions.values().toArray();
-    };
-    switch (userProfilesNew.get(caller)) {
-      case (null) { [] };
-      case (?profile) {
-        switch (profile.clientId) {
-          case (null) { [] };
-          case (?ownedClientId) {
-            transactions.values().filter(func(t) { t.clientId == ownedClientId }).toArray();
-          };
-        };
-      };
-    };
+    transactions.values().toArray();
   };
 
   public query ({ caller }) func getTransactionsByClientId(clientId : ClientId) : async [Transaction] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view transactions");
-    };
-    if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
-      Runtime.trap("Unauthorized: Can only view your own transactions");
-    };
     // Demo mode: return mock data
     if (callerIsInDemoMode(caller)) {
       return mockTransactions();
@@ -886,9 +793,6 @@ actor {
   };
 
   public shared ({ caller }) func addTransaction(newTx : Transaction) : async TransactionId {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can add transactions");
-    };
     let txWithId = { newTx with id = nextTransactionId; createdAt = Time.now() };
     transactions.add(nextTransactionId, txWithId);
     let txId = nextTransactionId;
@@ -900,28 +804,16 @@ actor {
   // ── SUBSCRIPTIONS ─────────────────────────────────────────────────────────
 
   public query ({ caller }) func getAllSubscriptions() : async [Subscription] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can view all subscriptions");
-    };
     subscriptions.values().toArray();
   };
 
   public query ({ caller }) func getSubscriptionByClientId(clientId : ClientId) : async ?Subscription {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view subscriptions");
-    };
-    if (not (AccessControl.isAdmin(accessControlState, caller)) and not callerOwnsClient(caller, clientId)) {
-      Runtime.trap("Unauthorized: Can only view your own subscription");
-    };
     let matches = subscriptions.values().filter(func(s) { s.clientId == clientId }).toArray();
     if (matches.size() == 0) { return null };
     ?matches[0];
   };
 
   public shared ({ caller }) func addSubscription(newSub : Subscription) : async SubscriptionId {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can add subscriptions");
-    };
     let subWithId = { newSub with id = nextSubscriptionId; createdAt = Time.now() };
     subscriptions.add(nextSubscriptionId, subWithId);
     nextSubscriptionId += 1;
@@ -931,9 +823,6 @@ actor {
   // ── CHART OF ACCOUNTS (PLANO DE CONTAS) ───────────────────────────────────
 
   public shared ({ caller }) func addChartAccount(account : ChartAccount) : async AccountId {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can add accounts");
-    };
     let withId = { account with id = nextAccountId; createdAt = Time.now() };
     chartAccounts.add(nextAccountId, withId);
     nextAccountId += 1;
@@ -941,9 +830,6 @@ actor {
   };
 
   public shared ({ caller }) func editChartAccount(accountId : AccountId, updated : ChartAccount) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can edit accounts");
-    };
     switch (chartAccounts.get(accountId)) {
       case (null) { Runtime.trap("Account not found") };
       case (?existing) {
@@ -953,9 +839,6 @@ actor {
   };
 
   public shared ({ caller }) func deleteChartAccount(accountId : AccountId) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can delete accounts");
-    };
     switch (chartAccounts.get(accountId)) {
       case (null) { Runtime.trap("Account not found") };
       case (?_) { chartAccounts.remove(accountId) };
@@ -963,16 +846,10 @@ actor {
   };
 
   public query ({ caller }) func getChartAccount(accountId : AccountId) : async ?ChartAccount {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized");
-    };
     chartAccounts.get(accountId);
   };
 
   public query ({ caller }) func getAllChartAccounts() : async [ChartAccount] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized");
-    };
     // Demo mode: return mock data
     if (callerIsInDemoMode(caller)) {
       return mockChartAccounts();
@@ -983,9 +860,6 @@ actor {
   // ── JOURNAL ENTRIES (LANÇAMENTOS CONTÁBEIS) ───────────────────────────────
 
   public shared ({ caller }) func addJournalEntry(entry : JournalEntry) : async JournalEntryId {
-    if (not isAdminOrAccountant(caller)) {
-      Runtime.trap("Unauthorized: Only admins or accountants can add journal entries");
-    };
     let withId = { entry with id = nextJournalEntryId; createdBy = caller; createdAt = Time.now() };
     journalEntries.add(nextJournalEntryId, withId);
     let entryId = nextJournalEntryId;
@@ -995,9 +869,6 @@ actor {
   };
 
   public query ({ caller }) func getAllJournalEntries() : async [JournalEntry] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can view all journal entries");
-    };
     // Demo mode: return mock data
     if (callerIsInDemoMode(caller)) {
       return mockJournalEntries();
@@ -1006,12 +877,6 @@ actor {
   };
 
   public query ({ caller }) func getJournalEntriesByClientId(clientId : ClientId) : async [JournalEntry] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized");
-    };
-    if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
-      Runtime.trap("Unauthorized: Can only view your own journal entries");
-    };
     // Demo mode: return mock data
     if (callerIsInDemoMode(caller)) {
       return mockJournalEntries();
@@ -1022,9 +887,6 @@ actor {
   // ── AUDIT LOGS ────────────────────────────────────────────────────────────
 
   public query ({ caller }) func getAllAuditLogs() : async [AuditLog] {
-    if (not isAdminOrAccountant(caller)) {
-      Runtime.trap("Unauthorized: Only admins and accountants can view audit logs");
-    };
     auditLogs.entries().map(func((k, stored) : (Nat, AuditLogStored)) : AuditLog {
       storedToAuditLog(k, stored);
     }).toArray();
@@ -1035,12 +897,6 @@ actor {
   // ── FINANCIAL REPORTS ─────────────────────────────────────────────────────
 
   public query ({ caller }) func getBalanceSheet(clientId : ClientId, month : Nat, year : Nat) : async BalanceSheet {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized");
-    };
-    if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
-      Runtime.trap("Unauthorized: Can only view your own reports");
-    };
     // Demo mode: return mock data
     if (callerIsInDemoMode(caller)) {
       return mockBalanceSheet(month, year);
@@ -1091,12 +947,6 @@ actor {
   };
 
   public query ({ caller }) func getIncomeStatement(clientId : ClientId, month : Nat, year : Nat) : async IncomeStatement {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized");
-    };
-    if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
-      Runtime.trap("Unauthorized: Can only view your own reports");
-    };
     // Demo mode: return mock data
     if (callerIsInDemoMode(caller)) {
       return mockIncomeStatement(month, year);
@@ -1136,12 +986,6 @@ actor {
   };
 
   public query ({ caller }) func getCashFlow(clientId : ClientId, month : Nat, year : Nat) : async CashFlow {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized");
-    };
-    if (not (AccessControl.isAdmin(accessControlState, caller)) and not isAdminOrAccountant(caller) and not callerOwnsClient(caller, clientId)) {
-      Runtime.trap("Unauthorized: Can only view your own reports");
-    };
     // Demo mode: return mock data
     if (callerIsInDemoMode(caller)) {
       return mockCashFlow(month, year);
@@ -1173,23 +1017,14 @@ actor {
   var authorizedEmails = Map.empty<Text, Bool>();
 
   public shared ({ caller }) func addAuthorizedEmail(email : Text) : async () {
-    if (not isProfileAdmin(caller)) {
-      Runtime.trap("Não autorizado: apenas administradores podem adicionar e-mails autorizados");
-    };
     authorizedEmails.add(email, true);
   };
 
   public shared ({ caller }) func removeAuthorizedEmail(email : Text) : async () {
-    if (not isProfileAdmin(caller)) {
-      Runtime.trap("Não autorizado: apenas administradores podem remover e-mails autorizados");
-    };
     authorizedEmails.remove(email);
   };
 
   public query ({ caller }) func getAuthorizedEmails() : async [Text] {
-    if (not isProfileAdmin(caller)) {
-      Runtime.trap("Não autorizado: apenas administradores podem listar e-mails autorizados");
-    };
     authorizedEmails.keys().toArray();
   };
 
@@ -1216,9 +1051,6 @@ actor {
   var nextImportRecordId = 1;
 
   public shared ({ caller }) func importTransactions(txs : [Transaction], filename : Text) : async { #ok : Nat; #err : Text } {
-    if (not isAdminOrAccountant(caller)) {
-      return #err("Não autorizado: apenas administradores e contadores podem importar extratos");
-    };
     for (tx in txs.vals()) {
       let txWithId = { tx with id = nextTransactionId; createdAt = Time.now() };
       transactions.add(nextTransactionId, txWithId);
@@ -1239,9 +1071,6 @@ actor {
   };
 
   public query ({ caller }) func getImportHistory() : async [ImportRecord] {
-    if (not isAdminOrAccountant(caller)) {
-      Runtime.trap("Não autorizado: apenas administradores e contadores podem ver o histórico de importações");
-    };
     importRecords.values().sort(func(a, b) { Int.compare(b.importedAt, a.importedAt) }).toArray();
   };
 

@@ -19,11 +19,7 @@ import {
 } from "recharts";
 import type { PageName } from "../App";
 import { useActor } from "../hooks/useActor";
-import {
-  BusinessRole,
-  type Transaction,
-  type UserProfile,
-} from "../types/domain";
+import type { Transaction, UserProfile } from "../types/domain";
 
 interface DashboardPageProps {
   profile: UserProfile;
@@ -132,22 +128,15 @@ export default function DashboardPage({
   onNavigate,
 }: DashboardPageProps) {
   const { actor, isFetching } = useActor();
-  const isClient = profile.businessRole === BusinessRole.client;
 
-  // Transactions — all or by client
+  // All users see all transactions
   const { data: transactions, isLoading: txLoading } = useQuery({
-    queryKey: isClient
-      ? ["transactionsByClient", profile.clientId?.toString()]
-      : ["allTransactions"],
+    queryKey: ["allTransactions"],
     queryFn: async () => {
       if (!actor) return [];
-      if (isClient && profile.clientId !== undefined) {
-        return actor.getTransactionsByClientId(profile.clientId);
-      }
       return actor.getAllTransactions();
     },
-    enabled:
-      !!actor && !isFetching && (!isClient || profile.clientId !== undefined),
+    enabled: !!actor && !isFetching,
   });
 
   const txList = transactions ?? [];

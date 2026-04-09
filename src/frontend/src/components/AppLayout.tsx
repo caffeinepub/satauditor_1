@@ -35,12 +35,7 @@ import type { PageName } from "../App";
 import { useProfile } from "../context/ProfileContext";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { usePWAInstall } from "../hooks/usePWAInstall";
-import {
-  ROLE_BADGE_CLASSES,
-  ROLE_LABELS,
-  ROLE_PERMISSIONS,
-} from "../lib/permissions";
-import { BusinessRole, type UserProfile } from "../types/domain";
+import type { UserProfile } from "../types/domain";
 
 interface NavItem {
   id: PageName;
@@ -102,13 +97,8 @@ export default function AppLayout({
   const { canInstall, install } = usePWAInstall();
   const { isDemoMode } = useProfile();
 
-  const role = profile.businessRole ?? BusinessRole.client;
-  const allowedPages =
-    ROLE_PERMISSIONS[role] ?? ROLE_PERMISSIONS[BusinessRole.client];
-
+  // All nav items visible — filter only demoOnly when not in demo mode
   const visibleNavItems = NAV_ITEMS.filter((item) => {
-    if (!allowedPages.includes(item.id)) return false;
-    // "ativar-servico" is only shown when isDemoMode = true
     if (item.demoOnly && !isDemoMode) return false;
     return true;
   });
@@ -223,20 +213,11 @@ export default function AppLayout({
                 <p className="text-xs text-muted-foreground truncate">
                   {profile.email}
                 </p>
-                {/* Role badge */}
-                <span
-                  data-ocid="nav.user.role_badge"
-                  className={`inline-block mt-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full leading-none ${
-                    ROLE_BADGE_CLASSES[role]
-                  }`}
-                >
-                  {ROLE_LABELS[role]}
-                </span>
                 {/* Demo mode badge */}
                 {isDemoMode && (
                   <span
                     data-ocid="nav.demo_mode.badge"
-                    className="inline-block ml-1 mt-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full leading-none bg-amber-500/20 text-amber-600 border border-amber-500/30"
+                    className="inline-block mt-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full leading-none bg-amber-500/20 text-amber-600 border border-amber-500/30"
                   >
                     Modo Demo
                   </span>

@@ -30,12 +30,11 @@ import {
 import { motion } from "motion/react";
 import { useState } from "react";
 import { useActor } from "../hooks/useActor";
-import {
-  type BalanceSheet,
-  BusinessRole,
-  type CashFlow,
-  type IncomeStatement,
-  type UserProfile,
+import type {
+  BalanceSheet,
+  CashFlow,
+  IncomeStatement,
+  UserProfile,
 } from "../types/domain";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -677,10 +676,7 @@ export default function RelatoriosPage({ profile }: RelatoriosPageProps) {
   const [ano, setAno] = useState(String(new Date().getFullYear()));
   const [activeTab, setActiveTab] = useState("balanco");
 
-  const clientId: bigint =
-    profile.businessRole === BusinessRole.admin
-      ? 1n
-      : BigInt(profile.clientId ?? 1);
+  const clientId: bigint = BigInt(profile.clientId ?? 1);
 
   const mesIndex = Number.parseInt(mes);
   const anoNum = Number.parseInt(ano);

@@ -19,13 +19,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeftRight, Download, Info, Search } from "lucide-react";
+import { ArrowLeftRight, Download, Search } from "lucide-react";
 import { motion } from "motion/react";
 import { useMemo, useState } from "react";
 import type { PageName } from "../App";
 import { useActor } from "../hooks/useActor";
 import {
-  BusinessRole,
   type Transaction,
   TransactionType,
   type UserProfile,
@@ -79,24 +78,16 @@ export default function TransacoesPage({
   onNavigate,
 }: TransacoesPageProps) {
   const { actor, isFetching } = useActor();
-  const isClient = profile.businessRole === BusinessRole.client;
   const isDemoMode = profile.demoMode === true;
 
   const [search, setSearch] = useState("");
   const [filterTipo, setFilterTipo] = useState("todos");
   const [filterCategoria, setFilterCategoria] = useState("todas");
 
-  const clientId = profile.clientId;
-
   const { data: transactions = [], isLoading } = useQuery<Transaction[]>({
-    queryKey: isClient
-      ? ["transactions", "client", clientId?.toString()]
-      : ["transactions"],
+    queryKey: ["transactions"],
     queryFn: async () => {
       if (!actor) return [];
-      if (isClient && clientId !== undefined) {
-        return actor.getTransactionsByClientId(clientId);
-      }
       return actor.getAllTransactions();
     },
     enabled: !!actor && !isFetching && !isDemoMode,
@@ -113,8 +104,7 @@ export default function TransacoesPage({
       const categoria = getCategoryLabel(t);
       const matchSearch =
         (t.hash ?? "").toLowerCase().includes(search.toLowerCase()) ||
-        (!isClient &&
-          t.description.toLowerCase().includes(search.toLowerCase()));
+        t.description.toLowerCase().includes(search.toLowerCase());
       const matchTipo =
         filterTipo === "todos" ||
         (filterTipo === "entrada" && tipo === "Entrada") ||
@@ -123,7 +113,7 @@ export default function TransacoesPage({
         filterCategoria === "todas" || categoria === filterCategoria;
       return matchSearch && matchTipo && matchCat;
     });
-  }, [transactions, search, filterTipo, filterCategoria, isClient]);
+  }, [transactions, search, filterTipo, filterCategoria]);
 
   const totalEntradas = filtered
     .filter((t) => t.transactionType === TransactionType.income)
@@ -132,7 +122,7 @@ export default function TransacoesPage({
     .filter((t) => t.transactionType === TransactionType.expense)
     .reduce((acc, t) => acc + Number(t.value ?? 0n), 0);
 
-  const colSpan = isClient ? 6 : 7;
+  const colSpan = 7;
 
   // Demo mode: show prompt to activate company
   if (isDemoMode) {
@@ -179,17 +169,6 @@ export default function TransacoesPage({
 
   return (
     <div className="p-6 space-y-6">
-      {/* Client-only banner — only when there are real transactions */}
-      {isClient && transactions.length > 0 && (
-        <div
-          data-ocid="transacoes.client.panel"
-          className="flex items-center gap-2 px-4 py-3 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-sm"
-        >
-          <Info className="h-4 w-4 flex-shrink-0" />
-          Exibindo suas transações vinculadas à sua conta.
-        </div>
-      )}
-
       {/* Summary */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-card border border-border rounded-lg p-4">
@@ -227,9 +206,7 @@ export default function TransacoesPage({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             data-ocid="transacoes.search_input"
-            placeholder={
-              isClient ? "Buscar por hash..." : "Buscar hash ou descrição..."
-            }
+            placeholder="Buscar hash ou descrição..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9 bg-card border-border"
@@ -292,11 +269,9 @@ export default function TransacoesPage({
                   <TableHead className="text-muted-foreground">
                     Categoria
                   </TableHead>
-                  {!isClient && (
-                    <TableHead className="text-muted-foreground">
-                      Descrição
-                    </TableHead>
-                  )}
+                  <TableHead className="text-muted-foreground">
+                    Descrição
+                  </TableHead>
                   <TableHead className="text-muted-foreground">
                     Status
                   </TableHead>
@@ -325,11 +300,9 @@ export default function TransacoesPage({
                       <TableCell>
                         <Skeleton className="h-5 w-24" />
                       </TableCell>
-                      {!isClient && (
-                        <TableCell>
-                          <Skeleton className="h-4 w-32" />
-                        </TableCell>
-                      )}
+                      <TableCell>
+                        <Skeleton className="h-4 w-32" />
+                      </TableCell>
                       <TableCell>
                         <Skeleton className="h-5 w-20" />
                       </TableCell>
@@ -395,11 +368,9 @@ export default function TransacoesPage({
                             {categoria}
                           </Badge>
                         </TableCell>
-                        {!isClient && (
-                          <TableCell className="text-sm text-muted-foreground max-w-[180px] truncate">
-                            {t.description || "—"}
-                          </TableCell>
-                        )}
+                        <TableCell className="text-sm text-muted-foreground max-w-[180px] truncate">
+                          {t.description || "—"}
+                        </TableCell>
                         <TableCell>
                           <Badge
                             variant="outline"

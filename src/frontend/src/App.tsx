@@ -7,8 +7,6 @@ import AppLayout from "./components/AppLayout";
 import { ProfileProvider, useProfile } from "./context/ProfileContext";
 import { useActor } from "./hooks/useActor";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
-import { ROLE_PERMISSIONS } from "./lib/permissions";
-import AccessPendingPage from "./pages/AccessPendingPage";
 import AssinaturasPage from "./pages/AssinaturasPage";
 import AtivarServicoPage from "./pages/AtivarServicoPage";
 import AuditoriaPage from "./pages/AuditoriaPage";
@@ -39,11 +37,6 @@ export type PageName =
   | "ativar-servico"
   | "minha-empresa";
 
-// Actor extended type for email authorization methods (optional — may not be deployed yet)
-type ActorWithEmailCheck = {
-  isEmailAuthorized?: (email: string) => Promise<boolean>;
-};
-
 // Inner component that has access to ProfileContext
 function AppInner() {
   const { identity, isInitializing } = useInternetIdentity();
@@ -59,9 +52,6 @@ function AppInner() {
   // retried tracks whether we already attempted an auto-retry after timeout
   const [retried, setRetried] = useState(false);
   const hardTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Email authorization: null = pending check, true = authorized, false = blocked
-  const [emailAuthorized, setEmailAuthorized] = useState<boolean | null>(null);
 
   const isAuthenticated = !!identity;
   const actorReady = !!actor && !isFetching;
@@ -104,40 +94,6 @@ function AppInner() {
     };
   }, [isAuthenticated, actorReady]);
 
-  // Check email authorization after profile is settled
-  // Admin users bypass this check entirely.
-  // If the backend method doesn't exist yet, default to authorized (open access).
-  useEffect(() => {
-    if (!profile || !actor) return;
-
-    // Admin always has access
-    if (profile.businessRole === BusinessRole.admin) {
-      setEmailAuthorized(true);
-      return;
-    }
-
-    // No email set yet → user is still in onboarding flow, skip check
-    if (!profile.email || profile.email.trim() === "") {
-      setEmailAuthorized(true);
-      return;
-    }
-
-    const ext = actor as unknown as ActorWithEmailCheck;
-    if (!ext.isEmailAuthorized) {
-      // Backend method not deployed yet — grant access by default
-      setEmailAuthorized(true);
-      return;
-    }
-
-    ext
-      .isEmailAuthorized(profile.email.trim())
-      .then((authorized) => setEmailAuthorized(authorized))
-      .catch(() => {
-        // On error, grant access to avoid blocking legitimate users
-        setEmailAuthorized(true);
-      });
-  }, [profile, actor]);
-
   // Reset state when identity changes (logout / re-login)
   useEffect(() => {
     if (!isAuthenticated) {
@@ -145,7 +101,6 @@ function AppInner() {
       setProfileSettled(false);
       setTimedOut(false);
       setRetried(false);
-      setEmailAuthorized(null);
     }
   }, [isAuthenticated, setProfile]);
 
@@ -191,21 +146,9 @@ function AppInner() {
     };
   }, [isLoading, timedOut, retried]);
 
-  // Redirect to dashboard if current page is not allowed for this role
-  useEffect(() => {
-    if (!profile) return;
-    const role = profile?.businessRole ?? BusinessRole.client;
-    const allowed =
-      ROLE_PERMISSIONS[role] ?? ROLE_PERMISSIONS[BusinessRole.client];
-    if (!allowed.includes(currentPage)) {
-      setCurrentPage("dashboard");
-    }
-  }, [profile, currentPage]);
-
-  // Re-check email authorization (called from AccessPendingPage "Verificar novamente")
-  const handleAccessGranted = useCallback(() => {
-    setEmailAuthorized(true);
-  }, []);
+  // Suppress unused variable warning for handleAccessGranted (no longer used)
+  const handleAccessGranted = useCallback(() => {}, []);
+  void handleAccessGranted;
 
   // Loading screen
   if (isLoading) {
@@ -263,21 +206,6 @@ function AppInner() {
     return (
       <>
         <OnboardingPage />
-        <Toaster />
-      </>
-    );
-  }
-
-  // Access pending: profile exists but email not yet authorized
-  // emailAuthorized === null means the check is still in-flight — let it through
-  // so we don't flash the AccessPendingPage during the async check
-  if (emailAuthorized === false) {
-    return (
-      <>
-        <AccessPendingPage
-          email={profile.email}
-          onAccessGranted={handleAccessGranted}
-        />
         <Toaster />
       </>
     );
@@ -346,3 +274,6 @@ export default function App() {
     </ProfileProvider>
   );
 }
+
+// Keep BusinessRole in scope to avoid unused import warning
+void BusinessRole;

@@ -192,6 +192,7 @@ export const IncomeStatement = IDL.Record({
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'addAuthorizedEmail' : IDL.Func([IDL.Text], [], []),
   'addChartAccount' : IDL.Func([ChartAccount], [AccountId], []),
   'addJournalEntry' : IDL.Func([JournalEntry], [JournalEntryId], []),
   'addSubscription' : IDL.Func([Subscription], [SubscriptionId], []),
@@ -208,6 +209,7 @@ export const idlService = IDL.Service({
   'getAllJournalEntries' : IDL.Func([], [IDL.Vec(JournalEntry)], ['query']),
   'getAllSubscriptions' : IDL.Func([], [IDL.Vec(Subscription)], ['query']),
   'getAllTransactions' : IDL.Func([], [IDL.Vec(Transaction)], ['query']),
+  'getAuthorizedEmails' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
   'getBalanceSheet' : IDL.Func(
       [ClientId, IDL.Nat, IDL.Nat],
       [BalanceSheet],
@@ -257,7 +259,9 @@ export const idlService = IDL.Service({
       [],
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'isEmailAuthorized' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
   'registerClient' : IDL.Func([Client], [ClientId], []),
+  'removeAuthorizedEmail' : IDL.Func([IDL.Text], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'saveCompanyProfile' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
@@ -456,6 +460,7 @@ export const idlFactory = ({ IDL }) => {
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'addAuthorizedEmail' : IDL.Func([IDL.Text], [], []),
     'addChartAccount' : IDL.Func([ChartAccount], [AccountId], []),
     'addJournalEntry' : IDL.Func([JournalEntry], [JournalEntryId], []),
     'addSubscription' : IDL.Func([Subscription], [SubscriptionId], []),
@@ -472,6 +477,7 @@ export const idlFactory = ({ IDL }) => {
     'getAllJournalEntries' : IDL.Func([], [IDL.Vec(JournalEntry)], ['query']),
     'getAllSubscriptions' : IDL.Func([], [IDL.Vec(Subscription)], ['query']),
     'getAllTransactions' : IDL.Func([], [IDL.Vec(Transaction)], ['query']),
+    'getAuthorizedEmails' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
     'getBalanceSheet' : IDL.Func(
         [ClientId, IDL.Nat, IDL.Nat],
         [BalanceSheet],
@@ -529,7 +535,9 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'isEmailAuthorized' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
     'registerClient' : IDL.Func([Client], [ClientId], []),
+    'removeAuthorizedEmail' : IDL.Func([IDL.Text], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'saveCompanyProfile' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],

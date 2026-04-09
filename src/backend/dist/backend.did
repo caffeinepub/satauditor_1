@@ -204,6 +204,7 @@ type AccountType =
 type AccountId = nat;
 service : {
   _initializeAccessControlWithSecret: (userSecret: text) -> ();
+  addAuthorizedEmail: (email: text) -> ();
   addChartAccount: (account: ChartAccount) -> (AccountId);
   addJournalEntry: (entry: JournalEntry) -> (JournalEntryId);
   addSubscription: (newSub: Subscription) -> (SubscriptionId);
@@ -220,6 +221,7 @@ service : {
   getAllJournalEntries: () -> (vec JournalEntry) query;
   getAllSubscriptions: () -> (vec Subscription) query;
   getAllTransactions: () -> (vec Transaction) query;
+  getAuthorizedEmails: () -> (vec text) query;
   getBalanceSheet: (clientId: ClientId, month: nat, year: nat) ->
    (BalanceSheet) query;
   getCallerDemoMode: () -> (bool) query;
@@ -246,7 +248,9 @@ service : {
       ok: nat;
     });
   isCallerAdmin: () -> (bool) query;
+  isEmailAuthorized: (email: text) -> (bool) query;
   registerClient: (newClient: Client) -> (ClientId);
+  removeAuthorizedEmail: (email: text) -> ();
   saveCallerUserProfile: (profile: UserProfile) -> ();
   saveCompanyProfile: (companyName: text, cnpj: text, segment: text,
    responsibleName: text, companyEmail: text, companyPhone: text,

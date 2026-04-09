@@ -174,6 +174,7 @@ export type WalletType = { 'ckbtc' : null } |
   { 'manual' : null };
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'addAuthorizedEmail' : ActorMethod<[string], undefined>,
   'addChartAccount' : ActorMethod<[ChartAccount], AccountId>,
   'addJournalEntry' : ActorMethod<[JournalEntry], JournalEntryId>,
   'addSubscription' : ActorMethod<[Subscription], SubscriptionId>,
@@ -190,6 +191,7 @@ export interface _SERVICE {
   'getAllJournalEntries' : ActorMethod<[], Array<JournalEntry>>,
   'getAllSubscriptions' : ActorMethod<[], Array<Subscription>>,
   'getAllTransactions' : ActorMethod<[], Array<Transaction>>,
+  'getAuthorizedEmails' : ActorMethod<[], Array<string>>,
   'getBalanceSheet' : ActorMethod<[ClientId, bigint, bigint], BalanceSheet>,
   'getCallerDemoMode' : ActorMethod<[], boolean>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
@@ -217,7 +219,9 @@ export interface _SERVICE {
       { 'err' : string }
   >,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'isEmailAuthorized' : ActorMethod<[string], boolean>,
   'registerClient' : ActorMethod<[Client], ClientId>,
+  'removeAuthorizedEmail' : ActorMethod<[string], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'saveCompanyProfile' : ActorMethod<
     [string, string, string, string, string, string, string],

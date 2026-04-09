@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import AppLayout from "./components/AppLayout";
 import { ProfileProvider, useProfile } from "./context/ProfileContext";
 import { useActor } from "./hooks/useActor";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
 import { ROLE_PERMISSIONS } from "./lib/permissions";
+import AccessPendingPage from "./pages/AccessPendingPage";
 import AssinaturasPage from "./pages/AssinaturasPage";
 import AtivarServicoPage from "./pages/AtivarServicoPage";
 import AuditoriaPage from "./pages/AuditoriaPage";
@@ -36,6 +37,11 @@ export type PageName =
   | "importar-extrato"
   | "ativar-servico";
 
+// Actor extended type for email authorization methods (optional — may not be deployed yet)
+type ActorWithEmailCheck = {
+  isEmailAuthorized?: (email: string) => Promise<boolean>;
+};
+
 // Inner component that has access to ProfileContext
 function AppInner() {
   const { identity, isInitializing } = useInternetIdentity();
@@ -52,13 +58,13 @@ function AppInner() {
   const [retried, setRetried] = useState(false);
   const hardTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Email authorization: null = pending check, true = authorized, false = blocked
+  const [emailAuthorized, setEmailAuthorized] = useState<boolean | null>(null);
+
   const isAuthenticated = !!identity;
   const actorReady = !!actor && !isFetching;
 
   // Fetch profile ONCE when actor becomes ready after auth.
-  // Deps intentionally limited to [isAuthenticated, actorReady] — we only want
-  // to re-fetch when auth or actor readiness changes, not on every render.
-  // actor, queryClient, setProfile and identity are stable refs.
   const actorRef = useRef(actor);
   actorRef.current = actor;
   const setProfileRef = useRef(setProfile);
@@ -80,7 +86,6 @@ function AppInner() {
         if (cancelled) return;
         setProfileRef.current(result);
         setProfileSettled(true);
-        // Seed React Query cache so other pages can read without another call
         queryClientRef.current.setQueryData(
           ["userProfile", identityRef.current?.getPrincipal().toString()],
           result,
@@ -97,13 +102,48 @@ function AppInner() {
     };
   }, [isAuthenticated, actorReady]);
 
-  // Reset settled state when identity changes (logout / re-login)
+  // Check email authorization after profile is settled
+  // Admin users bypass this check entirely.
+  // If the backend method doesn't exist yet, default to authorized (open access).
+  useEffect(() => {
+    if (!profile || !actor) return;
+
+    // Admin always has access
+    if (profile.businessRole === BusinessRole.admin) {
+      setEmailAuthorized(true);
+      return;
+    }
+
+    // No email set yet → user is still in onboarding flow, skip check
+    if (!profile.email || profile.email.trim() === "") {
+      setEmailAuthorized(true);
+      return;
+    }
+
+    const ext = actor as unknown as ActorWithEmailCheck;
+    if (!ext.isEmailAuthorized) {
+      // Backend method not deployed yet — grant access by default
+      setEmailAuthorized(true);
+      return;
+    }
+
+    ext
+      .isEmailAuthorized(profile.email.trim())
+      .then((authorized) => setEmailAuthorized(authorized))
+      .catch(() => {
+        // On error, grant access to avoid blocking legitimate users
+        setEmailAuthorized(true);
+      });
+  }, [profile, actor]);
+
+  // Reset state when identity changes (logout / re-login)
   useEffect(() => {
     if (!isAuthenticated) {
       setProfile(null);
       setProfileSettled(false);
       setTimedOut(false);
       setRetried(false);
+      setEmailAuthorized(null);
     }
   }, [isAuthenticated, setProfile]);
 
@@ -113,12 +153,10 @@ function AppInner() {
     (isInitializing || (isAuthenticated && (!actorReady || !profileSettled)));
 
   // Hard timeout: force-exit loading after 10 seconds in case backend hangs.
-  // On first timeout, attempt an automatic re-fetch before giving up.
   useEffect(() => {
     if (isLoading && !timedOut) {
       hardTimeoutRef.current = setTimeout(() => {
         if (!retried && actorRef.current) {
-          // Attempt one automatic re-fetch before showing the reload button
           setRetried(true);
           actorRef.current
             .getCallerUserProfile()
@@ -131,13 +169,12 @@ function AppInner() {
               );
             })
             .catch(() => {
-              // Auto-retry failed — surface the reload button
               setTimedOut(true);
               setProfileSettled(true);
             });
         } else {
           setTimedOut(true);
-          setProfileSettled(true); // unblock rendering
+          setProfileSettled(true);
         }
       }, 10000);
     } else if (!isLoading && hardTimeoutRef.current) {
@@ -162,6 +199,11 @@ function AppInner() {
       setCurrentPage("dashboard");
     }
   }, [profile, currentPage]);
+
+  // Re-check email authorization (called from AccessPendingPage "Verificar novamente")
+  const handleAccessGranted = useCallback(() => {
+    setEmailAuthorized(true);
+  }, []);
 
   // Loading screen
   if (isLoading) {
@@ -219,6 +261,21 @@ function AppInner() {
     return (
       <>
         <OnboardingPage />
+        <Toaster />
+      </>
+    );
+  }
+
+  // Access pending: profile exists but email not yet authorized
+  // emailAuthorized === null means the check is still in-flight — let it through
+  // so we don't flash the AccessPendingPage during the async check
+  if (emailAuthorized === false) {
+    return (
+      <>
+        <AccessPendingPage
+          email={profile.email}
+          onAccessGranted={handleAccessGranted}
+        />
         <Toaster />
       </>
     );

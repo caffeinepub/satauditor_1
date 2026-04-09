@@ -160,6 +160,10 @@ export default function OnboardingPage() {
                 required
                 className="h-11 bg-input/50 border-border focus:border-primary"
               />
+              <p className="text-sm text-muted-foreground">
+                Use o mesmo e-mail que você informou ao administrador pelo
+                WhatsApp.
+              </p>
             </div>
 
             <div className="space-y-2">

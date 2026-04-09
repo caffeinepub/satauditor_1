@@ -15,9 +15,12 @@ import {
   KeyRound,
   Loader2,
   Palette,
+  Plus,
   Save,
   Shield,
+  Trash2,
   User,
+  UserCheck,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
@@ -32,6 +35,13 @@ const roleLabels: Record<BusinessRole, string> = {
   [BusinessRole.client]: "Cliente — Empresa usando o serviço",
   [BusinessRole.accountant]: "Contador — Profissional contábil",
   [BusinessRole.admin]: "Administrador — Gestor da plataforma",
+};
+
+// Helper to call optional actor methods (not yet in backend.d.ts)
+type ActorWithEmailMethods = {
+  addAuthorizedEmail?: (email: string) => Promise<void>;
+  removeAuthorizedEmail?: (email: string) => Promise<void>;
+  getAuthorizedEmails?: () => Promise<string[]>;
 };
 
 export default function ConfiguracoesPage() {
@@ -54,6 +64,15 @@ export default function ConfiguracoesPage() {
   const [passwordError, setPasswordError] = useState(false);
   const [adminSaving, setAdminSaving] = useState(false);
 
+  // Authorized emails management
+  const [authorizedEmails, setAuthorizedEmails] = useState<string[]>([]);
+  const [newEmail, setNewEmail] = useState("");
+  const [emailsLoading, setEmailsLoading] = useState(false);
+  const [addingEmail, setAddingEmail] = useState(false);
+  const [removingEmail, setRemovingEmail] = useState<string | null>(null);
+
+  const isAdmin = adminUnlocked || profile?.businessRole === BusinessRole.admin;
+
   // Populate form from ProfileContext (no extra backend call needed)
   useEffect(() => {
     if (profile) {
@@ -65,7 +84,6 @@ export default function ConfiguracoesPage() {
       }
       setLoading(false);
     } else if (actor) {
-      // Fallback: fetch directly if context not populated yet
       actor
         .getCallerUserProfile()
         .then((p) => {
@@ -85,6 +103,24 @@ export default function ConfiguracoesPage() {
     }
   }, [profile, actor]);
 
+  // Load authorized emails when admin is unlocked
+  useEffect(() => {
+    if (!isAdmin || !actor) return;
+    const ext = actor as unknown as ActorWithEmailMethods;
+
+    setEmailsLoading(true);
+    (ext.getAuthorizedEmails
+      ? ext.getAuthorizedEmails()
+      : Promise.resolve([] as string[])
+    )
+      .then((emails) => setAuthorizedEmails(emails ?? []))
+      .catch((err: unknown) => {
+        console.error(err);
+        toast.error("Erro ao carregar e-mails autorizados.");
+      })
+      .finally(() => setEmailsLoading(false));
+  }, [isAdmin, actor]);
+
   const handleAdminPasswordSubmit = async () => {
     if (!checkAdminPassword(adminPasswordInput)) {
       setPasswordError(true);
@@ -103,12 +139,10 @@ export default function ConfiguracoesPage() {
         name: name.trim() || "Administrador",
         email: email.trim(),
         businessRole: BusinessRole.admin,
-        // clientId left undefined — bindgen converts undefined → [] (Candid None)
       };
 
       await actor.saveCallerUserProfile(adminProfile);
 
-      // Immediately update context so sidebar badge changes without reload
       setProfile({ ...adminProfile, demoMode: profile?.demoMode });
       setAdminUnlocked(true);
       setRole(BusinessRole.admin);
@@ -129,7 +163,6 @@ export default function ConfiguracoesPage() {
     e.preventDefault();
     if (!actor) return;
 
-    // Somente quem desbloqueou via senha pode salvar como admin
     const finalRole = adminUnlocked
       ? BusinessRole.admin
       : role === BusinessRole.admin
@@ -142,13 +175,10 @@ export default function ConfiguracoesPage() {
         name: name.trim(),
         email: email.trim(),
         businessRole: finalRole,
-        // clientId left undefined — bindgen converts undefined → [] (Candid None)
       };
 
       await actor.saveCallerUserProfile(updatedProfile);
 
-      // Update context immediately — sidebar badge updates without reload
-      // Preserve existing optional fields (demoMode, companyName, etc.) from current profile
       setProfile({
         ...(profile ?? { name: "", email: "", businessRole: finalRole }),
         ...updatedProfile,
@@ -159,6 +189,58 @@ export default function ConfiguracoesPage() {
       toast.error("Erro ao salvar perfil. Tente novamente.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleAddEmail = async () => {
+    const trimmed = newEmail.trim().toLowerCase();
+    if (!trimmed || !trimmed.includes("@")) {
+      toast.error("Digite um e-mail válido.");
+      return;
+    }
+    if (authorizedEmails.includes(trimmed)) {
+      toast.info("Este e-mail já está na lista.");
+      return;
+    }
+
+    if (!isAdmin) {
+      toast.error("Apenas administradores podem adicionar e-mails.");
+      return;
+    }
+
+    const ext = actor as unknown as ActorWithEmailMethods;
+
+    setAddingEmail(true);
+    try {
+      if (ext.addAuthorizedEmail) {
+        await ext.addAuthorizedEmail(trimmed);
+      }
+      setAuthorizedEmails((prev) => [...prev, trimmed]);
+      setNewEmail("");
+      toast.success("E-mail autorizado com sucesso!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao adicionar e-mail. Tente novamente.");
+    } finally {
+      setAddingEmail(false);
+    }
+  };
+
+  const handleRemoveEmail = async (emailToRemove: string) => {
+    const ext = actor as unknown as ActorWithEmailMethods;
+
+    setRemovingEmail(emailToRemove);
+    try {
+      if (ext.removeAuthorizedEmail) {
+        await ext.removeAuthorizedEmail(emailToRemove);
+      }
+      setAuthorizedEmails((prev) => prev.filter((e) => e !== emailToRemove));
+      toast.success("E-mail removido com sucesso!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao remover e-mail. Tente novamente.");
+    } finally {
+      setRemovingEmail(null);
     }
   };
 
@@ -296,6 +378,117 @@ export default function ConfiguracoesPage() {
           </CardContent>
         </Card>
       </motion.div>
+
+      {/* Authorized Emails — admin only */}
+      {isAdmin && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
+        >
+          <Card className="bg-card border-border shadow-card">
+            <CardHeader>
+              <CardTitle className="font-display text-base flex items-center gap-2">
+                <UserCheck className="h-5 w-5 text-primary" />
+                Usuários Autorizados
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Adicione os e-mails dos clientes que terão acesso à plataforma.
+              </p>
+
+              {/* Add email row */}
+              <div className="flex gap-2">
+                <Input
+                  data-ocid="configuracoes.authorized_email_input"
+                  type="email"
+                  placeholder="cliente@empresa.com.br"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      void handleAddEmail();
+                    }
+                  }}
+                  disabled={addingEmail}
+                  className="bg-muted/30 border-border h-10 flex-1"
+                />
+                <Button
+                  data-ocid="configuracoes.add_email_btn"
+                  type="button"
+                  onClick={() => void handleAddEmail()}
+                  disabled={addingEmail || !newEmail.trim()}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground h-10 px-4"
+                >
+                  {addingEmail ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Plus className="mr-1.5 h-4 w-4" />
+                      Adicionar
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {/* Email list */}
+              {emailsLoading ? (
+                <div className="flex items-center gap-2 py-2 text-muted-foreground text-sm">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Carregando lista...
+                </div>
+              ) : authorizedEmails.length === 0 ? (
+                <div
+                  data-ocid="configuracoes.authorized_emails_empty"
+                  className="py-6 text-center border border-dashed border-border/60 rounded-lg"
+                >
+                  <UserCheck className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">
+                    Nenhum e-mail autorizado ainda.
+                  </p>
+                </div>
+              ) : (
+                <div
+                  data-ocid="configuracoes.authorized_emails_list"
+                  className="space-y-1.5"
+                >
+                  {authorizedEmails.map((authorizedEmail) => (
+                    <div
+                      key={authorizedEmail}
+                      className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-muted/20 border border-border/40 group"
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div className="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0" />
+                        <span className="text-sm text-foreground truncate">
+                          {authorizedEmail}
+                        </span>
+                      </div>
+                      <Button
+                        data-ocid="configuracoes.remove_email_btn"
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => void handleRemoveEmail(authorizedEmail)}
+                        disabled={removingEmail === authorizedEmail}
+                        className="h-7 w-7 p-0 text-muted-foreground hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                        aria-label={`Remover ${authorizedEmail}`}
+                      >
+                        {removingEmail === authorizedEmail ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-3.5 w-3.5" />
+                        )}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Security info */}
       <motion.div
@@ -477,7 +670,7 @@ export default function ConfiguracoesPage() {
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !adminSaving)
-                      handleAdminPasswordSubmit();
+                      void handleAdminPasswordSubmit();
                   }}
                   autoFocus
                   disabled={adminSaving}
@@ -503,7 +696,7 @@ export default function ConfiguracoesPage() {
                   </Button>
                   <Button
                     type="button"
-                    onClick={handleAdminPasswordSubmit}
+                    onClick={() => void handleAdminPasswordSubmit()}
                     disabled={adminPasswordInput.length !== 4 || adminSaving}
                     className="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-semibold"
                   >

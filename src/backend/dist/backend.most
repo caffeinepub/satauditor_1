@@ -162,6 +162,8 @@ actor {
       var root : Node__46230540<Nat, AuditLogStored__798273817>;
       var size : Nat__490723111
     };
+  stable var authorizedEmails :
+    {var root : Node__46230540<Text, Bool>; var size : Nat__490723111};
   stable var chartAccounts :
     {
       var root : Node__46230540<AccountId__765643564, ChartAccount__218940492>;

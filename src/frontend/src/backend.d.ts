@@ -182,6 +182,7 @@ export enum WalletType {
     manual = "manual"
 }
 export interface backendInterface {
+    addAuthorizedEmail(email: string): Promise<void>;
     addChartAccount(account: ChartAccount): Promise<AccountId>;
     addJournalEntry(entry: JournalEntry): Promise<JournalEntryId>;
     addSubscription(newSub: Subscription): Promise<SubscriptionId>;
@@ -198,6 +199,7 @@ export interface backendInterface {
     getAllJournalEntries(): Promise<Array<JournalEntry>>;
     getAllSubscriptions(): Promise<Array<Subscription>>;
     getAllTransactions(): Promise<Array<Transaction>>;
+    getAuthorizedEmails(): Promise<Array<string>>;
     getBalanceSheet(clientId: ClientId, month: bigint, year: bigint): Promise<BalanceSheet>;
     getCallerDemoMode(): Promise<boolean>;
     getCallerUserProfile(): Promise<UserProfile | null>;
@@ -221,7 +223,9 @@ export interface backendInterface {
         err: string;
     }>;
     isCallerAdmin(): Promise<boolean>;
+    isEmailAuthorized(email: string): Promise<boolean>;
     registerClient(newClient: Client): Promise<ClientId>;
+    removeAuthorizedEmail(email: string): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     saveCompanyProfile(companyName: string, cnpj: string, segment: string, responsibleName: string, companyEmail: string, companyPhone: string, companyWallet: string): Promise<void>;
     setCallerDemoMode(demoMode: boolean): Promise<void>;

@@ -1154,6 +1154,40 @@ actor {
     { inflows; outflows; totalInflows; totalOutflows; netCashFlow = totalInflows - totalOutflows; month; year };
   };
 
+  // ── AUTHORIZED EMAILS ────────────────────────────────────────────────────
+
+  var authorizedEmails = Map.empty<Text, Bool>();
+
+  public shared ({ caller }) func addAuthorizedEmail(email : Text) : async () {
+    if (not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Não autorizado: apenas administradores podem adicionar e-mails autorizados");
+    };
+    authorizedEmails.add(email, true);
+  };
+
+  public shared ({ caller }) func removeAuthorizedEmail(email : Text) : async () {
+    if (not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Não autorizado: apenas administradores podem remover e-mails autorizados");
+    };
+    authorizedEmails.remove(email);
+  };
+
+  public query ({ caller }) func getAuthorizedEmails() : async [Text] {
+    if (not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Não autorizado: apenas administradores podem listar e-mails autorizados");
+    };
+    authorizedEmails.keys().toArray();
+  };
+
+  public query func isEmailAuthorized(email : Text) : async Bool {
+    switch (authorizedEmails.get(email)) {
+      case (?_) { true };
+      case (null) { false };
+    };
+  };
+
+  // ── END AUTHORIZED EMAILS ─────────────────────────────────────────────────
+
   // ── IMPORTAÇÃO DE EXTRATOS ────────────────────────────────────────────────
 
   public type ImportRecord = {

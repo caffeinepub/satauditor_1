@@ -265,6 +265,7 @@ export enum WalletType {
 }
 export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
+    addAuthorizedEmail(email: string): Promise<void>;
     addChartAccount(account: ChartAccount): Promise<AccountId>;
     addJournalEntry(entry: JournalEntry): Promise<JournalEntryId>;
     addSubscription(newSub: Subscription): Promise<SubscriptionId>;
@@ -281,6 +282,7 @@ export interface backendInterface {
     getAllJournalEntries(): Promise<Array<JournalEntry>>;
     getAllSubscriptions(): Promise<Array<Subscription>>;
     getAllTransactions(): Promise<Array<Transaction>>;
+    getAuthorizedEmails(): Promise<Array<string>>;
     getBalanceSheet(clientId: ClientId, month: bigint, year: bigint): Promise<BalanceSheet>;
     getCallerDemoMode(): Promise<boolean>;
     getCallerUserProfile(): Promise<UserProfile | null>;
@@ -304,7 +306,9 @@ export interface backendInterface {
         err: string;
     }>;
     isCallerAdmin(): Promise<boolean>;
+    isEmailAuthorized(email: string): Promise<boolean>;
     registerClient(newClient: Client): Promise<ClientId>;
+    removeAuthorizedEmail(email: string): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     saveCompanyProfile(companyName: string, cnpj: string, segment: string, responsibleName: string, companyEmail: string, companyPhone: string, companyWallet: string): Promise<void>;
     setCallerDemoMode(demoMode: boolean): Promise<void>;
@@ -324,6 +328,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor._initializeAccessControlWithSecret(arg0);
+            return result;
+        }
+    }
+    async addAuthorizedEmail(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.addAuthorizedEmail(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.addAuthorizedEmail(arg0);
             return result;
         }
     }
@@ -549,6 +567,20 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.getAllTransactions();
             return from_candid_vec_n46(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getAuthorizedEmails(): Promise<Array<string>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAuthorizedEmails();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAuthorizedEmails();
+            return result;
         }
     }
     async getBalanceSheet(arg0: ClientId, arg1: bigint, arg2: bigint): Promise<BalanceSheet> {
@@ -795,6 +827,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async isEmailAuthorized(arg0: string): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.isEmailAuthorized(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.isEmailAuthorized(arg0);
+            return result;
+        }
+    }
     async registerClient(arg0: Client): Promise<ClientId> {
         if (this.processError) {
             try {
@@ -806,6 +852,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.registerClient(to_candid_Client_n20(this._uploadFile, this._downloadFile, arg0));
+            return result;
+        }
+    }
+    async removeAuthorizedEmail(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.removeAuthorizedEmail(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.removeAuthorizedEmail(arg0);
             return result;
         }
     }
